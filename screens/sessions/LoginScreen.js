@@ -1,0 +1,101 @@
+import React from "react";
+import { View, Text, Image, TextInput } from "react-native";
+import { useForm, Controller } from "react-hook-form";
+import { Button } from "react-native-paper";
+import styles from "./styles";
+import { auth } from "../../firebase";
+
+const LoginScreen = ({ navigation }) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    const { email, password } = data;
+    auth.signInWithEmailAndPassword(email.trim().toLowerCase(), password);
+  };
+  return (
+    <View style={styles.authFormContainer}>
+      <Image
+        source={require("../../assets/doinghomework.png")}
+        style={{ width: 185, height: 150, alignSelf: "center" }}
+      />
+      <View style={styles.inputField}>
+        <Text style={styles.headerOne}>Logg inn</Text>
+        <View style={styles.inputWrapper}>
+          <Text>E-mail</Text>
+          <Controller
+            control={control}
+            render={({ field: { onChange, value, onBlur } }) => (
+              <TextInput
+                onBlur={onBlur}
+                onChangeText={(v) => onChange(v)}
+                value={value}
+                style={styles.formInput}
+                placeholder={"olan@gmail.com"}
+              />
+            )}
+            name="email"
+            rules={{ required: true }}
+            defaultValue=""
+          />
+        </View>
+        <View style={styles.errorMsg}>
+          {errors && errors.email && (
+            <Text style={styles.errorText}>Du må fylle inn email</Text>
+          )}
+        </View>
+        <View style={styles.inputWrapper}>
+          <Text>Passord</Text>
+          <Controller
+            control={control}
+            render={({ field: { onChange, value, onBlur } }) => (
+              <TextInput
+                secureTextEntry
+                onBlur={onBlur}
+                onChangeText={(v) => onChange(v)}
+                value={value}
+                style={styles.formInput}
+                placeholder={"passord123"}
+              />
+            )}
+            name="password"
+            rules={{ required: true }}
+            defaultValue=""
+          />
+        </View>
+
+        <View style={styles.errorMsg}>
+          {errors && errors.password && (
+            <Text style={styles.errorText}>Du må fylle inn passord</Text>
+          )}
+        </View>
+      </View>
+
+      <View>
+        <Button
+          mode="contained"
+          compact={false}
+          onPress={handleSubmit(onSubmit)}
+          style={styles.submitButton}
+        >
+          Logg inn
+        </Button>
+      </View>
+
+      <View style={styles.noAccount}>
+        <Button
+          mode="outlined"
+          compact
+          style={styles.button2}
+          onPress={() => navigation.navigate("register")}
+        >
+          Registrer konto
+        </Button>
+      </View>
+    </View>
+  );
+};
+export default LoginScreen;
