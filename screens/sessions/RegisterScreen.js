@@ -19,8 +19,17 @@ const RegisterScreen = ({ navigation }) => {
 
   const onSubmit = (data) => {
     console.log(data);
-    const { email, password } = data;
-    auth.createUserWithEmailAndPassword(email.trim().toLowerCase(), password);
+    const { email, password, name } = data;
+    auth
+      .createUserWithEmailAndPassword(email.trim().toLowerCase(), password)
+      .then(function (result) {
+        return result.user.updateProfile({
+          displayName: name,
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
   return (
     <View style={styles.authFormContainer}>

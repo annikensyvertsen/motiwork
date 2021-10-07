@@ -4,12 +4,15 @@ import { Button } from "react-native-paper";
 import { auth } from "../firebase";
 
 const ProfileTab = () => {
+  let currentUser = auth.currentUser;
+  console.log("xu", currentUser);
   return (
     <View>
       <Text>Profile</Text>
-      <Button mode="outlined" compact onPress={() => auth.signOut()}>
-        Logg ut
-      </Button>
+      <Text>Email: {currentUser.email}</Text>
+      <Text>Username: {currentUser.displayName}</Text>
+
+      <Button onPress={() => auth.signOut()}>Logg ut</Button>
     </View>
   );
 };

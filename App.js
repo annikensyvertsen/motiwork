@@ -9,13 +9,66 @@ import RegisterScreen from "./screens/sessions/RegisterScreen";
 import CoursesTab from "./screens/CoursesTab";
 import CompetitionTab from "./screens/CompetitionTab";
 import ProfileTab from "./screens/ProfileTab";
+import RegisterCourses from "./screens/RegisterCourses";
+
 import { FontAwesome } from "@expo/vector-icons";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { useFonts } from "expo-font";
+import { profile } from "console";
 
 const Stack = createStackNavigator();
+
+const MainStackNavigator = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="courses" component={CoursesTab} />
+      <Stack.Screen name="registerCourses" component={RegisterCourses} />
+    </Stack.Navigator>
+  );
+};
+
+const CompetitionStackNavigator = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="courses" component={CoursesTab} />
+      <Stack.Screen name="competition" component={CompetitionTab} />
+    </Stack.Navigator>
+  );
+};
+
+const ProfileStackNavigator = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="profile" component={profile} />
+    </Stack.Navigator>
+  );
+};
+
+const SignInStackNavigator = () => {
+  return (
+    <Stack.Navigator presentation="card" screenOptions={{}}>
+      <Stack.Screen
+        name="signIn"
+        component={LoginScreen}
+        options={{
+          title: "Sign in",
+        }}
+      />
+      <Stack.Screen
+        name="register"
+        component={RegisterScreen}
+        options={{ title: "Register" }}
+      />
+      <Stack.Screen
+        name="registerCourses"
+        component={RegisterCourses}
+        options={{ title: "Registrer emner" }}
+      />
+    </Stack.Navigator>
+  );
+};
 
 export default function App() {
   const [signedIn, setSignedIn] = useState(false);
@@ -74,21 +127,21 @@ export default function App() {
               name="courses"
               component={CoursesTab}
               options={{
-                title: "Courses",
+                title: "Emner",
               }}
             />
             <Tab.Screen
               name="competition"
               component={CompetitionTab}
               options={{
-                title: "Competition",
+                title: "Konkurranse",
               }}
             />
             <Tab.Screen
               name="profile"
               component={ProfileTab}
               options={{
-                title: "Profile",
+                title: "Profil",
               }}
             />
           </Tab.Navigator>
@@ -108,6 +161,11 @@ export default function App() {
               name="register"
               component={RegisterScreen}
               options={{ title: "Register" }}
+            />
+            <Stack.Screen
+              name="registerCourses"
+              component={RegisterCourses}
+              options={{ title: "Registrer emner" }}
             />
           </Stack.Navigator>
         </>
