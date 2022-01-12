@@ -41,9 +41,11 @@ export const Timer = (props) => {
   }
   useEffect(() => {
     console.log("stopwatch listens", convertToSeconds(hours, minutes))
-    let totalMinutes = convertToSeconds(hours, minutes)
-    console.log("total minutes", totalMinutes, formatTime(totalMinutes))
-    setFormattedTime(formatTime(totalMinutes))
+    let totalSeconds = convertToSeconds(hours, minutes)
+    console.log("total minutes", totalSeconds, formatTime(totalSeconds))
+    setFormattedTime(formatTime(totalSeconds))
+    setCountDownTime(totalSeconds)
+    //setCountDownTime(formattedTime)
     console.log("formatted time?", formattedTime)
   }, [hours, minutes])
 
