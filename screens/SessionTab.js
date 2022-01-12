@@ -9,6 +9,8 @@ const SessionTab = () => {
   const [isTimer, setIsTimer] = useState(false)
 
   const onToggleSwitch = () => setIsTimer(!isTimer)
+        //TODO: use togglebutton instead
+
   return (
     <View>
 

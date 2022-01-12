@@ -1844,6 +1844,16 @@
   "resolved" "https://registry.npmjs.org/@react-native-community/masked-view/-/masked-view-0.1.11.tgz"
   "version" "0.1.11"
 
+"@react-native-picker/picker@^1.16.1", "@react-native-picker/picker@1":
+  "integrity" "sha512-sk07ARwL0cMXwkXsqcxyprL/KiEVD0xRFXFqznTnZs1YXqwxEqz6GiGtq2vQlK64CzXDpHX8gw1QQz47abBY1Q=="
+  "resolved" "https://registry.npmjs.org/@react-native-picker/picker/-/picker-1.16.1.tgz"
+  "version" "1.16.1"
+
+"@react-native-picker/picker@^2.1.0":
+  "integrity" "sha512-EC7yv22QLHlTfnbC1ez9IUdXTOh1W31x96Oir0PfskSGFFJMWWdLTg4VrcE2DsGLzbfjjkBk123c173vf2a5MQ=="
+  "resolved" "https://registry.npmjs.org/@react-native-picker/picker/-/picker-2.2.1.tgz"
+  "version" "2.2.1"
+
 "@react-navigation/bottom-tabs@^6.0.7":
   "integrity" "sha512-NfSb4Y5wSEPg3T7gHN25O133enSscJ808xEWqhGkR96BtSjcHh/oNMO+dqk6Avgh56uZEyL92Qm/CKFvaGkWow=="
   "resolved" "https://registry.npmjs.org/@react-navigation/bottom-tabs/-/bottom-tabs-6.0.7.tgz"
@@ -5339,7 +5349,7 @@
   dependencies:
     "asap" "~2.0.6"
 
-"prop-types@^15.6.0", "prop-types@^15.6.2", "prop-types@^15.7.2":
+"prop-types@^15.5.10", "prop-types@^15.6.0", "prop-types@^15.6.2", "prop-types@^15.7.2":
   "integrity" "sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ=="
   "resolved" "https://registry.npmjs.org/prop-types/-/prop-types-15.7.2.tgz"
   "version" "15.7.2"
@@ -5528,6 +5538,19 @@
   dependencies:
     "warn-once" "^0.1.0"
 
+"react-native-simple-picker@^3.1.3":
+  "integrity" "sha512-lCaonriqS68m2z3olnLkS3cEeczhgsiHxXB4GZN/q+VuRDmgO7sADMy9dEfBi5lL+u2gFnVABCp2/13/7BR0fw=="
+  "resolved" "https://registry.npmjs.org/react-native-simple-picker/-/react-native-simple-picker-3.1.3.tgz"
+  "version" "3.1.3"
+  dependencies:
+    "@react-native-picker/picker" "^2.1.0"
+    "prop-types" "^15.5.10"
+
+"react-native-simple-time-picker@^1.3.7":
+  "integrity" "sha512-ZqCn1N/hqug2cbawTE+obs6l3x0YaxSPo6W1I3uIDYLXdEV38icpzyyQ+TPa0znwlwprBO5nGAR1HYwp2ZlBmA=="
+  "resolved" "https://registry.npmjs.org/react-native-simple-time-picker/-/react-native-simple-time-picker-1.3.7.tgz"
+  "version" "1.3.7"
+
 "react-native-svg@>=6.2.1":
   "integrity" "sha512-NIAJ8jCnXGCqGWXkkJ1GTzO4a3Md5at5sagYV8Vh4MXYnL4z5Rh428Wahjhh+LIjx40EE5xM5YtwyJBqOIba2Q=="
   "resolved" "https://registry.npmjs.org/react-native-svg/-/react-native-svg-12.1.1.tgz"
@@ -5564,6 +5587,11 @@
     "normalize-css-color" "^1.0.2"
     "prop-types" "^15.6.0"
     "react-timer-mixin" "^0.13.4"
+
+"react-native-wheel-picker@^1.2.0":
+  "integrity" "sha1-BQPjezMmhWckUBZ5vfVpfg3SR6Y="
+  "resolved" "https://registry.npmjs.org/react-native-wheel-picker/-/react-native-wheel-picker-1.2.0.tgz"
+  "version" "1.2.0"
 
 "react-native@*", "react-native@>=0.42.0", "react-native@>=0.50.0", "react-native@>=0.57", "react-native@>=0.62.0-rc.0 <0.64.0", "react-native@https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz":
   "integrity" "sha512-qWR6pcG4yDu/Rthm+DvAS017rL38LbZFnJv/k4HL4ZUH/WhKuqC+stD7TlpaOBb3N2bkydm9s+GCa14T41MLEg=="
@@ -5616,7 +5644,7 @@
   "resolved" "https://registry.npmjs.org/react-timer-mixin/-/react-timer-mixin-0.13.4.tgz"
   "version" "0.13.4"
 
-"react@*", "react@^16.13.1", "react@^16.3.0", "react@^16.8.0 || ^17", "react@^16.8.0 || ^17.0.0", "react@>=16.0", "react@>=16.5.1", "react@>=16.8.0", "react@16.13.1":
+"react@*", "react@^16.0 || ^17.0.0", "react@^16.13.1", "react@^16.3.0", "react@^16.8.0 || ^17", "react@^16.8.0 || ^17.0.0", "react@>=16.0", "react@>=16.5.1", "react@>=16.8.0", "react@16 || 17", "react@16.13.1":
   "integrity" "sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w=="
   "resolved" "https://registry.npmjs.org/react/-/react-16.13.1.tgz"
   "version" "16.13.1"
