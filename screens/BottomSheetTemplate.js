@@ -5,18 +5,12 @@ import {
   BottomSheetModal,
   BottomSheetModalProvider,
 } from '@gorhom/bottom-sheet';
-import GoalForm from '../components/GoalForm';
-
 
 const BottomSheet =  React.forwardRef((props, ref)  => {
 
-  const snapPoints = useMemo(() => ['50%', '80%'], []);
+  const snapPoints = useMemo(() => ['50%', '50%'], []);
 
-
-  console.log("time", props)
-
-
-  const TimeComponent = props.timeComponent
+  const ContentComponent = props.contentComponent
   const handleSheetChanges = useCallback((index) => {
   }, []);
 
@@ -29,7 +23,7 @@ const BottomSheet =  React.forwardRef((props, ref)  => {
           snapPoints={snapPoints}
           onChange={handleSheetChanges}
         >
-        {TimeComponent}
+        {ContentComponent}
         </BottomSheetModal>
     </BottomSheetModalProvider>
   );

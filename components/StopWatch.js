@@ -5,6 +5,7 @@ import { Button } from "react-native-paper";
 import { useStopwatch } from "../hooks/stopWatchHook";
 
 export const StopWatch = () => {
+
   const {isRunning, elapsedTime, startTimer, stopTimer, resetTimer} = useStopwatch();
   const handleStartStop = () => {
     isRunning ? stopTimer() : startTimer();
@@ -18,6 +19,7 @@ export const StopWatch = () => {
     let seconds = Math.floor(elapsedTime - minutes * 60)
     return minutes + "m : " + seconds + " s"
   }
+
 
   return(
     <View>

@@ -1,36 +1,31 @@
 
 import React, {useState, useRef} from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { Button, Modal, Portal, Provider } from "react-native-paper";
+import { Button, Subheading } from "react-native-paper";
 import {TimePicker} from 'react-native-simple-time-picker';
 
 
 
-export const ChooseTime = () => {
-  console.log("renders")
- 
-
-  const [selectedItem, setSelectedItem] = useState("")
-  const itemList = ['10', '20', '30', '40', '50', '60']
-
-  const onPickerSelect = (i) => {setSelectedItem(itemList[i])}
+export const ChooseTime = ({values}) => {
 
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const handleChange = (value) => {
     setHours(value.hours);
     setMinutes(value.minutes);
-    console.log("value: ", value)
   };
+
+  const onButtonPress = () => {
+    values.setHours(hours)
+    values.setMinutes(minutes)
+  }
 
   return (
 
-    <View>
-  
-      <Text> Choose: </Text>
+    <View style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+      <Subheading> Hvor lenge ønsker du å arbeide? </Subheading>
       <TimePicker hoursUnit="timer" minutesUnit="min" value={{hours, minutes}} onChange={handleChange} />
-     
-    
+      <Button onPress={onButtonPress} style={{width: 100}} mode="contained"> Velg</Button>
     </View>
   )
 }

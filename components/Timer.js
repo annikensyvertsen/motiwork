@@ -2,8 +2,6 @@ import React, {useState, useEffect, useRef} from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
-import {ChooseTime} from "./ChooseTime"
-
 
 const formatTime = (t) => {
   let minutes = Math.floor(t / 60);
@@ -11,7 +9,16 @@ const formatTime = (t) => {
   return minutes + "m : " + seconds + " s"
 }
 
+const convertToSeconds = (h, m) => {
+  let seconds = (m + (60* h))*60
+  return seconds
+}
+
 export const Timer = (props) => {
+
+  let hours = props.values?.hours;
+  let minutes = props.values?.minutes;
+
   const [isRunning, setIsRunning] = useState(false)
   const [countDownTime, setCountDownTime] = useState(600)
 
@@ -31,8 +38,15 @@ export const Timer = (props) => {
   const onTimePress = () => {
     setIsSetTimer(!isSetTimer)
     props.handlePresentPress()
-    console.log("????")
   }
+  useEffect(() => {
+    console.log("stopwatch listens", convertToSeconds(hours, minutes))
+    let totalMinutes = convertToSeconds(hours, minutes)
+    console.log("total minutes", totalMinutes, formatTime(totalMinutes))
+    setFormattedTime(formatTime(totalMinutes))
+    console.log("formatted time?", formattedTime)
+  }, [hours, minutes])
+
 
   return (
 
@@ -46,11 +60,7 @@ export const Timer = (props) => {
       >
         {() =><Button onPress={onTimePress}><Text>{formattedTime}</Text></Button>}
       </CountdownCircleTimer>
-      <Button onPress={onPress}>{isRunning ? "Stop" : "Start"}</Button>
-            
-      {isSetTimer && <ChooseTime /> }
-
-
+      <Button onPress={onPress}>{isRunning ? "Stop" : "Start"}</Button>            
       </View>
 
   )
