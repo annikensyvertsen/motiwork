@@ -1,22 +1,20 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { Button, Modal, Portal, Provider } from "react-native-paper";
+import { Button } from "react-native-paper";
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import {ChooseTime} from "./ChooseTime"
 
 
 const formatTime = (t) => {
-  console.log("in format time", t)
   let minutes = Math.floor(t / 60);
   let seconds = Math.floor(t - minutes * 60)
   return minutes + "m : " + seconds + " s"
 }
 
-export const Timer = () => {
+export const Timer = (props) => {
   const [isRunning, setIsRunning] = useState(false)
   const [countDownTime, setCountDownTime] = useState(600)
 
-  const [isModalVisible, setIsModalVisible] = useState(false)
 
   const [formattedTime, setFormattedTime] = useState(formatTime(countDownTime))
   const [remainingTime, setRemainingTime] = useState(0)
@@ -28,26 +26,17 @@ export const Timer = () => {
 
   }, [remainingTime])
 
-  useEffect(() => {
-    console.log("is set timer?", isSetTimer)
-
-  }, [isSetTimer])
-
-  const showModal = () => setIsModalVisible(true);
-  const hideModal = () => setIsModalVisible(false);
   const onPress = () => { setIsRunning(!isRunning)}
-  const containerStyle = {backgroundColor: 'white', padding: 40};
-
 
   const onTimePress = () => {
-    showModal();
     setIsSetTimer(!isSetTimer)
+    props.handlePresentPress()
+    console.log("????")
   }
+
   return (
 
     <View>
-    
-
       <CountdownCircleTimer
         isPlaying={isRunning}
         duration={countDownTime}
@@ -60,12 +49,11 @@ export const Timer = () => {
       <Button onPress={onPress}>{isRunning ? "Stop" : "Start"}</Button>
             
       {isSetTimer && <ChooseTime /> }
+
+
       </View>
+
   )
 }
 
-// <Portal>
-//       <Modal visible={isModalVisible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-//         <Text>Modal</Text>
-//       </Modal>
-//     </Portal>
+

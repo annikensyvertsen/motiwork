@@ -1,8 +1,11 @@
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { Switch } from "react-native-paper";
+import { ChooseTime } from "../components/ChooseTime";
 import {StopWatch} from "../components/StopWatch"
 import {Timer} from "../components/Timer"
+import BottomSheetTemplate from "../screens/BottomSheetTemplate";
+
 
 const SessionTab = () => {
 
@@ -11,16 +14,23 @@ const SessionTab = () => {
   const onToggleSwitch = () => setIsTimer(!isTimer)
         //TODO: use togglebutton instead
 
-  return (
-    <View>
+   
+  const bottomSheetModalRef = useRef(null);
+  const handlePresentPress = () => bottomSheetModalRef.current.present()
+      
 
+  return (
+    <View style={{flex: 1}}>
      <Text style={styles.header1}>Session</Text>
      <View style={styles.container}>
       <Text>Timer</Text>
        <Switch color="purple" value={isTimer} onValueChange={onToggleSwitch} />
       <Text>Stopwatch</Text>
      </View>
-     {isTimer ? <Timer /> : <StopWatch />}
+     {isTimer ? <Timer handlePresentPress={handlePresentPress} /> : <StopWatch />}
+     <BottomSheetTemplate timeComponent={<ChooseTime />} ref={bottomSheetModalRef}>
+     </BottomSheetTemplate>
+
     </View>
   );
 };

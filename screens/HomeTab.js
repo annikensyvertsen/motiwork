@@ -1,11 +1,7 @@
-import React, {useState, useRef, useCallback, useMemo} from "react";
-import { Text, View, Modal } from "react-native";
+import React, {useState, useRef} from "react";
+import { Text, View } from "react-native";
 import { Button } from "react-native-paper";
 import styles from "./sessions/styles";
-import {
-  BottomSheetModal,
-  BottomSheetModalProvider,
-} from '@gorhom/bottom-sheet';
 import BottomSheet from "./BottomSheet";
 
 

@@ -9,9 +9,6 @@ import RegisterScreen from "./screens/sessions/RegisterScreen";
 import SessionTab from "./screens/SessionTab";
 import HomeTab from "./screens/HomeTab";
 
-import BottomSheet from "./screens/BottomSheet";
-
-
 import CommunityTab from "./screens/CommunityTab";
 import ProfileTab from "./screens/ProfileTab";
 
@@ -22,39 +19,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useFonts } from "expo-font";
 
 const Stack = createStackNavigator();
-
-
-// const HomeStackNavigator = () => {
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen name="Hjem" component={HomeTab} />
-//     </Stack.Navigator>
-//   );
-// };
-
-// const SessionStackNavigator = () => {
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen name="Økt" component={SessionTab} />
-//     </Stack.Navigator>
-//   );
-// };
-
-// const CommunityStackNavigator = () => {
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen name="Fellesskap" component={CommunityTab} />
-//     </Stack.Navigator>
-//   );
-// };
-
-// const ProfileStackNavigator = () => {
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen name="Profil" component={ProfileTab} />
-//     </Stack.Navigator>
-//   );
-// };
 
 export default function App() {
   const [signedIn, setSignedIn] = useState(false);
