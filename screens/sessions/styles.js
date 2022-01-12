@@ -1,8 +1,34 @@
 import { StyleSheet } from "react-native";
 import Constants from "expo-constants";
 const styles = StyleSheet.create({
-  authFormContainer: {
+  mainContentContainer: {
+    margin: 30,
+  },
+  standardflexColumnContainer: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  container: {
     flex: 1,
+    padding: 24,
+    backgroundColor: 'grey',
+  },
+  contentContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  textContainer: {
+    marginTop: 10,
+  },
+  modalView: {
+    backgroundColor: "white",
+    flex: 1,
+    justifyContent: 'flex-end',
+    marginTop: 500,
+    borderRadius: 12,
+    height: 10
+  },
+  authFormContainer: {
     paddingTop: 100,
     backgroundColor: "#fff",
     width: "100%",
@@ -66,6 +92,13 @@ const styles = StyleSheet.create({
   headerOne: {
     fontSize: 40,
     fontFamily: "roboto-bold",
+  },
+  headingThree: {
+    color: "#979797"
+  },
+  courseTitleContainer: {
+    display: "flex",
+    flexDirection: "column",
   },
 });
 export default styles;

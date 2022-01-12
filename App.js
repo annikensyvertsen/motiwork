@@ -1,74 +1,60 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { Text, SafeAreaView } from "react-native";
+import { Text, SafeAreaView, View } from "react-native";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { auth } from "./firebase";
 import LoginScreen from "./screens/sessions/LoginScreen";
 import RegisterScreen from "./screens/sessions/RegisterScreen";
-import CoursesTab from "./screens/CoursesTab";
-import CompetitionTab from "./screens/CompetitionTab";
+import SessionTab from "./screens/SessionTab";
+import HomeTab from "./screens/HomeTab";
+
+import BottomSheet from "./screens/BottomSheet";
+
+
+import CommunityTab from "./screens/CommunityTab";
 import ProfileTab from "./screens/ProfileTab";
-import RegisterCourses from "./screens/RegisterCourses";
 
 import { FontAwesome } from "@expo/vector-icons";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { useFonts } from "expo-font";
-import { profile } from "console";
 
 const Stack = createStackNavigator();
 
-const MainStackNavigator = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name="courses" component={CoursesTab} />
-      <Stack.Screen name="registerCourses" component={RegisterCourses} />
-    </Stack.Navigator>
-  );
-};
 
-const CompetitionStackNavigator = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name="courses" component={CoursesTab} />
-      <Stack.Screen name="competition" component={CompetitionTab} />
-    </Stack.Navigator>
-  );
-};
+// const HomeStackNavigator = () => {
+//   return (
+//     <Stack.Navigator>
+//       <Stack.Screen name="Hjem" component={HomeTab} />
+//     </Stack.Navigator>
+//   );
+// };
 
-const ProfileStackNavigator = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name="profile" component={profile} />
-    </Stack.Navigator>
-  );
-};
+// const SessionStackNavigator = () => {
+//   return (
+//     <Stack.Navigator>
+//       <Stack.Screen name="Økt" component={SessionTab} />
+//     </Stack.Navigator>
+//   );
+// };
 
-const SignInStackNavigator = () => {
-  return (
-    <Stack.Navigator presentation="card" screenOptions={{}}>
-      <Stack.Screen
-        name="signIn"
-        component={LoginScreen}
-        options={{
-          title: "Sign in",
-        }}
-      />
-      <Stack.Screen
-        name="register"
-        component={RegisterScreen}
-        options={{ title: "Register" }}
-      />
-      <Stack.Screen
-        name="registerCourses"
-        component={RegisterCourses}
-        options={{ title: "Registrer emner" }}
-      />
-    </Stack.Navigator>
-  );
-};
+// const CommunityStackNavigator = () => {
+//   return (
+//     <Stack.Navigator>
+//       <Stack.Screen name="Fellesskap" component={CommunityTab} />
+//     </Stack.Navigator>
+//   );
+// };
+
+// const ProfileStackNavigator = () => {
+//   return (
+//     <Stack.Navigator>
+//       <Stack.Screen name="Profil" component={ProfileTab} />
+//     </Stack.Navigator>
+//   );
+// };
 
 export default function App() {
   const [signedIn, setSignedIn] = useState(false);
@@ -100,54 +86,45 @@ export default function App() {
           <Tab.Navigator
             screenOptions={({ route }) => ({
               tabBarIcon: ({ color, size }) => {
-                if (route.name === "courses") {
+                if (route.name === "Hjem") {
                   return (
-                    <FontAwesome name="list-ul" size={size} color={color} />
+                    <FontAwesome name="home" size={size} color={color} />
                   );
                 }
-                if (route.name === "competition") {
+                if (route.name === "Fellesskap") {
                   return (
                     <FontAwesome name="trophy" size={size} color={color} />
                   );
                 }
-                if (route.name === "profile") {
+                if (route.name === "Økt") {
+                  //should be changed to stopwatch or similar
+                  return <FontAwesome name="play" size={size} color={color} />;
+                }
+                if (route.name === "Profil") {
                   return <FontAwesome name="user" size={size} color={color} />;
                 }
               },
-            })}
-            tabBarOptions={{
-              activeTintColor: "green",
-              inactiveTintColor: "#819ca9",
+              tabBarActiveTintColor: "green",
+              tabBarInactiveTintColor: "#819ca9",
               style: {
                 backgroundColor: "#29434e",
               },
-            }}
+            })}
           >
+            <Tab.Screen name="Hjem" component={HomeTab} />
             <Tab.Screen
-              name="courses"
-              component={CoursesTab}
-              options={{
-                title: "Emner",
-              }}
+              name="Fellesskap"
+              component={CommunityTab}
             />
             <Tab.Screen
-              name="competition"
-              component={CompetitionTab}
-              options={{
-                title: "Konkurranse",
-              }}
+              name="Økt"
+              component={SessionTab}
             />
-            <Tab.Screen
-              name="profile"
-              component={ProfileTab}
-              options={{
-                title: "Profil",
-              }}
-            />
+            <Tab.Screen name="Profil" component={ProfileTab} />
           </Tab.Navigator>
         </SafeAreaView>
       ) : (
-        <>
+        <View>
           <StatusBar style="light" />
           <Stack.Navigator presentation="card" screenOptions={{}}>
             <Stack.Screen
@@ -162,13 +139,8 @@ export default function App() {
               component={RegisterScreen}
               options={{ title: "Register" }}
             />
-            <Stack.Screen
-              name="registerCourses"
-              component={RegisterCourses}
-              options={{ title: "Registrer emner" }}
-            />
           </Stack.Navigator>
-        </>
+        </View>
       )}
     </NavigationContainer>
   );
