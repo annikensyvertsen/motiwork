@@ -8,8 +8,8 @@ import {TimePicker} from 'react-native-simple-time-picker';
 
 export const ChooseTime = ({values}) => {
 
-  const [hours, setHours] = useState(0);
-  const [minutes, setMinutes] = useState(0);
+  const [hours, setHours] = useState(values.hours);
+  const [minutes, setMinutes] = useState(values.minutes);
   const handleChange = (value) => {
     setHours(value.hours);
     setMinutes(value.minutes);
