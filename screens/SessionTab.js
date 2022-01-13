@@ -1,6 +1,6 @@
 import React, {useState, useRef, useEffect} from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { Switch } from "react-native-paper";
+import { Switch, Button, DefaultTheme } from "react-native-paper";
 import { ChooseTime } from "../components/ChooseTime";
 import {StopWatch} from "../components/StopWatch"
 import {Timer} from "../components/Timer"
@@ -29,15 +29,24 @@ const SessionTab = () => {
      <Text style={styles.header1}>Session</Text>
      <View style={styles.container}>
       <Text>Timer</Text>
-       <Switch color="purple" value={isTimer} onValueChange={onToggleSwitch} />
-      <Text>Stopwatch</Text>
+        <View style={styles.toggleButtonsContainer}>
+          <View >
+            <Button onPress={onToggleSwitch} style={styles.timerButton} color={isTimer ? 'white' : DefaultTheme.colors.primary} mode="contained">Timer</Button>
+          </View>
+          <View>
+            <Button onPress={onToggleSwitch} style={styles.stopWatchButton} color={!isTimer ? 'white' : DefaultTheme.colors.primary} mode="contained">Stopwatch</Button>
+          </View>
+        </View>
+          <Text>Stopwatch</Text>
      </View>
-     {isTimer ? <Timer  values={{hours, minutes}} handlePresentPress={handlePresentPress} /> : <StopWatch/>}
+     {isTimer ? <Timer values={{hours, minutes}} handlePresentPress={handlePresentPress} /> : <StopWatch/>}
      <BottomSheetTemplate contentComponent={<ChooseTime values={{hours, minutes, setHours, setMinutes, bottomSheetModalRef}} />} ref={bottomSheetModalRef} />
     </View>
   );
 };
 export default SessionTab;
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -50,5 +59,34 @@ const styles = StyleSheet.create({
   },
   header1: {
     fontSize: 18,
+  },
+  toggleButtonsContainer: {
+    display: "flex",
+    flexDirection: "row"
+  },
+  stopWatchButton: {
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 8,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 8,
+    borderWidth: 2,
+    borderColor: DefaultTheme.colors.primary
+  },
+
+  timerButton: {
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 0,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 0,
+    borderWidth: 2,
+    borderColor: DefaultTheme.colors.primary
   }
 });
+
+
+// <ToggleButton.Group
+//         onValueChange={value => onToggleSwitch}
+//         value={isTimer}>
+//         <ToggleButton icon="format-align-left" status={isTimer} value="left" />
+//         <ToggleButton icon="format-align-right" status={!isTimer} value="right" />
+//       </ToggleButton.Group>
