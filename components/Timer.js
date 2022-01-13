@@ -11,13 +11,13 @@ const formatTime = (t) => {
   if(hours > 0){
     minutes = Math.floor(t % 3600 / 60)
     seconds = Math.floor(t % 3600 % 60)
-    formatted = hours + "h : " + minutes + "m : " + seconds + " s"
+    formatted = hours + "h : " + minutes + " m : " + seconds + " s"
   }else{
     minutes = Math.floor(t / 60);
     seconds = Math.floor(t - minutes * 60)
     formatted =  minutes + "m : " + seconds + " s"
   }
-  return (hours > 0 && hours + "h : " ) + minutes + "m : " + seconds + " s"
+  return (hours > 0 && hours + "h : " ) + minutes + " m : " + seconds + " s"
 }
 
 const convertToSeconds = (h, m) => {
@@ -59,7 +59,7 @@ export const Timer = (props) => {
 
   return (
 
-    <View>
+    <View style={{flex: 1}}>
       <CountdownCircleTimer
         isPlaying={isRunning}
         duration={countDownTime}

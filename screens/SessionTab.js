@@ -11,33 +11,25 @@ const SessionTab = () => {
 
   const [isTimer, setIsTimer] = useState(false)
   const [hours, setHours] = useState(0);
-  const [minutes, setMinutes] = useState(0);
+  const [minutes, setMinutes] = useState(45);
 
   const onToggleSwitch = () => setIsTimer(!isTimer)
         //TODO: use togglebutton instead
 
   const bottomSheetModalRef = useRef(null);
   const handlePresentPress = () => bottomSheetModalRef.current.present()
-      
-
-  useEffect(() => {
-    console.log("woop", hours, minutes)
-    
-  }, [hours, minutes])
+  
   return (
     <View style={{flex: 1}}>
-     <Text style={styles.header1}>Session</Text>
      <View style={styles.container}>
-      <Text>Timer</Text>
         <View style={styles.toggleButtonsContainer}>
           <View >
-            <Button onPress={onToggleSwitch} style={styles.timerButton} color={isTimer ? 'white' : DefaultTheme.colors.primary} mode="contained">Timer</Button>
+            <Button onPress={onToggleSwitch} style={styles.timerButton} color={isTimer ? 'white' : DefaultTheme.colors.primary} mode="contained">Stopwatch</Button>
           </View>
           <View>
-            <Button onPress={onToggleSwitch} style={styles.stopWatchButton} color={!isTimer ? 'white' : DefaultTheme.colors.primary} mode="contained">Stopwatch</Button>
+            <Button onPress={onToggleSwitch} style={styles.stopWatchButton} color={!isTimer ? 'white' : DefaultTheme.colors.primary} mode="contained">Timer</Button>
           </View>
         </View>
-          <Text>Stopwatch</Text>
      </View>
      {isTimer ? <Timer values={{hours, minutes}} handlePresentPress={handlePresentPress} /> : <StopWatch/>}
      <BottomSheetTemplate contentComponent={<ChooseTime values={{hours, minutes, setHours, setMinutes, bottomSheetModalRef}} />} ref={bottomSheetModalRef} />

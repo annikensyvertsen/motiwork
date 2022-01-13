@@ -6,7 +6,7 @@ import { useStopwatch } from "../hooks/stopWatchHook";
 
 export const StopWatch = () => {
 
-  const {isRunning, elapsedTime, startTimer, stopTimer, resetTimer} = useStopwatch();
+  const {points, isRunning, elapsedTime, startTimer, stopTimer, resetTimer} = useStopwatch();
   const handleStartStop = () => {
     isRunning ? stopTimer() : startTimer();
   }
@@ -24,6 +24,7 @@ export const StopWatch = () => {
   return(
     <View>
       <Text> {formatTime()} </Text>
+      <Text> Points: {points}</Text>
       <Button onPress={handleReset}>reset</Button>
       <Button onPress={handleStartStop} status={isRunning ? "running" : "stopped"}>
         {isRunning ? "Stop" : "Start"}
