@@ -1,23 +1,26 @@
 import React, {useState, useEffect, useRef} from "react";
-import { Text, View, StyleSheet } from "react-native";
-import { Button } from "react-native-paper";
+import { Text, View, StyleSheet, Dimensions } from "react-native";
+import { Button, DefaultTheme } from "react-native-paper";
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
+import { buttonStyles, textStyles, containerStyles } from "./styles/sharedStyles";
+
 
 const formatTime = (t) => {
   let hours = Math.floor(t/3600)
   let minutes = 0
   let seconds = 0
   let formatted = ""
+  
   if(hours > 0){
     minutes = Math.floor(t % 3600 / 60)
     seconds = Math.floor(t % 3600 % 60)
-    formatted = hours + "h : " + minutes + " m : " + seconds + " s"
+    formatted = hours + " : " + minutes + " : " + seconds
   }else{
     minutes = Math.floor(t / 60);
     seconds = Math.floor(t - minutes * 60)
-    formatted =  minutes + "m : " + seconds + " s"
+    formatted =  minutes + " :  " + seconds
   }
-  return (hours > 0 && hours + "h : " ) + minutes + " m : " + seconds + " s"
+  return formatted
 }
 
 const convertToSeconds = (h, m) => {
@@ -27,6 +30,7 @@ const convertToSeconds = (h, m) => {
 
 export const Timer = (props) => {
 
+  let sizeOfTimer = Dimensions.get('window').width * 0.8;
   let hours = props.values?.hours;
   let minutes = props.values?.minutes;
 
@@ -37,19 +41,24 @@ export const Timer = (props) => {
   const [formattedTime, setFormattedTime] = useState(formatTime(countDownTime))
   const [remainingTime, setRemainingTime] = useState(0)
 
-  const [isSetTimer, setIsSetTimer] = useState(false)
+  const [isChangeTime, setIsChangeTime] = useState(false)
 
-  useEffect(() => {
-    setFormattedTime(formatTime(remainingTime))
 
-  }, [remainingTime])
-
-  const onPress = () => { setIsRunning(!isRunning)}
+  const onStartOrStopPress = () => { 
+    setIsRunning(!isRunning)
+  }
 
   const onTimePress = () => {
-    setIsSetTimer(!isSetTimer)
+    setIsChangeTime(!isChangeTime)
     props.handlePresentPress()
   }
+
+  //change the time-text every time remaining time changes
+  useEffect(() => {
+    setFormattedTime(formatTime(remainingTime))
+  }, [remainingTime])
+
+  //update the time when the hours and minutes are changed manually in bottom sheet
   useEffect(() => {
     let totalSeconds = convertToSeconds(hours, minutes)
     setFormattedTime(formatTime(totalSeconds))
@@ -59,20 +68,43 @@ export const Timer = (props) => {
 
   return (
 
-    <View style={{flex: 1}}>
+    <View style={styles.wrapper}>
       <CountdownCircleTimer
         isPlaying={isRunning}
         duration={countDownTime}
-        colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+        colors={[DefaultTheme.colors.primary, '#F7B801', '#A30000', '#A30000']}
         colorsTime={[7, 5, 2, 0]}
         onUpdate={(setRemainingTime)}
+        size={sizeOfTimer}
+        strokeWidth={20}
       >
-        {() =><Button onPress={onTimePress}><Text>{formattedTime}</Text></Button>}
+        {() =>
+          <Button onPress={onTimePress}>
+            <Text style={styles.timeText}>{formattedTime}</Text>
+          </Button>}
       </CountdownCircleTimer>
-      <Button onPress={onPress}>{isRunning ? "Stop" : "Start"}</Button>            
+
+      <View style={containerStyles.flexBoxWithMarginTop}>      
+        <Button labelStyle={textStyles.secondaryButtonText} mode="contained" style={buttonStyles.secondaryButton} onPress={onStartOrStopPress}>
+          {isRunning ? "Stop" : "Start"}
+        </Button>            
       </View>
 
+    </View>
   )
 }
+
+
+export const styles = StyleSheet.create({
+  wrapper: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  timeText:{
+    fontSize: 30,
+    fontWeight: "bold"
+  }
+})
 
 

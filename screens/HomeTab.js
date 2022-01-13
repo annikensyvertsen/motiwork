@@ -11,7 +11,6 @@ let challengeColor = activeChallenges ? 'green' : 'red';
 
 
 const HomeTab = () => {
-  const [modalVisible, setModalVisible] = useState(false);
 
   const bottomSheetModalRef = useRef(null);
 

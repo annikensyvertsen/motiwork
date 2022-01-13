@@ -31,17 +31,17 @@ export const useTimer = () => {
     setIsRunning,
     elapsedTime,
     setElapsedTime,
-    points
+    points,
+    setPoints,
   }
 }
 
 export const useStopwatch = () => {
-  //const [laps, setLaps] = useState([]);
-  const { isRunning, setIsRunning, elapsedTime, setElapsedTime, points} = useTimer()
+  const { isRunning, setIsRunning, elapsedTime, setElapsedTime, points, setPoints} = useTimer()
   const handleReset = () => {
     setIsRunning(false);
     setElapsedTime(0);
-    //setLaps([])
+    setPoints(0);
   }
   return {
     elapsedTime: elapsedTime.toFixed(1), 

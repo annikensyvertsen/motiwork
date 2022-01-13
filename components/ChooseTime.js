@@ -10,14 +10,17 @@ export const ChooseTime = ({values}) => {
 
   const [hours, setHours] = useState(values.hours);
   const [minutes, setMinutes] = useState(values.minutes);
+  //const [seconds, setSeconds] = useState(values.seconds)
   const handleChange = (value) => {
     setHours(value.hours);
     setMinutes(value.minutes);
+    //setSeconds(0)
   };
 
   const onButtonPress = () => {
     values.setHours(hours)
     values.setMinutes(minutes)
+    values.setSeconds(0)
 
     values.bottomSheetModalRef.current.dismiss()
 
