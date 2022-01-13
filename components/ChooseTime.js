@@ -18,6 +18,9 @@ export const ChooseTime = ({values}) => {
   const onButtonPress = () => {
     values.setHours(hours)
     values.setMinutes(minutes)
+
+    values.bottomSheetModalRef.current.dismiss()
+
   }
 
   return (

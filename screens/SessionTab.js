@@ -33,7 +33,7 @@ const SessionTab = () => {
       <Text>Stopwatch</Text>
      </View>
      {isTimer ? <Timer  values={{hours, minutes}} handlePresentPress={handlePresentPress} /> : <StopWatch/>}
-     <BottomSheetTemplate contentComponent={<ChooseTime values={{setHours, setMinutes}} />} ref={bottomSheetModalRef} />
+     <BottomSheetTemplate contentComponent={<ChooseTime values={{setHours, setMinutes, bottomSheetModalRef}} />} ref={bottomSheetModalRef} />
     </View>
   );
 };

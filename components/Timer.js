@@ -4,9 +4,20 @@ import { Button } from "react-native-paper";
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 
 const formatTime = (t) => {
-  let minutes = Math.floor(t / 60);
-  let seconds = Math.floor(t - minutes * 60)
-  return minutes + "m : " + seconds + " s"
+  let hours = Math.floor(t/3600)
+  let minutes = 0
+  let seconds = 0
+  let formatted = ""
+  if(hours > 0){
+    minutes = Math.floor(t % 3600 / 60)
+    seconds = Math.floor(t % 3600 % 60)
+    formatted = hours + "h : " + minutes + "m : " + seconds + " s"
+  }else{
+    minutes = Math.floor(t / 60);
+    seconds = Math.floor(t - minutes * 60)
+    formatted =  minutes + "m : " + seconds + " s"
+  }
+  return (hours > 0 && hours + "h : " ) + minutes + "m : " + seconds + " s"
 }
 
 const convertToSeconds = (h, m) => {
@@ -40,13 +51,9 @@ export const Timer = (props) => {
     props.handlePresentPress()
   }
   useEffect(() => {
-    console.log("stopwatch listens", convertToSeconds(hours, minutes))
     let totalSeconds = convertToSeconds(hours, minutes)
-    console.log("total minutes", totalSeconds, formatTime(totalSeconds))
     setFormattedTime(formatTime(totalSeconds))
     setCountDownTime(totalSeconds)
-    //setCountDownTime(formattedTime)
-    console.log("formatted time?", formattedTime)
   }, [hours, minutes])
 
 
