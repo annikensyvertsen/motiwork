@@ -3,6 +3,8 @@ import { Text, View, StyleSheet, Dimensions } from "react-native";
 import { Button, DefaultTheme } from "react-native-paper";
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import { buttonStyles, textStyles, containerStyles } from "./styles/sharedStyles";
+import { auth, db } from "../firebase";
+import firebase from 'firebase/app';
 
 
 //todo: denne funksjonen kan forenkles
@@ -40,6 +42,8 @@ const convertToSeconds = (h, m) => {
 
 export const Timer = (props) => {
 
+  let currentUser = auth.currentUser;
+
   let sizeOfTimer = Dimensions.get('window').width * 0.8;
   let hours = props.values?.hours;
   let minutes = props.values?.minutes;
@@ -52,7 +56,7 @@ export const Timer = (props) => {
 
   const [isChangeTime, setIsChangeTime] = useState(false)
 
-  const [points, setPoints] = useState(0)
+  //const [points, setPoints] = useState(2)
 
   const onStartOrStopPress = () => { 
     setIsRunning(!isRunning)
@@ -66,11 +70,16 @@ export const Timer = (props) => {
     props.handlePresentPress()
   }
 
-  const onCountdownComplete = () => {
+  const onCountdownComplete = async () => {
     let totalMinutes = countDownTime/60
     if(totalMinutes >= 10){
       let totalPoints = Math.floor(totalMinutes/10)
-      setPoints(totalPoints)
+      db.collection('usersCollection').doc(currentUser.uid).update({
+        points: firebase.firestore.FieldValue.increment(totalPoints)
+      })
+      .then(result => console.log("result??", result))
+      .catch(error => console.log("error", error))
+      
     }
     onStartOrStopPress()
 

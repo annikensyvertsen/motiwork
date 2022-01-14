@@ -23,11 +23,12 @@ const RegisterScreen = ({ navigation }) => {
     const { email, password, name } = data;
     auth
       .createUserWithEmailAndPassword(email.trim().toLowerCase(), password)
-      .then(function (result) {        
-        db.collection('usersCollection').add({
+      .then(function (result) {  
+        db.collection('usersCollection').doc(result.user.uid).set({
           uid: result.user.uid,
-          points: 0,
-        }).then(function (result) {
+          points: 0
+        })      
+       .then(function (result) {
           //todo: skal denne gjøre noe?
           //console.log("result of user collection: ", result)
         }).catch(function(error){
