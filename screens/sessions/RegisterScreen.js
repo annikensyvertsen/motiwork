@@ -3,7 +3,8 @@ import { View, Text, Image, TextInput } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { Button } from "react-native-paper";
 import styles from "./styles";
-import { auth } from "../../firebase";
+import { auth, db } from "../../firebase";
+
 
 const RegisterScreen = ({ navigation }) => {
   const {
@@ -22,7 +23,16 @@ const RegisterScreen = ({ navigation }) => {
     const { email, password, name } = data;
     auth
       .createUserWithEmailAndPassword(email.trim().toLowerCase(), password)
-      .then(function (result) {
+      .then(function (result) {        
+        db.collection('usersCollection').add({
+          uid: result.user.uid,
+          points: 0,
+        }).then(function (result) {
+          //todo: skal denne gjøre noe?
+          //console.log("result of user collection: ", result)
+        }).catch(function(error){
+          console.log(error)
+        })
         return result.user.updateProfile({
           displayName: name,
         });

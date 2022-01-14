@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-import Constants from "expo-constants";
 const styles = StyleSheet.create({
   mainContentContainer: {
     margin: 30,
@@ -32,6 +31,7 @@ const styles = StyleSheet.create({
     paddingTop: 100,
     backgroundColor: "#fff",
     width: "100%",
+    flex: 1,
   },
   inputField: {
     margin: 50,

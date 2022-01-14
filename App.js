@@ -22,7 +22,6 @@ const Stack = createStackNavigator();
 
 export default function App() {
   const [signedIn, setSignedIn] = useState(false);
-
   const Tab = createBottomTabNavigator();
 
   const [loaded] = useFonts({
@@ -88,9 +87,9 @@ export default function App() {
           </Tab.Navigator>
         </SafeAreaView>
       ) : (
-        <View>
+        <View style={{flex: 1}}>
           <StatusBar style="light" />
-          <Stack.Navigator presentation="card" screenOptions={{}}>
+          <Stack.Navigator presentation="card">
             <Stack.Screen
               name="signIn"
               component={LoginScreen}
