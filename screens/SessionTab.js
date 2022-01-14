@@ -14,7 +14,6 @@ const SessionTab = () => {
   const [minutes, setMinutes] = useState(45);
   const [seconds, setSeconds] = useState(0);
 
-  //forsøk
   const [isTimerRunning, setIsTimerRunning] = useState(false)
 
   const onToggleSwitch = () => setIsTimer(!isTimer)
