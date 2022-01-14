@@ -8,6 +8,7 @@ const ProfileTab = () => {
   const [userData, setUserData] = useState({uid: currentUser.uid, points: 0 })
 
   const getUserInformation = async () => {
+    console.log("so this is called")
     await db.collection('usersCollection')
     .doc(currentUser.uid).get().then(doc => {
       if(doc.exists){
