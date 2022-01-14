@@ -37,7 +37,6 @@ export const Timer = (props) => {
   const [isRunning, setIsRunning] = useState(false)
   const [countDownTime, setCountDownTime] = useState(600)
 
-
   const [formattedTime, setFormattedTime] = useState(formatTime(countDownTime))
   const [remainingTime, setRemainingTime] = useState(0)
 
@@ -47,8 +46,7 @@ export const Timer = (props) => {
   const onStartOrStopPress = () => { 
     setIsRunning(!isRunning)
     if(isRunning){
-      props.values.onTimerClick()
-
+      props.values.resetComponent()
     }
   }
 

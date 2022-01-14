@@ -23,8 +23,7 @@ const SessionTab = () => {
   const handlePresentPress = () => bottomSheetModalRef.current.present()
   
 
-
-  const onTimerClick = () => {
+  const resetComponent = () => {
     setIsTimerRunning(!isTimerRunning)
   }
   
@@ -48,7 +47,7 @@ const SessionTab = () => {
      </View>
 
      <View style={styles.flexBoxWithMarginTop}>
-      {isTimer ? <Timer key={isTimerRunning} values={{hours, minutes, onTimerClick, setHours, setMinutes, setIsTimerRunning, isTimerRunning}} handlePresentPress={handlePresentPress} /> : <StopWatch/>}
+      {isTimer ? <Timer key={isTimerRunning} values={{hours, minutes, resetComponent, setHours, setMinutes}} handlePresentPress={handlePresentPress} /> : <StopWatch/>}
      </View>
 
      <BottomSheetTemplate contentComponent={<ChooseTime values={{hours, minutes, seconds, setSeconds, setHours, setMinutes, bottomSheetModalRef}} />} ref={bottomSheetModalRef} />
