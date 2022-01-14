@@ -5,46 +5,31 @@ import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import { buttonStyles, textStyles, containerStyles } from "./styles/sharedStyles";
 
 
-//todo: denne funksjonen skal forenkles
+//todo: denne funksjonen kan forenkles
 const formatTime = (t) => {
   let hours = Math.floor(t/3600)
   let minutes = 0
   let seconds = 0
   let formatted = ""
-  
-  let formattedsec = ""
-  let formattedmin = ""
-  let formattedhour = ""
 
   if(hours > 0){
-    minutes = Math.floor(t % 3600 / 60)
-    seconds = Math.floor(t % 3600 % 60)
-    formattedhour = hours.toString()
-    formattedmin = minutes.toString()
-    formattedsec = seconds.toString()
-    if(hours < 10){
-      formattedhour = "0" + hours
-    }
-    if(minutes < 10){
-      formattedmin = "0" + minutes
-    }
-    if(seconds < 10){
-      formattedsec = "0" + seconds
-    }
-    formatted = formattedhour + " : " + formattedmin + " : " + formattedsec
+    minutes = Math.floor(t % 3600 / 60).toString()
+    seconds = Math.floor(t % 3600 % 60).toString()
+    
   }else{
     minutes = Math.floor(t / 60);
     seconds = Math.floor(t - minutes * 60)
-    formattedmin = minutes.toString()
-    formattedsec = seconds.toString()
-    if(minutes < 10){
-      formattedmin = "0" + minutes
-    }
-    if(seconds < 10){
-      formattedsec = "0" + seconds
-    }
-    formatted =  formattedmin + " :  " + formattedsec
   }
+  if(hours < 10){
+    hours = "0" + hours
+  }
+  if(minutes < 10){
+    minutes = "0" + minutes
+  }
+  if(seconds < 10){
+   seconds = "0" + seconds
+  }
+  formatted = hours + " : " + minutes + " : " + seconds
   return formatted
 }
 
