@@ -5,6 +5,7 @@ import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import { buttonStyles, textStyles, containerStyles } from "./styles/sharedStyles";
 import { auth, db } from "../firebase";
 import firebase from 'firebase/app';
+import { updateUserPoints } from "../hooks/setPointsHook";
 
 
 //todo: denne funksjonen kan forenkles
@@ -56,8 +57,6 @@ export const Timer = (props) => {
 
   const [isChangeTime, setIsChangeTime] = useState(false)
 
-  //const [points, setPoints] = useState(2)
-
   const onStartOrStopPress = () => { 
     setIsRunning(!isRunning)
     if(isRunning){
@@ -73,13 +72,8 @@ export const Timer = (props) => {
   const onCountdownComplete = async () => {
     let totalMinutes = countDownTime/60
     if(totalMinutes >= 10){
-      let totalPoints = Math.floor(totalMinutes/10)
-      db.collection('usersCollection').doc(currentUser.uid).update({
-        points: firebase.firestore.FieldValue.increment(totalPoints)
-      })
-      .then(result => console.log("result??", result))
-      .catch(error => console.log("error", error))
-      
+      let points = Math.floor(totalMinutes/10)
+      updateUserPoints(points, currentUser.uid)
     }
     onStartOrStopPress()
 

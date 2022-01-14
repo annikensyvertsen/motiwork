@@ -2,14 +2,21 @@
 import React, {useState, useEffect} from "react";
 import { Text, View, StyleSheet, Dimensions } from "react-native";
 import { Button, DefaultTheme, Surface } from "react-native-paper";
+import { updateUserPoints } from "../hooks/setPointsHook";
 import { useStopwatch } from "../hooks/stopWatchHook";
-//import styles from "../screens/sessions/styles";
+import { auth } from "../firebase";
 import { buttonStyles, textStyles } from "./styles/sharedStyles";
 
 export const StopWatch = () => {
   const {points, isRunning, elapsedTime, startTimer, stopTimer, resetTimer} = useStopwatch();
+  let currentUser = auth.currentUser
   const handleStartStop = () => {
-    isRunning ? stopTimer() : startTimer();
+    if(isRunning){
+      stopTimer()
+      updateUserPoints(points, currentUser.uid)
+    }else{
+      startTimer()
+    };
   }
   const handleReset = () => {
     !isRunning && resetTimer()
@@ -77,5 +84,3 @@ const styles = StyleSheet.create({
   },
 
 })
-
-//      // <Button onPress={handleReset}>reset</Button>
