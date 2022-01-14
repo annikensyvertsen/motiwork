@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from "react";
+import React, {useState, useRef, useEffect, useCallback} from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { Switch, Button, DefaultTheme } from "react-native-paper";
 import { ChooseTime } from "../components/ChooseTime";
@@ -14,13 +14,21 @@ const SessionTab = () => {
   const [minutes, setMinutes] = useState(45);
   const [seconds, setSeconds] = useState(0);
 
+  //forsøk
+  const [isTimerRunning, setIsTimerRunning] = useState(false)
 
   const onToggleSwitch = () => setIsTimer(!isTimer)
-        //TODO: use togglebutton instead
 
   const bottomSheetModalRef = useRef(null);
   const handlePresentPress = () => bottomSheetModalRef.current.present()
   
+
+
+  const onTimerClick = () => {
+    setIsTimerRunning(!isTimerRunning)
+  }
+  
+
   return (
     <View style={styles.sessionWrapper}>
      <View style={styles.container}>
@@ -40,7 +48,7 @@ const SessionTab = () => {
      </View>
 
      <View style={styles.flexBoxWithMarginTop}>
-      {isTimer ? <Timer values={{hours, minutes, setHours, setMinutes}} handlePresentPress={handlePresentPress} /> : <StopWatch/>}
+      {isTimer ? <Timer key={isTimerRunning} values={{hours, minutes, onTimerClick, setHours, setMinutes, setIsTimerRunning, isTimerRunning}} handlePresentPress={handlePresentPress} /> : <StopWatch/>}
      </View>
 
      <BottomSheetTemplate contentComponent={<ChooseTime values={{hours, minutes, seconds, setSeconds, setHours, setMinutes, bottomSheetModalRef}} />} ref={bottomSheetModalRef} />

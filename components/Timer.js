@@ -46,6 +46,10 @@ export const Timer = (props) => {
 
   const onStartOrStopPress = () => { 
     setIsRunning(!isRunning)
+    if(isRunning){
+      props.values.onTimerClick()
+
+    }
   }
 
   const onTimePress = () => {
@@ -53,18 +57,22 @@ export const Timer = (props) => {
     props.handlePresentPress()
   }
 
-  //change the time-text every time remaining time changes
   useEffect(() => {
     setFormattedTime(formatTime(remainingTime))
   }, [remainingTime])
 
-  //update the time when the hours and minutes are changed manually in bottom sheet
   useEffect(() => {
     let totalSeconds = convertToSeconds(hours, minutes)
+
     setFormattedTime(formatTime(totalSeconds))
     setCountDownTime(totalSeconds)
-  }, [hours, minutes])
+  }, [props.values?.minutes,  props.values?.minutes, ])
 
+
+  const updateTimer = (e) => {
+    setRemainingTime(e)
+    setFormattedTime(formatTime(e))
+  }
 
   return (
 
@@ -74,7 +82,7 @@ export const Timer = (props) => {
         duration={countDownTime}
         colors={[DefaultTheme.colors.primary, '#F7B801', '#A30000', '#A30000']}
         colorsTime={[7, 5, 2, 0]}
-        onUpdate={(setRemainingTime)}
+        onUpdate={updateTimer}
         size={sizeOfTimer}
         strokeWidth={20}
       >
