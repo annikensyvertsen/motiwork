@@ -52,6 +52,7 @@ export const Timer = (props) => {
 
   const [isChangeTime, setIsChangeTime] = useState(false)
 
+  const [points, setPoints] = useState(0)
 
   const onStartOrStopPress = () => { 
     setIsRunning(!isRunning)
@@ -65,6 +66,21 @@ export const Timer = (props) => {
     props.handlePresentPress()
   }
 
+  const onCountdownComplete = () => {
+    let totalMinutes = countDownTime/60
+    if(totalMinutes >= 10){
+      let totalPoints = Math.floor(totalMinutes/10)
+      setPoints(totalPoints)
+    }
+    onStartOrStopPress()
+
+  }
+
+  const updateTimer = (e) => {
+    setRemainingTime(e)
+    setFormattedTime(formatTime(e))
+  }
+
   useEffect(() => {
     setFormattedTime(formatTime(remainingTime))
   }, [remainingTime])
@@ -75,11 +91,6 @@ export const Timer = (props) => {
     setCountDownTime(totalSeconds)
   }, [props.values?.hours,  props.values?.minutes, ])
 
-
-  const updateTimer = (e) => {
-    setRemainingTime(e)
-    setFormattedTime(formatTime(e))
-  }
 
   return (
 
@@ -92,6 +103,7 @@ export const Timer = (props) => {
         onUpdate={updateTimer}
         size={sizeOfTimer}
         strokeWidth={20}
+        onComplete={onCountdownComplete}
       >
         {() =>
           <Button onPress={onTimePress}>
