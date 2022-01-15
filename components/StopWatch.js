@@ -1,26 +1,40 @@
 
 import React, {useState, useEffect} from "react";
 import { Text, View, StyleSheet, Dimensions } from "react-native";
-import { Button, DefaultTheme, Surface } from "react-native-paper";
+import { Button, DefaultTheme, Surface,  Portal, Provider } from "react-native-paper";
 import { updateUserPoints } from "../hooks/setPointsHook";
 import { useStopwatch } from "../hooks/stopWatchHook";
 import { auth } from "../firebase";
-import { buttonStyles, textStyles } from "./styles/sharedStyles";
+import { buttonStyles, textStyles, containerStyles } from "./styles/sharedStyles";
 
-export const StopWatch = () => {
+export const StopWatch = (props) => {
+
   const {points, isRunning, elapsedTime, startTimer, stopTimer, resetTimer} = useStopwatch();
   let currentUser = auth.currentUser
-  const handleStartStop = () => {
+
+  const handleOnStartStopPress = () => {
     if(isRunning){
       stopTimer()
-      updateUserPoints(points, currentUser.uid)
+      props.values.activateDialog()
     }else{
       startTimer()
     };
   }
-  const handleReset = () => {
+
+  const handleResetStopwatch = () => {
+    updateUserPoints(points, currentUser.uid)
     !isRunning && resetTimer()
   }
+
+  useEffect(() => {
+    if(!props.values.visibleDialog){
+      if(props.values.isEndSession){  
+        handleResetStopwatch()
+      }else{
+        startTimer()
+      }
+    }
+  }, [props.values.visibleDialog])
 
   const formatTime = () => {
     let minutes = Math.floor(elapsedTime / 60);
@@ -40,12 +54,18 @@ export const StopWatch = () => {
 
   return(
     <View style={styles.wrapper}>
-      <Surface style={styles.circle}>
-      <Text style={styles.pointText}> {points}p</Text>
-        <Text style={styles.timerText}> {formatTime()} </Text>
-      </Surface>
+      <View style={containerStyles.flexBoxWithMarginTop}>
+        <Text>Start en økt for å få poeng!</Text>
+        <Text>Hold det gående i minst ti minutter for å få poeng.</Text>
+      </View>
+      <View style={containerStyles.flexBoxWithMarginTop}>
+        <Surface style={styles.circle}>
+        <Text style={styles.pointText}> {points}p</Text>
+          <Text style={styles.timerText}> {formatTime()} </Text>
+        </Surface>
+      </View>
       <View style={styles.flexBoxWithMarginTop}>
-        <Button labelStyle={textStyles.secondaryButtonText} mode="contained" style={buttonStyles.secondaryButton} onPress={handleStartStop} status={isRunning ? "running" : "stopped"}>
+        <Button labelStyle={textStyles.secondaryButtonText} mode="contained" style={buttonStyles.secondaryButton} onPress={handleOnStartStopPress} status={isRunning ? "running" : "stopped"}>
             {isRunning ? "Stop" : "Start"}
         </Button>
       </View>

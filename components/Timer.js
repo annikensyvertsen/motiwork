@@ -3,8 +3,7 @@ import { Text, View, StyleSheet, Dimensions } from "react-native";
 import { Button, DefaultTheme } from "react-native-paper";
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import { buttonStyles, textStyles, containerStyles } from "./styles/sharedStyles";
-import { auth, db } from "../firebase";
-import firebase from 'firebase/app';
+import { auth } from "../firebase";
 import { updateUserPoints } from "../hooks/setPointsHook";
 
 
@@ -98,21 +97,28 @@ export const Timer = (props) => {
   return (
 
     <View style={styles.wrapper}>
-      <CountdownCircleTimer
-        isPlaying={isRunning}
-        duration={countDownTime}
-        colors={[DefaultTheme.colors.primary, '#F7B801', '#A30000', '#A30000']}
-        colorsTime={[7, 5, 2, 0]}
-        onUpdate={updateTimer}
-        size={sizeOfTimer}
-        strokeWidth={20}
-        onComplete={onCountdownComplete}
-      >
-        {() =>
-          <Button onPress={onTimePress}>
-            <Text style={styles.timeText}>{formattedTime}</Text>
-          </Button>}
-      </CountdownCircleTimer>
+      <View style={containerStyles.flexBoxWithMarginTop}>
+       <Text>Start en økt for å få poeng!</Text>
+       <Text>Hold ut helt til økten er ferdig for å få poeng &#128131; </Text>
+      </View>
+
+      <View style={containerStyles.flexBoxWithMarginTop}>
+        <CountdownCircleTimer
+          isPlaying={isRunning}
+          duration={countDownTime}
+          colors={[DefaultTheme.colors.primary, '#F7B801', '#A30000', '#A30000']}
+          colorsTime={[7, 5, 2, 0]}
+          onUpdate={updateTimer}
+          size={sizeOfTimer}
+          strokeWidth={20}
+          onComplete={onCountdownComplete}
+        >
+          {() =>
+            <Button onPress={onTimePress}>
+              <Text style={styles.timeText}>{formattedTime}</Text>
+            </Button>}
+        </CountdownCircleTimer>
+      </View>
 
       <View style={containerStyles.flexBoxWithMarginTop}>      
         <Button labelStyle={textStyles.secondaryButtonText} mode="contained" style={buttonStyles.secondaryButton} onPress={onStartOrStopPress}>

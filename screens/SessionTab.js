@@ -1,10 +1,11 @@
 import React, {useState, useRef, useEffect, useCallback} from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { Switch, Button, DefaultTheme } from "react-native-paper";
+import {  Button, DefaultTheme, Provider, Portal } from "react-native-paper";
 import { ChooseTime } from "../components/ChooseTime";
 import {StopWatch} from "../components/StopWatch"
 import {Timer} from "../components/Timer"
 import BottomSheetTemplate from "../screens/BottomSheetTemplate";
+import ComponentDialog from '../components/Dialog'
 
 
 const SessionTab = () => {
@@ -13,7 +14,8 @@ const SessionTab = () => {
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(45);
   const [seconds, setSeconds] = useState(0);
-
+  const [visibleDialog, setVisibleDialog] = useState(false);
+  const [isEndSession, setIsEndSession] = useState(false);
   const [isTimerRunning, setIsTimerRunning] = useState(false)
 
   const onToggleSwitch = () => setIsTimer(!isTimer)
@@ -21,13 +23,25 @@ const SessionTab = () => {
   const bottomSheetModalRef = useRef(null);
   const handlePresentPress = () => bottomSheetModalRef.current.present()
   
-
   const resetComponent = () => {
     setIsTimerRunning(!isTimerRunning)
   }
-  
+
+  const activateDialog = () => {
+    setVisibleDialog(!visibleDialog)
+  }
+
+  const stopDialog = (endSession) => {
+    setVisibleDialog(!visibleDialog)
+    setIsEndSession(endSession)
+  }
 
   return (
+    <Provider>
+    <Portal>
+      <ComponentDialog stopDialog={stopDialog} visibleDialog={visibleDialog}/>
+    </Portal>
+
     <View style={styles.sessionWrapper}>
      <View style={styles.container}>
         <View style={styles.toggleButtonsContainer}>
@@ -41,16 +55,15 @@ const SessionTab = () => {
      </View>
 
      <View style={styles.flexBoxWithMarginTop}>
-        <Text>Start en økt for å få poeng!</Text>
-        <Text>Hold det gående i minst ti minutter for å få poeng.</Text>
-     </View>
-
-     <View style={styles.flexBoxWithMarginTop}>
-      {isTimer ? <Timer key={isTimerRunning} values={{hours, minutes, resetComponent, setHours, setMinutes}} handlePresentPress={handlePresentPress} /> : <StopWatch/>}
+      {isTimer ? 
+        <Timer key={isTimerRunning} values={{activateDialog, hours, minutes, resetComponent, setHours, setMinutes, isEndSession}} handlePresentPress={handlePresentPress} /> 
+        : 
+        <StopWatch values={{activateDialog,visibleDialog, isEndSession}}/>}
      </View>
 
      <BottomSheetTemplate contentComponent={<ChooseTime values={{hours, minutes, seconds, setSeconds, setHours, setMinutes, bottomSheetModalRef}} />} ref={bottomSheetModalRef} />
     </View>
+    </Provider>
   );
 };
 export default SessionTab;
