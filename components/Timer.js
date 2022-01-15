@@ -56,12 +56,34 @@ export const Timer = (props) => {
 
   const [isChangeTime, setIsChangeTime] = useState(false)
 
-  const onStartOrStopPress = () => { 
+  const didMountRef = useRef(false);
+
+  const handleOnStartStoppPress = () => { 
     setIsRunning(!isRunning)
     if(isRunning){
-      props.values.resetComponent()
+      props.values.activateDialog()
     }
   }
+
+  const handleResetStopwatch = () => {
+    props.values.resetComponent()
+  }
+
+  useEffect(() => {
+    if(didMountRef.current){
+
+    if(!props.values.visibleDialog){
+      if(props.values.isEndSession){  
+        handleResetStopwatch()
+      }else{
+        setIsRunning(!isRunning)
+      }
+    }
+  }else {
+    didMountRef.current = true
+  }
+  
+  }, [props.values.visibleDialog])
 
   const onTimePress = () => {
     setIsChangeTime(!isChangeTime)
@@ -74,7 +96,7 @@ export const Timer = (props) => {
       let points = Math.floor(totalMinutes/10)
       updateUserPoints(points, currentUser.uid)
     }
-    onStartOrStopPress()
+    handleOnStartStoppPress()
 
   }
 
@@ -121,7 +143,7 @@ export const Timer = (props) => {
       </View>
 
       <View style={containerStyles.flexBoxWithMarginTop}>      
-        <Button labelStyle={textStyles.secondaryButtonText} mode="contained" style={buttonStyles.secondaryButton} onPress={onStartOrStopPress}>
+        <Button labelStyle={textStyles.secondaryButtonText} mode="contained" style={buttonStyles.secondaryButton} onPress={handleOnStartStoppPress}>
           {isRunning ? "Stop" : "Start"}
         </Button>            
       </View>

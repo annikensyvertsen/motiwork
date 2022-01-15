@@ -1,5 +1,5 @@
 
-import React, {useState, useEffect} from "react";
+import React, {useRef, useEffect} from "react";
 import { Text, View, StyleSheet, Dimensions } from "react-native";
 import { Button, DefaultTheme, Surface,  Portal, Provider } from "react-native-paper";
 import { updateUserPoints } from "../hooks/setPointsHook";
@@ -11,6 +11,9 @@ export const StopWatch = (props) => {
 
   const {points, isRunning, elapsedTime, startTimer, stopTimer, resetTimer} = useStopwatch();
   let currentUser = auth.currentUser
+  //didmountref = reference used to see if it is initial render or not, maybe not the best way but works for now
+  const didMountRef = useRef(false);
+
 
   const handleOnStartStopPress = () => {
     if(isRunning){
@@ -27,13 +30,19 @@ export const StopWatch = (props) => {
   }
 
   useEffect(() => {
-    if(!props.values.visibleDialog){
-      if(props.values.isEndSession){  
-        handleResetStopwatch()
-      }else{
-        startTimer()
+    if(didMountRef.current){
+      if(!props.values.visibleDialog ){
+        if(props.values.isEndSession){  
+          handleResetStopwatch()
+        }else{
+          console.log("wtf is this called on initial render?")
+          startTimer()
+        }
       }
+    }else {
+      didMountRef.current = true
     }
+    
   }, [props.values.visibleDialog])
 
   const formatTime = () => {

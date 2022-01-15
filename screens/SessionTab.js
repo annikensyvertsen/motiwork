@@ -56,7 +56,7 @@ const SessionTab = () => {
 
      <View style={styles.flexBoxWithMarginTop}>
       {isTimer ? 
-        <Timer key={isTimerRunning} values={{activateDialog, hours, minutes, resetComponent, setHours, setMinutes, isEndSession}} handlePresentPress={handlePresentPress} /> 
+        <Timer key={isTimerRunning} values={{activateDialog, hours, minutes, resetComponent, setHours, setMinutes, visibleDialog, isEndSession}} handlePresentPress={handlePresentPress} /> 
         : 
         <StopWatch values={{activateDialog,visibleDialog, isEndSession}}/>}
      </View>
