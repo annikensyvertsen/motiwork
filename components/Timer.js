@@ -47,15 +47,17 @@ export const Timer = (props) => {
   let sizeOfTimer = Dimensions.get('window').width * 0.8;
   let hours = props.values?.hours;
   let minutes = props.values?.minutes;
+  let totalInitialTime = (hours*60*60) + (minutes*60)
 
   const [isRunning, setIsRunning] = useState(false)
-  const [countDownTime, setCountDownTime] = useState(600)
+  const [countDownTime, setCountDownTime] = useState(totalInitialTime)
 
   const [formattedTime, setFormattedTime] = useState(formatTime(countDownTime))
   const [remainingTime, setRemainingTime] = useState(0)
 
   const [isChangeTime, setIsChangeTime] = useState(false)
 
+  const [currentPoints, setCurrentPoints] = useState(0)
   const didMountRef = useRef(false);
 
   const handleOnStartStoppPress = () => { 
@@ -70,19 +72,18 @@ export const Timer = (props) => {
   }
 
   useEffect(() => {
+    //if renders for the firsttime
     if(didMountRef.current){
-
-    if(!props.values.visibleDialog){
-      if(props.values.isEndSession){  
-        handleResetStopwatch()
-      }else{
-        setIsRunning(!isRunning)
+      if(!props.values.visibleDialog){
+        if(props.values.isEndSession){  
+          handleResetStopwatch()
+        }else{
+          setIsRunning(!isRunning)
+        }
       }
+    }else {
+      didMountRef.current = true
     }
-  }else {
-    didMountRef.current = true
-  }
-  
   }, [props.values.visibleDialog])
 
   const onTimePress = () => {
@@ -97,16 +98,28 @@ export const Timer = (props) => {
       updateUserPoints(points, currentUser.uid)
     }
     handleOnStartStoppPress()
-
   }
+
 
   const updateTimer = (e) => {
     setRemainingTime(e)
     setFormattedTime(formatTime(e))
+    calculateCurrentPoints(e)
+  }
+
+  const calculateCurrentPoints = (t) => {
+    let totalTime = (hours * 60 * 60) + (minutes * 60)
+    let timeElapsed = totalTime - t
+    let totalMinutes = timeElapsed/60
+    if(totalMinutes >= 10){
+      let points = Math.floor(totalMinutes/10)
+      setCurrentPoints(points)
+    }
   }
 
   useEffect(() => {
     setFormattedTime(formatTime(remainingTime))
+
   }, [remainingTime])
 
   useEffect(() => {
@@ -136,9 +149,13 @@ export const Timer = (props) => {
           onComplete={onCountdownComplete}
         >
           {() =>
-            <Button onPress={onTimePress}>
-              <Text style={styles.timeText}>{formattedTime}</Text>
-            </Button>}
+            <View style={styles.timerContent}>
+              <Text style={styles.pointText}>{currentPoints}p</Text>
+              <Button onPress={onTimePress}>
+                <Text style={styles.timeText}>{formattedTime}</Text>
+              </Button>
+            </View>
+           }
         </CountdownCircleTimer>
       </View>
 
@@ -159,9 +176,19 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
-  timeText:{
+  timerContent: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  timeText: {
     fontSize: 30,
     fontWeight: "bold"
+  },
+  pointText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: DefaultTheme.colors.primary
   }
 })
 
