@@ -1,177 +1,265 @@
-import { Button, Menu, Divider, Provider, TextInput } from 'react-native-paper';
+import { Button, Menu, Provider, TextInput, IconButton } from 'react-native-paper';
 import React, { useState } from "react";
-import { View, Text, TouchableWithoutFeedback } from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
-import DatePicker from 'react-native-datepicker'
-import {Keyboard} from 'react-native'
+import { View, StyleSheet, ScrollView, Text } from 'react-native';
 
+import { useForm, Controller } from "react-hook-form";
 
-const DismissKeyboard = ({children}) => (
-  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-    {children}
-  </TouchableWithoutFeedback>
-)
+import DateTimePicker from '@react-native-community/datetimepicker';
 
-function returnPlaceholder(){
+import { containerStyles } from "./styles/sharedStyles";
 
-}
-
-function returnPeriod(period){
- if(period === "day"){
-   return ""
- }
-}
-
-function handleWorkloadChange(e){
-   const re = /^[0-9\b]+$/;
-
-    // if value is not blank, then test the regex
-
-    if (e.target.value === '' || re.test(e.target.value)) {
-       this.setState({value: e.target.value})
-    }
-}
 
 const GoalForm = () => {
-  const [isOpenPeriodDropdown, setIsOpenPeriodDropdown] = useState(false);
-  const [period, setPeriod] = useState(null);
-  const [reward, setReward] = useState("")
-  const [typesOfPeriod, setTypesOfPeriod] = useState([
-    {label: 'Dag', value: 'day'},
-    {label: 'Uke', value: 'week'},
-    {label: 'Måned', value: 'month'},
-  ]);
-  const [workload, setWorkload] = useState()
+   const {
+     control,
+     handleSubmit,
+     register,
+     formState: { errors },
+   } = useForm();
 
+
+  /*
+  form: 
+  - fyll inn startdato
+  - fyll inn sluttdato
+  - navn på målet
+  - ønsket premie
+  - antall timer man ønsker å arbeide
+  */
+
+  let dateTomorrow = new Date((new Date()).getTime() + 86400000);
+  const [reward, setReward] = useState('');
+  const predefinedRewards = ["Ingenting", "En gratis middag", "En kinodate", "En kaffedate"]
+  const [menuVisible, setMenuVisible] = useState(!menuVisible);
+  const [visible, setVisible] = useState(!visible);
  
-  const [date, setDate] = useState('')
+  const [workload, setWorkload] = useState()
+  const [goalName, setGoalName] = useState("")
 
-  function handleWorkloadChange(amount){
-   const re = /^[0-9\b]+$/;
-   console.log("e", amount)
-    // if value is not blank, then test the regex
+  const [startDate, setStartDate] = useState(new Date())
+  const [endDate, setEndDate] = useState(dateTomorrow)
 
-    if (/^\d+$/.test(amount) || amount === '') { setWorkload( amount ) }
-}
+
+  const openMenu = () => {
+    setVisible(!visible)
+  };
+
+  const checkIfNumbers = (load) => {
+    console.log("load", load, workload)
+    if (/^\d+$/.test(load.toString())) { 
+      console.log("test", workload)
+
+      setWorkload(load)
+    }
+  }
+
+  const closeMenu = () => setVisible(!visible);
+
+  const onStartDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || startDate;
+    setStartDate(currentDate);
+    console.log("currentdate", currentDate, "end date", endDate)
+
+    if(currentDate > endDate){
+      console.log("in here")
+      setEndDate(new Date(startDate.getTime() + 86400000))
+    }
+  };
+
+  const onEndDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || endDate;
+    setEndDate(currentDate);
+    
+  };
+
+
+  const onSubmit = (data) => {
+    console.log("data: ", data)
+  }
 
   return(
-    <View>
-    <Text>Jeg vil sette et mål for</Text>
-      <DropDownPicker
-        placeholder={"Velg en periode"}
-        placeholderStyle={{
-          color: "grey",
-        }}
-        open={isOpenPeriodDropdown}
-        value={period}
-        items={typesOfPeriod}
-        setOpen={setIsOpenPeriodDropdown}
-        setValue={setPeriod}
-        setItems={setTypesOfPeriod}
-        style={{
-          borderColor: "#421EB7",
-        }}
-      />
-      <Text>Antall arbeidstimer</Text>
-      <DismissKeyboard>
-          <TextInput 
-            mode={"outlined"}
-            value={workload}
-            onChangeText={text => setWorkload(text)}
-            keyboardType="number-pad"
-            placeholder={"40"}
-          />
-      </DismissKeyboard>
+    
+    <Provider style={styles.provider}>
+    <View style={styles.formWrapper}>
 
-       <TextInput 
-        label={"Premie"}
-        mode={"outlined"}
-        value={reward}
-        onChangeText={text => setReward(text)}
-        placeholder={"Hjemmelaget middag"}
+    <View style={{flex: 1}}>
+      <Controller
+        control={control}
+         rules={{
+         required: true,
+         }}
+         render={({ field: { onChange, onBlur, value } }) => (
+           <TextInput 
+            label="Navn på målet"
+             mode={"outlined"}
+             value={goalName}
+             onChangeText={name => setGoalName(name)}
+             placeholder={"Jobbe minst førti timer "}
+            
+            />
+         )}
+         name="goalname"
+       />
+      </View>
+
+      <View style={containerStyles.flexWithMarginTop}>
+       <Controller
+        control={control}
+          rules={{
+          required: true,
+          pattern: /^\d+$/
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput 
+              type="number"
+              label="Antall timer"
+              mode={"outlined"}
+              value={workload}
+              onChange={load => checkIfNumbers(load)}
+              placeholder={"40"}
+            
+            />
+          )}
+          name="goalname"
       />
-    </View>
+
+      </View>
+
+      <View style={containerStyles.flexWithMarginTop}>
+        <Controller 
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <View style={styles.container}>
+            <TextInput
+              placeholder="En gratis middag"
+              mode="outlined"
+              label="Premie"
+              value={reward}
+              onChangeText={setReward}
+              right={
+                <TextInput.Icon
+                  name={"chevron-down"} 
+                  onPress={openMenu}
+                />
+              }
+            />
+          <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'flex-start'
+          }}>
+            <Menu
+            style={styles.menu}
+            visible={visible}
+            onDismiss={closeMenu}
+            anchor={{ x: 100, y: -20 }}>
+
+              {predefinedRewards.map(r => (
+              <Menu.Item key={r} onPress={() => setReward(r)} title={r} />
+              ))}     
+            </Menu>
+        </View>
+        </View>
+          )}
+        />
+      </View>
+
+      <View style={styles.datesContainer}>
+        <Controller
+        control={control}
+        rules={{required: true,}}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <View style={styles.dateWrapper}>
+            <Text style={styles.datePickerText}>Startdato for målet</Text>
+              <View>
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={startDate}
+                  mode={'date'}
+                  display="default"
+                  style={styles.datePicker}
+                  onChange={onStartDateChange}
+                />  
+              </View>
+          </View>
+          )}
+          name="startdate"
+        />
+
+        <Controller
+        control={control}
+        rules={{required: true}}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <View style={styles.dateWrapper}>
+            <Text style={styles.datePickerText}>Sluttdato for målet</Text>
+            <View>
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={endDate}
+                mode={'date'}
+                style={styles.datePicker}
+                display="default"
+                onChange={onEndDateChange}
+                minimumDate={new Date(startDate.getTime() + 86400000)} 
+              />  
+              </View>
+          </View>
+          )}
+          name="endDate"
+        />
+      </View>
+
+
+
+      <View style={containerStyles.flexWithMarginTop}>
+        <Button title="Submit" mode="contained" onPress={handleSubmit(onSubmit)}>Lagre</Button>
+
+      </View>
+      </View>
+
+  </Provider>
+
   )
  
 }
 
 export default GoalForm;
-// <View>
-//       <TextInput label="" value={period} onChangeText={}/>
-//       <TextInput label="" value={text} onChangeText={}/>
-//       <TextInput label="" value={text} onChangeText={}/>
-//       <TextInput label="" value={text} onChangeText={}/>
 
-      
-//     </View>
+const styles = StyleSheet.create({
+  provider: {
+    flex: 1,
+  },
+  formWrapper: {
+    flex: 1,
+    justifyContent: "space-around",
+    padding: 30,
+    height: '100%',
+  },
+  datesContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginTop: 20
+  },
+  datePicker: {
+    alignSelf: 'flex-start',
+    paddingLeft: 120,
+  },
+  dateWrapper: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  datePickerText: {
+    marginBottom: 10
+  },
+  container: {
+    flex: 1,
+  },
+  menu: {
+    top:10
+  },
 
-// const [period, setPeriod] = useState()
-
-// const [visible, setVisible] = React.useState(false);
-
-// const openMenu = () => setVisible(true);
-
-// const closeMenu = () => setVisible(false);
-// return(
-//   <Provider>
-//     <View
-//       style={{
-   
-//         flexDirection: 'row',
-//         justifyContent: 'center',
-//       }}>
-//       <Menu
-//         visible={visible}
-//         onDismiss={closeMenu}
-//         anchor={<TextInput onPress={openMenu}>Show menu</TextInput>}>
-//         <Menu.Item onPress={() => {}} title="Item 1" />
-//         <Divider />
-//         <Menu.Item onPress={() => {}} title="Item 2" />
-//         <Divider />
-//         <Menu.Item onPress={() => {}} title="Item 3" />
-//       </Menu>
-//     </View>
-//   </Provider>
-// )
-
-
-//<DropDownPicker
-      //   placeholder={returnPlaceholder}
-      //   placeholderStyle={{
-      //     color: "grey",
-      //   }}
-      //   open={open}
-      //   value={value}
-      //   items={items}
-      //   setOpen={setOpen}
-      //   setValue={setValue}
-      //   setItems={setItems}
-      //   style={{
-      //     borderColor: "#421EB7",
-      //   }}
-      // />
+});
 
 
-      
-      // <DatePicker
-      //   date={date}
-      //   mode="date"
-      //   placeholder="select date"
-      //   format="YYYY-MM-DD"
-      //   confirmBtnText="Done"
-      //   customStyles={{
-      //     dateIcon: {
-      //       position: 'absolute',
-      //       left: 0,
-      //       top: 4,
-      //       marginLeft: 0
-      //     },
-      //     dateInput: {
-      //       marginLeft: 36,
-      //       borderColor: "#421EB7",
-      //       borderRadius: '12px',
-      //     }
-      //     // ... You can check the source to find the other keys.
-      //   }}
-      //   onDateChange={(date) => {setDate( date)}}
-      // />

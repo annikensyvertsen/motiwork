@@ -1,9 +1,9 @@
-import React, {useState, useRef} from "react";
+import React, { useRef} from "react";
 import { Text, View } from "react-native";
 import { Button } from "react-native-paper";
 import styles from "./sessions/styles";
-import BottomSheet from "./BottomSheet";
-
+import AddGoal from '../components/AddGoal';
+import BottomSheetTemplate from "../screens/BottomSheetTemplate";
 
 let goals = null;
 let activeChallenges = null;
@@ -46,27 +46,9 @@ const HomeTab = () => {
       </View>
  
       </View>
-        <BottomSheet ref={bottomSheetModalRef} />
+        <BottomSheetTemplate contentComponent={<AddGoal />} ref={bottomSheetModalRef} />
     </View>
    
   )
 };
 export default HomeTab;
-
-
-
-// <Modal
-// animationType="slide"
-// transparent={true}
-// visible={modalVisible}
-// onRequestClose={() => {
-//   Alert.alert("Modal has been closed.");
-//   setModalVisible(!modalVisible);
-// }}
-// >
-// <View style={styles.modalView}>
-// <Text>mOdal</Text>
-// <Button onPress={() => setModalVisible(!modalVisible)}>Close</Button>
-
-// </View>
-// </Modal>

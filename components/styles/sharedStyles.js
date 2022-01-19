@@ -22,4 +22,10 @@ export const containerStyles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
   },
+  flexWithMarginTop: {
+    flex: 1,
+    marginTop: 20,
+  },
 })
+
+
