@@ -1,6 +1,6 @@
-import { Button, Menu, Provider, TextInput, IconButton } from 'react-native-paper';
+import { Button, Menu, Provider, TextInput } from 'react-native-paper';
 import React, { useState } from "react";
-import { View, StyleSheet, ScrollView, Text } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 
 import { useForm, Controller } from "react-hook-form";
 
@@ -13,27 +13,26 @@ const GoalForm = () => {
    const {
      control,
      handleSubmit,
-     register,
      formState: { errors },
-   } = useForm();
+   } = useForm({
+     defaultValues: {
+      nameOfGoal: "",
+      numerOfHours: "",
+      reward: "",
+      startDate: "",
+      endDate: "",
+     }
+   });
 
-
-  /*
-  form: 
-  - fyll inn startdato
-  - fyll inn sluttdato
-  - navn på målet
-  - ønsket premie
-  - antall timer man ønsker å arbeide
-  */
+   //todo: legge til error i form
 
   let dateTomorrow = new Date((new Date()).getTime() + 86400000);
+
   const [reward, setReward] = useState('');
   const predefinedRewards = ["Ingenting", "En gratis middag", "En kinodate", "En kaffedate"]
-  const [menuVisible, setMenuVisible] = useState(!menuVisible);
   const [visible, setVisible] = useState(!visible);
  
-  const [workload, setWorkload] = useState()
+  const [workload, setWorkload] = useState(0)
   const [goalName, setGoalName] = useState("")
 
   const [startDate, setStartDate] = useState(new Date())
@@ -44,13 +43,9 @@ const GoalForm = () => {
     setVisible(!visible)
   };
 
+  //TODO: denne skal kun akseptere nummer -> how
   const checkIfNumbers = (load) => {
-    console.log("load", load, workload)
-    if (/^\d+$/.test(load.toString())) { 
-      console.log("test", workload)
-
-      setWorkload(load)
-    }
+    setWorkload(load)
   }
 
   const closeMenu = () => setVisible(!visible);
@@ -58,10 +53,7 @@ const GoalForm = () => {
   const onStartDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || startDate;
     setStartDate(currentDate);
-    console.log("currentdate", currentDate, "end date", endDate)
-
     if(currentDate > endDate){
-      console.log("in here")
       setEndDate(new Date(startDate.getTime() + 86400000))
     }
   };
@@ -74,7 +66,14 @@ const GoalForm = () => {
 
 
   const onSubmit = (data) => {
-    console.log("data: ", data)
+    console.log("data: ")
+    console.log("name", goalName)
+    console.log("reward", reward)
+
+    console.log("startdate", startDate)
+    console.log("endDate", endDate)
+    console.log("workload", workload)
+
   }
 
   return(
@@ -98,7 +97,7 @@ const GoalForm = () => {
             
             />
          )}
-         name="goalname"
+         name="nameOfGoal"
        />
       </View>
 
@@ -115,12 +114,12 @@ const GoalForm = () => {
               label="Antall timer"
               mode={"outlined"}
               value={workload}
-              onChange={load => checkIfNumbers(load)}
+              onChangeText={load => checkIfNumbers(load)}
               placeholder={"40"}
             
             />
           )}
-          name="goalname"
+          name="numberOfHours"
       />
 
       </View>
@@ -162,6 +161,7 @@ const GoalForm = () => {
         </View>
         </View>
           )}
+          name="reward"
         />
       </View>
 
@@ -184,7 +184,7 @@ const GoalForm = () => {
               </View>
           </View>
           )}
-          name="startdate"
+          name="startDate"
         />
 
         <Controller
@@ -210,14 +210,11 @@ const GoalForm = () => {
         />
       </View>
 
-
-
       <View style={containerStyles.flexWithMarginTop}>
-        <Button title="Submit" mode="contained" onPress={handleSubmit(onSubmit)}>Lagre</Button>
-
-      </View>
+        <Button title="Submit" mode="contained" onPress={onSubmit}>Lagre</Button>
       </View>
 
+    </View>
   </Provider>
 
   )
