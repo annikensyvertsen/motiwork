@@ -1,14 +1,21 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 
 import GoalForm from './GoalForm';
 
-const AddGoal = () => {
+import SubmittedMessage from './SubmittedMessage';
+
+const AddGoal = ({bottomSheetModalRef}) => {
+  const [submitted, setSubmitted] = useState(false)
 
   return(
     <ScrollView style={styles.wrapper}>
       <Text style={styles.header}>Legg til et nytt mål</Text>
-      <GoalForm />
+      {submitted ? 
+        <SubmittedMessage bottomSheetModalRef={bottomSheetModalRef} />        
+        : 
+        <GoalForm submitted={submitted} setSubmitted={setSubmitted} />
+      }
     </ScrollView>
   )
 

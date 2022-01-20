@@ -46,7 +46,7 @@ const HomeTab = () => {
       </View>
  
       </View>
-        <BottomSheetTemplate contentComponent={<AddGoal />} ref={bottomSheetModalRef} />
+        <BottomSheetTemplate contentComponent={<AddGoal bottomSheetModalRef={bottomSheetModalRef} />} ref={bottomSheetModalRef} />
     </View>
    
   )

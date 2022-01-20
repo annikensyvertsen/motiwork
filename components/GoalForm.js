@@ -1,15 +1,18 @@
 import { Button, Menu, Provider, TextInput } from 'react-native-paper';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text } from 'react-native';
+import { auth } from "../firebase";
+
 
 import { useForm, Controller } from "react-hook-form";
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { containerStyles } from "./styles/sharedStyles";
+import { setUserGoal } from '../hooks/goalHook';
 
 
-const GoalForm = () => {
+const GoalForm = ({ submitted, setSubmitted}) => {
    const {
      control,
      handleSubmit,
@@ -25,18 +28,22 @@ const GoalForm = () => {
    });
 
    //todo: legge til error i form
+   console.log("hallo")
 
   let dateTomorrow = new Date((new Date()).getTime() + 86400000);
 
   const [reward, setReward] = useState('');
   const predefinedRewards = ["Ingenting", "En gratis middag", "En kinodate", "En kaffedate"]
   const [visible, setVisible] = useState(!visible);
- 
+
   const [workload, setWorkload] = useState(0)
   const [goalName, setGoalName] = useState("")
 
   const [startDate, setStartDate] = useState(new Date())
   const [endDate, setEndDate] = useState(dateTomorrow)
+
+  let currentUser = auth.currentUser;
+
 
 
   const openMenu = () => {
@@ -61,23 +68,34 @@ const GoalForm = () => {
   const onEndDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || endDate;
     setEndDate(currentDate);
-    
+
   };
 
 
-  const onSubmit = (data) => {
-    console.log("data: ")
-    console.log("name", goalName)
-    console.log("reward", reward)
-
-    console.log("startdate", startDate)
-    console.log("endDate", endDate)
-    console.log("workload", workload)
-
+  const onSubmit = async () => {
+    console.log("submitted before?", submitted)
+    let workloadInMinutes = workload * 60
+    console.log("workload ", workload, "in minutes -", workloadInMinutes)
+    const data = {
+      goalName: goalName,
+      reward: reward,
+      startDate: startDate,
+      endDate: endDate,
+      workloadGoal: workloadInMinutes
+    }
+    await setUserGoal(data, currentUser.uid).then(() => {
+      setSubmitted(!submitted)
+    })
+    .catch(error => console.log("error", error))
+    //bottomSheetModalRef.current.dismiss()
   }
 
+  // useEffect(() => {
+  //   bottomSheetModalRef.current.dismiss()
+  // }, [submitted])
+
   return(
-    
+
     <Provider style={styles.provider}>
     <View style={styles.formWrapper}>
 
@@ -88,13 +106,13 @@ const GoalForm = () => {
          required: true,
          }}
          render={({ field: { onChange, onBlur, value } }) => (
-           <TextInput 
+           <TextInput
             label="Navn på målet"
              mode={"outlined"}
              value={goalName}
              onChangeText={name => setGoalName(name)}
              placeholder={"Jobbe minst førti timer "}
-            
+
             />
          )}
          name="nameOfGoal"
@@ -109,14 +127,14 @@ const GoalForm = () => {
           pattern: /^\d+$/
           }}
           render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput 
+            <TextInput
               type="number"
               label="Antall timer"
               mode={"outlined"}
               value={workload}
               onChangeText={load => checkIfNumbers(load)}
               placeholder={"40"}
-            
+
             />
           )}
           name="numberOfHours"
@@ -125,7 +143,7 @@ const GoalForm = () => {
       </View>
 
       <View style={containerStyles.flexWithMarginTop}>
-        <Controller 
+        <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <View style={styles.container}>
@@ -137,7 +155,7 @@ const GoalForm = () => {
               onChangeText={setReward}
               right={
                 <TextInput.Icon
-                  name={"chevron-down"} 
+                  name={"chevron-down"}
                   onPress={openMenu}
                 />
               }
@@ -156,7 +174,7 @@ const GoalForm = () => {
 
               {predefinedRewards.map(r => (
               <Menu.Item key={r} onPress={() => setReward(r)} title={r} />
-              ))}     
+              ))}
             </Menu>
         </View>
         </View>
@@ -180,7 +198,7 @@ const GoalForm = () => {
                   display="default"
                   style={styles.datePicker}
                   onChange={onStartDateChange}
-                />  
+                />
               </View>
           </View>
           )}
@@ -201,8 +219,8 @@ const GoalForm = () => {
                 style={styles.datePicker}
                 display="default"
                 onChange={onEndDateChange}
-                minimumDate={new Date(startDate.getTime() + 86400000)} 
-              />  
+                minimumDate={new Date(startDate.getTime() + 86400000)}
+              />
               </View>
           </View>
           )}
@@ -218,7 +236,7 @@ const GoalForm = () => {
   </Provider>
 
   )
- 
+
 }
 
 export default GoalForm;

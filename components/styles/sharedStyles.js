@@ -12,8 +12,11 @@ export const textStyles = StyleSheet.create({
   secondaryButtonText: {
     color: "white",
     fontSize: 20
-
   },
+  secondaryHeadingText: {
+    fontSize: 30,
+    fontWeight: "bold"
+  }
 })
 
 export const containerStyles = StyleSheet.create({
