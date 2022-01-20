@@ -1,31 +1,46 @@
-import React, { useRef} from "react";
+import React, { useRef, useState, useEffect} from "react";
 import { Text, View } from "react-native";
 import { Button } from "react-native-paper";
 import styles from "./sessions/styles";
 import AddGoal from '../components/AddGoal';
 import BottomSheetTemplate from "../screens/BottomSheetTemplate";
 import { GoalDisplay } from "../components/GoalDisplay";
+import { getUserGoal } from "../hooks/goalHook";
+import { auth, db } from "../firebase";
 
-let goals = true;
+
+//TODO: denne må settes som en state som oppdateres når man ser om det er noe data lagret 
 let activeChallenges = null;
 let challengeColor = activeChallenges ? 'green' : 'red';
+let currentUser = auth.currentUser;  
 
 
 const HomeTab = () => {
+
+  const [goal, setGoal] = useState()
 
   const bottomSheetModalRef = useRef(null);
 
   const handlePresentPress = () => bottomSheetModalRef.current.present()
 
+  const fetchGoals = async () => {
+    await getUserGoal(currentUser.uid).then(g => {
+      setGoal(g)
+    });
+  }
+  
+  useEffect( () => {
+    console.log("goal", goal)
+    fetchGoals()
+  }, [])
 
-  console.log("goals", goals)
   return (
     <View style={{flex: 1}}>
     <View style={styles.mainContentContainer}>
       <View style={styles.standardflexColumnContainer}>
         <Text style={styles.headingThree}>Mål</Text>
-        {goals ?
-        (<View style={styles.textContainer}><GoalDisplay /></View>)
+        {goal ?
+        (<View style={styles.textContainer}><GoalDisplay goal={goal}/></View>)
           :
         (<View style={styles.textContainer}>
           <Text>Du har ikke satt deg noen mål enda. Sett deg mål for å minne deg selv på å jobbe jevnt med skole!</Text>

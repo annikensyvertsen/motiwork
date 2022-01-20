@@ -23,7 +23,16 @@ export const textStyles = StyleSheet.create({
   tertiaryHeadingText: {
     fontSize: 18,
     fontWeight: "bold"
-  }
+  },
+  greyText: {
+    fontSize: 16,
+    color: "#636363"
+  },
+  greyTextBold: {
+    fontSize: 16,
+    color: "#636363",
+    fontWeight: "bold"
+  },
 })
 
 export const containerStyles = StyleSheet.create({

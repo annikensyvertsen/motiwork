@@ -26,7 +26,9 @@ const RegisterScreen = ({ navigation }) => {
       .then(function (result) {  
         db.collection('usersCollection').doc(result.user.uid).set({
           uid: result.user.uid,
-          points: 0
+          points: 0,
+          totalWorkload: 0,
+          currentGoal: {}
         })      
        .then(function (result) {
           //todo: skal denne gjøre noe?
