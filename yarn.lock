@@ -5356,7 +5356,7 @@
   dependencies:
     "asap" "~2.0.6"
 
-"prop-types@^15.5.10", "prop-types@^15.6.0", "prop-types@^15.6.2", "prop-types@^15.7.2":
+"prop-types@*", "prop-types@^15.5.10", "prop-types@^15.6.0", "prop-types@^15.6.2", "prop-types@^15.7.2":
   "integrity" "sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ=="
   "resolved" "https://registry.npmjs.org/prop-types/-/prop-types-15.7.2.tgz"
   "version" "15.7.2"
@@ -5464,6 +5464,11 @@
   "integrity" "sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w=="
   "resolved" "https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz"
   "version" "17.0.2"
+
+"react-native-animated-circular-progress@^1.0.6":
+  "integrity" "sha512-tV7Cw5yK3+Nj6G8HrHRKMToioMDECEmXH21bHzdtHiRQvBL7lbasr9l165AL3hGrAyFsMuza6aemwq/bSh62rw=="
+  "resolved" "https://registry.npmjs.org/react-native-animated-circular-progress/-/react-native-animated-circular-progress-1.0.6.tgz"
+  "version" "1.0.6"
 
 "react-native-countdown-circle-timer@^3.0.5":
   "integrity" "sha512-IcelVEdv2fB+H5KaoGQI8AnflPLShR51GAn67SH3Fa+RgFQ3TS8cHdOPdpFMaE8NQ9hXluc1Y6AdNNu47kWXyQ=="

@@ -4,8 +4,9 @@ import { Button } from "react-native-paper";
 import styles from "./sessions/styles";
 import AddGoal from '../components/AddGoal';
 import BottomSheetTemplate from "../screens/BottomSheetTemplate";
+import { GoalDisplay } from "../components/GoalDisplay";
 
-let goals = null;
+let goals = true;
 let activeChallenges = null;
 let challengeColor = activeChallenges ? 'green' : 'red';
 
@@ -17,13 +18,14 @@ const HomeTab = () => {
   const handlePresentPress = () => bottomSheetModalRef.current.present()
 
 
+  console.log("goals", goals)
   return (
     <View style={{flex: 1}}>
     <View style={styles.mainContentContainer}>
       <View style={styles.standardflexColumnContainer}>
         <Text style={styles.headingThree}>Mål</Text>
         {goals ?
-        (<Text>mål</Text>)
+        (<View style={styles.textContainer}><GoalDisplay /></View>)
           :
         (<View style={styles.textContainer}>
           <Text>Du har ikke satt deg noen mål enda. Sett deg mål for å minne deg selv på å jobbe jevnt med skole!</Text>

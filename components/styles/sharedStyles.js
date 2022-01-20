@@ -1,8 +1,11 @@
 import { StyleSheet } from 'react-native';
+import { DefaultTheme } from 'react-native-paper';
+
+export const yellowColor = "#FFB61D"
 
 export const buttonStyles = StyleSheet.create({
   secondaryButton: {
-    backgroundColor: "#FFB61D",
+    backgroundColor: yellowColor,
     width: 180,
   },
 })
@@ -15,6 +18,10 @@ export const textStyles = StyleSheet.create({
   },
   secondaryHeadingText: {
     fontSize: 30,
+    fontWeight: "bold"
+  },
+  tertiaryHeadingText: {
+    fontSize: 18,
     fontWeight: "bold"
   }
 })
@@ -31,4 +38,11 @@ export const containerStyles = StyleSheet.create({
   },
 })
 
-
+export const cardStyles = StyleSheet.create({
+  primaryCard: {
+    borderRadius: 10,
+    borderColor: DefaultTheme.colors.primary,
+    borderWidth: 1.5,
+    padding: 10
+  }
+})
