@@ -30,7 +30,6 @@ export const AppContent = () => {
     console.log("currenuser id", currentUser.uid)
     let doc = db.collection('usersCollection').doc(currentUser.uid)
     let unsubscribe = doc.onSnapshot(snapshot => {
-      console.log("snapshot happens", snapshot)
         setCurrentUser(currentUser.uid, dispatch)
     })
     return () => {

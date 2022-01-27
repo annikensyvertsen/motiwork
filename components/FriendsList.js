@@ -1,24 +1,27 @@
 import React, {useEffect, useState} from "react";
-import {  View, StyleSheet } from "react-native";
+import {  View, StyleSheet, Text } from "react-native";
 import { useSelector } from "react-redux";
 import { returnMultipleUsersBasedOnIds } from "../help-functions/friends";
 
 export const FriendsLists = () => {
 
   let {user} = useSelector(state => state.user)
-  const [friends, setFriends] = useState([])
+  console.log("user", user)
 
-  useEffect(() => {
-    if(user.friends.length > 0){
-      setFriends(returnMultipleUsersBasedOnIds(user.friends))
-    }
-  }, [user])
+  let friends = returnMultipleUsersBasedOnIds(user.friends)
+  console.log("friends", friends)
+
+  // useEffect(() => {
+  //   if(user.friends.length > 0){
+  //     setFriends(returnMultipleUsersBasedOnIds(user.friends))
+  //   }
+  // }, [user])
   return(
     <View>
     {friends.map(
-      friend => 
+      (friend, i) => 
       (
-        <Text>{friend.name}</Text>
+        <Text key={i}>{friend.name}</Text>
       )
     )}
     </View>

@@ -4,28 +4,11 @@ import { IconButton } from "react-native-paper";
 import { useSelector } from "react-redux";
 import { textStyles } from "./styles/sharedStyles";
 import { UserItem } from "./UserItem";
-import { returnAllUsersExceptFriends } from "../help-functions/friends";
-import { auth, db } from "../firebase";
+import { returnAllUsersExceptFriendsAndRequests } from "../help-functions/friends";
 
 export const AddFriends = () => {
   let {user} = useSelector(state => state.user)
-  //const [usersThatAreNotFriends, setUsersThatAreNotfriends] = useState([])
-  //setUsersThatAreNotfriends(returnAllUsersExceptFriends(user.friends, user.uid))
-  let usersThatAreNotFriends = returnAllUsersExceptFriends(user.friends, user.uid)
-  useEffect(() => {
-    //LISTEN to changes
-    const unsubscribe = db.collection('usersCollection').doc(user.uid)
-      .onSnapshot(snapshot => {
-        if (snapshot.size) {
-          console.log("snapshot", snapshot)
-        } else {
-          console.log("is empty")
-        }
-      })
-  return () => {
-      unsubscribe()
-    }
-  }, [])
+  let usersThatAreNotFriends = returnAllUsersExceptFriendsAndRequests(user.friends, user.uid)
 
   return(
     <View style={styles.container}>

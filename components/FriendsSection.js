@@ -11,15 +11,12 @@ import { useSelector } from "react-redux";
 export const FriendsSection = ({bottomSheetModalRef}) => {
   let {user} = useSelector(state => state.user)
 
-  const [incomingFriendRequests, setIncomingFriendRequests] = useState([])
+  let incomingFriendRequests = user.incomingFriendRequests;
 
   const onPress = () => { 
     bottomSheetModalRef.current.present()
   }
-  
-  useEffect(() => {
-    setIncomingFriendRequests(user.incomingFriendRequests)
-   }, [user]) 
+
 
   return(
     <View>
@@ -39,10 +36,12 @@ export const FriendsSection = ({bottomSheetModalRef}) => {
           </View>
         </View>
       )}
-        
-      <View>
-        <FriendsLists currentUser={user} />
-      </View>
+        {user.friends.length > 0 && (
+          <View>
+            <FriendsLists currentUser={user} />
+          </View>
+        )}
+     
     </View>
   )
 }

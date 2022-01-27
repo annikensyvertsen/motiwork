@@ -22,7 +22,6 @@ export const acceptFriendRequest = async (currentUserId, userToAddId) => {
 }
 
 export const declineFriendRequest = async (currentUserId, userToAddId ) => {
-  console.log("decline")
   await db.collection('usersCollection').doc(userToAddId).update({
     outgoingFriendRequests: firebase.firestore.FieldValue.arrayRemove(currentUserId)
   })
