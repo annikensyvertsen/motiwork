@@ -1,10 +1,8 @@
 import React, {useEffect, useState} from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { DefaultTheme, IconButton, Divider } from "react-native-paper";
-import { getIncomingFriendRequests } from "../hooks/friendHooks";
 import { FriendsLists } from "./FriendsList";
 import { textStyles } from "./styles/sharedStyles";
-import { auth, db } from "../firebase";
 import { RequestItem } from "./RequestItem";
 import { useSelector } from "react-redux";
 
