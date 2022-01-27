@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { IconButton } from "react-native-paper";
 import { useSelector } from "react-redux";
@@ -21,7 +21,7 @@ export const AddFriends = () => {
       <View style={styles.usersList}>
       {usersThatAreNotFriends.map((u, i) => 
         (
-          <UserItem currentUser={user} key={i} userId={u.uid} userName={u.name} />
+          <UserItem currentUser={user} key={i} user={u}/>
         )
       )}
       </View>

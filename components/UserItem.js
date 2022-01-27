@@ -5,17 +5,17 @@ import { useDispatch } from "react-redux";
 import {sendFriendRequest} from '../store/actions/socialActions';
 import { buttonStyles } from "./styles/sharedStyles";
 
-export const UserItem = ({currentUser, userId, userName}) => {
+export const UserItem = ({currentUser, user}) => {
 
   let currentUserId = currentUser.uid
   const [isRequestSent, setIsRequestSent] = useState(false)
   const onPress = () => {
-    sendFriendRequest(currentUserId, userId)
+    sendFriendRequest(currentUserId, user.id)
   }
 
   useEffect(() => {
     if(currentUser.outgoingFriendRequests.length > 0){
-      if(currentUser.outgoingFriendRequests.includes(userId)){
+      if(currentUser.outgoingFriendRequests.includes(user.id)){
         setIsRequestSent(true)
       }else{
         setIsRequestSent(false)
@@ -28,7 +28,7 @@ export const UserItem = ({currentUser, userId, userName}) => {
   return(
     <View>
       <View style={styles.wrapper}>
-        <Text style={styles.textStyle}>{userName}</Text>
+        <Text style={styles.textStyle}>{user.name}</Text>
         {
           isRequestSent ? 
           (<Text style={{color: "grey"}}>Forespørsel sendt</Text>)
