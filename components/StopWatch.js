@@ -25,7 +25,8 @@ export const StopWatch = (props) => {
   }
 
   const handleResetStopwatch = () => {
-    updateUserPoints(points, currentUser.uid)
+    let elapsedTimeInHours = (elapsedTime/60)/60
+    updateUserPoints(elapsedTimeInHours, points, currentUser.uid)
     !isRunning && resetTimer()
   }
 
@@ -35,7 +36,6 @@ export const StopWatch = (props) => {
         if(props.values.isEndSession){  
           handleResetStopwatch()
         }else{
-          console.log("wtf is this called on initial render?")
           startTimer()
         }
       }

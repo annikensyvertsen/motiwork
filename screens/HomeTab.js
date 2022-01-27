@@ -5,9 +5,11 @@ import styles from "./sessions/styles";
 import AddGoal from '../components/AddGoal';
 import BottomSheetTemplate from "../screens/BottomSheetTemplate";
 import { GoalDisplay } from "../components/GoalDisplay";
-import { getUserGoal } from "../hooks/goalHook";
 import { auth, db } from "../firebase";
+import { useSelector } from "react-redux";
+import { setCurrentUser } from "../store/actions/userActions";
 
+import { useDispatch} from 'react-redux';
 
 //TODO: denne må settes som en state som oppdateres når man ser om det er noe data lagret 
 let activeChallenges = null;
@@ -16,22 +18,43 @@ let currentUser = auth.currentUser;
 
 
 const HomeTab = () => {
+  let currentUserId = auth.currentUser.uid
 
+  let {user} = useSelector(state => state.user)
   const [goal, setGoal] = useState()
 
   const bottomSheetModalRef = useRef(null);
-
   const handlePresentPress = () => bottomSheetModalRef.current.present()
 
-  const fetchGoals = async () => {
-    await getUserGoal(currentUser.uid).then(g => {
-      setGoal(g)
-    });
+  const dispatch = useDispatch()
+
+  const initialSetup = async () => {
+    await setCurrentUser(currentUser.uid, dispatch)
   }
-  
+
   useEffect( () => {
-    console.log("goal", goal)
-    fetchGoals()
+    initialSetup()
+  }, [])
+
+
+  //TODO: her, eller et annet sted, må jeg sjekke om målet har gått ut på dato
+  useEffect(() => {
+    user.currentGoal.goalName && setGoal(user.currentGoal)
+   }, [user]) 
+
+   useEffect(() => {
+    //LISTEN to changes
+    const unsubscribe = db.collection('usersCollection').doc(currentUserId)
+      .onSnapshot(snapshot => {
+        if (snapshot.size) {
+          console.log("snapshot", snapshot)
+        } else {
+          console.log("is empty")
+        }
+      })
+  return () => {
+      unsubscribe()
+    }
   }, [])
 
   return (

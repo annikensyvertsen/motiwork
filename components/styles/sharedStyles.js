@@ -4,6 +4,9 @@ import { DefaultTheme } from 'react-native-paper';
 export const yellowColor = "#FFB61D"
 
 export const buttonStyles = StyleSheet.create({
+  primaryButtonSmall: {
+    borderRadius: 20
+  },
   secondaryButton: {
     backgroundColor: yellowColor,
     width: 180,

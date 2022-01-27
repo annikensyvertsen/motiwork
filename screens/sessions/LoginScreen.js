@@ -4,6 +4,8 @@ import { useForm, Controller } from "react-hook-form";
 import { Button } from "react-native-paper";
 import styles from "./styles";
 import { auth } from "../../firebase";
+import { loginUser } from "../../store/actions/userActions";
+import { useDispatch} from 'react-redux';
 
 const LoginScreen = ({ navigation }) => {
   const {
@@ -12,11 +14,12 @@ const LoginScreen = ({ navigation }) => {
     formState: { errors },
   } = useForm();
 
-  console.log("Loginscreen?")
+  const dispatch = useDispatch()
+
   const onSubmit = (data) => {
-    const { email, password } = data;
-    auth.signInWithEmailAndPassword(email.trim().toLowerCase(), password);
+    loginUser(data, dispatch)
   };
+
   return (
     <View style={styles.authFormContainer}>
       <Image

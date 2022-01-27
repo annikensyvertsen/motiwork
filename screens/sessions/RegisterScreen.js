@@ -4,6 +4,7 @@ import { useForm, Controller } from "react-hook-form";
 import { Button } from "react-native-paper";
 import styles from "./styles";
 import { auth, db } from "../../firebase";
+import { registerUser } from "../../store/actions/userActions";
 
 
 const RegisterScreen = ({ navigation }) => {
@@ -19,30 +20,35 @@ const RegisterScreen = ({ navigation }) => {
   password.current = watch("password", "");
 
   const onSubmit = (data) => {
-    console.log(data);
-    const { email, password, name } = data;
-    auth
-      .createUserWithEmailAndPassword(email.trim().toLowerCase(), password)
-      .then(function (result) {  
-        db.collection('usersCollection').doc(result.user.uid).set({
-          uid: result.user.uid,
-          points: 0,
-          totalWorkload: 0,
-          currentGoal: {}
-        })      
-       .then(function (result) {
-          //todo: skal denne gjøre noe?
-          //console.log("result of user collection: ", result)
-        }).catch(function(error){
-          console.log(error)
-        })
-        return result.user.updateProfile({
-          displayName: name,
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    registerUser(data)
+    // auth
+    //const { email, password, name } = data;
+
+    //   .createUserWithEmailAndPassword(email.trim().toLowerCase(), password)
+    //   .then(function (result) {  
+    //     db.collection('usersCollection').doc(result.user.uid).set({
+    //       uid: result.user.uid,
+    //       points: 0,
+    //       totalWorkload: 0,
+    //       currentGoal: {},
+    //       friends: [],
+    //       incomingFriendRequests: [],
+    //       outgoingFriendRequests: [],
+    //       name: name
+    //     })      
+    //    .then(function (result) {
+    //       //todo: skal denne gjøre noe?
+    //       //console.log("result of user collection: ", result)
+    //     }).catch(function(error){
+    //       console.log(error)
+    //     })
+    //     return result.user.updateProfile({
+    //       displayName: name,
+    //     });
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   };
   return (
     <View style={styles.authFormContainer}>

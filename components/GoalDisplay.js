@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet , Text} from "react-native";
 import AnimatedCircularProgress from 'react-native-animated-circular-progress';
-import { Card, DefaultTheme } from "react-native-paper";
+import { Card, Button } from "react-native-paper";
 import { cardStyles, textStyles, yellowColor } from "./styles/sharedStyles";
 
 export const GoalDisplay =  ({goal}) => {
 
   let today = Math.floor(new Date().getTime() / 1000)
-  let hoursWorked = goal.workload/60
-  let workloadGoal = goal.workloadGoal / 60
+  let hoursWorked = Math.floor(goal.workload/60)
+  let workloadGoal = Math.floor(goal.workloadGoal / 60)
 
   const [progress, setProgress] = useState()
   const [remainingDays, setRemainingDays] = useState(0)
@@ -27,7 +27,7 @@ export const GoalDisplay =  ({goal}) => {
   }
 
   const calculateTimeLeft = () => {
-    let timeLeftInSeconds = goal.endDate.seconds
+    let timeLeftInSeconds = goal.endDate ? goal.endDate.seconds : 0;
     let timeLeft = timeLeftInSeconds - today
     let timeLeftInDays = secondsToDhms(timeLeft).days
     setRemainingDays(timeLeftInDays)
@@ -39,9 +39,7 @@ export const GoalDisplay =  ({goal}) => {
     let percentageWorked = hoursWorked/workloadGoal
     let degrees = 360*percentageWorked
     setProgress(degrees)
-    //setProgress(hoursWorked/workloadGoal)
 
-   // console.log("hoursWorked", hoursWorked, "workloadGoal", workloadGoal, "progress", p, "degrees", degrees)
   }
 
   useEffect(() => {

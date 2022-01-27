@@ -1,29 +1,30 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, SafeAreaView, View } from "react-native";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { auth } from "./firebase";
+import thunk from 'redux-thunk'
+
+
 import LoginScreen from "./screens/sessions/LoginScreen";
 import RegisterScreen from "./screens/sessions/RegisterScreen";
-import SessionTab from "./screens/SessionTab";
-import HomeTab from "./screens/HomeTab";
 
-import CommunityTab from "./screens/CommunityTab";
-import ProfileTab from "./screens/ProfileTab";
-
-import { FontAwesome } from "@expo/vector-icons";
-
+import {Provider, useDispatch} from 'react-redux';
+import {applyMiddleware, combineReducers, createStore} from 'redux'
+import { setCurrentUser } from "./store/actions/userActions";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { useFonts } from "expo-font";
+import { userReducer } from "./store/reducers/userReducer";
+
+import {AppContent} from "./AppContent";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   const [signedIn, setSignedIn] = useState(false);
-  const Tab = createBottomTabNavigator();
-
+  
   const [loaded] = useFonts({
     "roboto-bold": require("./assets/fonts/Roboto-Bold.ttf"),
     "roboto-italic": require("./assets/fonts/Roboto-Italic.ttf"),
@@ -32,60 +33,27 @@ export default function App() {
     "roboto-thin": require("./assets/fonts/Roboto-Thin.ttf"),
   });
 
+  const rootReducer = combineReducers({user: userReducer})
+
+  const store = createStore(rootReducer, applyMiddleware(thunk))
+
   auth.onAuthStateChanged((user) => {
     if (user) {
       setSignedIn(true);
     } else {
       setSignedIn(false);
     }
-  });
+  })
+
+
   if (!loaded) {
     return null;
   }
   return (
+    <Provider store={store}>
     <NavigationContainer theme={DefaultTheme}>
       {signedIn ? (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#29434e" }}>
-          <Tab.Navigator
-            screenOptions={({ route }) => ({
-              tabBarIcon: ({ color, size }) => {
-                if (route.name === "Hjem") {
-                  return (
-                    <FontAwesome name="home" size={size} color={color} />
-                  );
-                }
-                if (route.name === "Fellesskap") {
-                  return (
-                    <FontAwesome name="trophy" size={size} color={color} />
-                  );
-                }
-                if (route.name === "Økt") {
-                  //should be changed to stopwatch or similar
-                  return <FontAwesome name="play" size={size} color={color} />;
-                }
-                if (route.name === "Profil") {
-                  return <FontAwesome name="user" size={size} color={color} />;
-                }
-              },
-              tabBarActiveTintColor: "green",
-              tabBarInactiveTintColor: "#819ca9",
-              style: {
-                backgroundColor: "#29434e",
-              },
-            })}
-          >
-            <Tab.Screen name="Hjem" component={HomeTab} />
-            <Tab.Screen
-              name="Fellesskap"
-              component={CommunityTab}
-            />
-            <Tab.Screen
-              name="Økt"
-              component={SessionTab}
-            />
-            <Tab.Screen name="Profil" component={ProfileTab} />
-          </Tab.Navigator>
-        </SafeAreaView>
+        <AppContent />
       ) : (
         <View style={{flex: 1}}>
           <StatusBar style="light" />
@@ -106,5 +74,6 @@ export default function App() {
         </View>
       )}
     </NavigationContainer>
+    </Provider>
   );
 }

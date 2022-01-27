@@ -95,7 +95,7 @@ export const Timer = (props) => {
     let totalMinutes = countDownTime/60
     if(totalMinutes >= 10){
       let points = Math.floor(totalMinutes/10)
-      updateUserPoints(points, currentUser.uid)
+      updateUserPoints(hours, points, currentUser.uid)
     }
     handleOnStartStoppPress()
   }
