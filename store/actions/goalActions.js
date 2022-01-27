@@ -1,8 +1,5 @@
-import React, { useRef } from "react";
-import {SET_USER, SET_UNAUTHENTICATED, LOADING_UI, SET_AUTHENTICATED, SET_LOADING, SET_ERROR, SET_GOAL} from '../constants/index'
-import {useSelector, useDispatch} from 'react-redux'
-import { auth, db } from "../../firebase";
-
+import { SET_LOADING, SET_ERROR, SET_GOAL} from '../constants/index'
+import { db } from "../../firebase"
 
 export const setUserGoal = async (data, uid, dispatch) => {
   
@@ -10,6 +7,7 @@ export const setUserGoal = async (data, uid, dispatch) => {
     type: SET_LOADING,
     payload: true
   })
+  const {goalName, reward, startDate, endDate, workloadGoal} = data
 
   await db.collection('usersCollection').doc(uid).update({
     
@@ -38,13 +36,3 @@ export const setUserGoal = async (data, uid, dispatch) => {
     )
 }
 
-export const updateUserPoints = async(hours, points, userId, dispatch) => {
-  await db.collection('usersCollection').doc(userId).update({
-    points: firebase.firestore.FieldValue.increment(points),
-    totalWorkload: firebase.firestore.FieldValue.increment(hours),
-    [`currentGoal.workload`]: firebase.firestore.FieldValue.increment(hours),
-
-  })
-  .then(result => console.log("result", result))
-  .catch(error => console.log("error", error))
-}

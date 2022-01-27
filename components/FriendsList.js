@@ -14,10 +14,10 @@ export const FriendsLists = () => {
     {friends.map(
       (friend, i) => 
       (
-        <View style={styles.friendWrapper}>
+        <View key={i} style={styles.friendWrapper}>
           <View style={styles.textWrapper}>
-            <Text style={styles.nameText} key={i}>{friend.name}</Text>
-            <Text style={styles.pointText} key={i}>{friend.points}p</Text>
+            <Text style={styles.nameText} >{friend.name}</Text>
+            <Text style={styles.pointText} >{friend.points}p</Text>
           </View>
           <Divider />
         </View>

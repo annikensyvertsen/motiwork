@@ -1,8 +1,8 @@
 
 import React, {useRef, useEffect} from "react";
 import { Text, View, StyleSheet, Dimensions } from "react-native";
-import { Button, DefaultTheme, Surface,  Portal, Provider } from "react-native-paper";
-import { updateUserPoints } from "../hooks/setPointsHook";
+import { Button, DefaultTheme, Surface } from "react-native-paper";
+import { updateUserPoints } from "../help-functions/goal";
 import { useStopwatch } from "../hooks/stopWatchHook";
 import { auth } from "../firebase";
 import { buttonStyles, textStyles, containerStyles } from "./styles/sharedStyles";

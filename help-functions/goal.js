@@ -1,7 +1,8 @@
-import {  db } from "../firebase";
+
+import { db } from "../firebase"
 import firebase from 'firebase/app';
 
-export const updateUserPoints = async (hours, points, userId) => {
+export const updateUserPoints = async(hours, points, userId) => {
   await db.collection('usersCollection').doc(userId).update({
     points: firebase.firestore.FieldValue.increment(points),
     totalWorkload: firebase.firestore.FieldValue.increment(hours),
@@ -10,5 +11,4 @@ export const updateUserPoints = async (hours, points, userId) => {
   })
   .then(result => console.log("result", result))
   .catch(error => console.log("error", error))
-  
 }

@@ -1,21 +1,19 @@
+import React, { useState } from "react";
 import { Button, Menu, Provider, TextInput } from 'react-native-paper';
-import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text } from 'react-native';
 import { auth } from "../firebase";
-
-
+import { useDispatch} from 'react-redux';
 import { useForm, Controller } from "react-hook-form";
+import { containerStyles } from "./styles/sharedStyles";
+import { setUserGoal } from '../store/actions/goalActions';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-import { containerStyles } from "./styles/sharedStyles";
-import { setUserGoal } from '../hooks/goalHook';
 
 
 const GoalForm = ({ submitted, setSubmitted}) => {
    const {
      control,
-     handleSubmit,
      formState: { errors },
    } = useForm({
      defaultValues: {
@@ -28,8 +26,8 @@ const GoalForm = ({ submitted, setSubmitted}) => {
    });
 
    //todo: legge til error i form
-   console.log("hallo")
 
+  let dispatch = useDispatch()
   let dateTomorrow = new Date((new Date()).getTime() + 86400000);
 
   const [reward, setReward] = useState('');
@@ -43,8 +41,6 @@ const GoalForm = ({ submitted, setSubmitted}) => {
   const [endDate, setEndDate] = useState(dateTomorrow)
 
   let currentUser = auth.currentUser;
-
-
 
   const openMenu = () => {
     setVisible(!visible)
@@ -73,9 +69,7 @@ const GoalForm = ({ submitted, setSubmitted}) => {
 
 
   const onSubmit = async () => {
-    console.log("submitted before?", submitted)
     let workloadInMinutes = workload * 60
-    console.log("workload ", workload, "in minutes -", workloadInMinutes)
     const data = {
       goalName: goalName,
       reward: reward,
@@ -83,16 +77,11 @@ const GoalForm = ({ submitted, setSubmitted}) => {
       endDate: endDate,
       workloadGoal: workloadInMinutes
     }
-    await setUserGoal(data, currentUser.uid).then(() => {
+    await setUserGoal(data, currentUser.uid, dispatch).then(() => {
       setSubmitted(!submitted)
     })
     .catch(error => console.log("error", error))
-    //bottomSheetModalRef.current.dismiss()
   }
-
-  // useEffect(() => {
-  //   bottomSheetModalRef.current.dismiss()
-  // }, [submitted])
 
   return(
 

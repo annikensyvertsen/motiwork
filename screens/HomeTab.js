@@ -18,15 +18,12 @@ let currentUser = auth.currentUser;
 
 
 const HomeTab = () => {
-  let currentUserId = auth.currentUser.uid
 
+  const dispatch = useDispatch()
   let {user} = useSelector(state => state.user)
-  const [goal, setGoal] = useState()
 
   const bottomSheetModalRef = useRef(null);
   const handlePresentPress = () => bottomSheetModalRef.current.present()
-
-  const dispatch = useDispatch()
 
   const initialSetup = async () => {
     await setCurrentUser(currentUser.uid, dispatch)
@@ -36,34 +33,16 @@ const HomeTab = () => {
     initialSetup()
   }, [])
 
-
   //TODO: her, eller et annet sted, må jeg sjekke om målet har gått ut på dato
-  useEffect(() => {
-    user.currentGoal.goalName && setGoal(user.currentGoal)
-   }, [user]) 
 
-   useEffect(() => {
-    //LISTEN to changes
-    const unsubscribe = db.collection('usersCollection').doc(currentUserId)
-      .onSnapshot(snapshot => {
-        if (snapshot.size) {
-          console.log("snapshot", snapshot)
-        } else {
-          console.log("is empty")
-        }
-      })
-  return () => {
-      unsubscribe()
-    }
-  }, [])
 
   return (
     <View style={{flex: 1}}>
     <View style={styles.mainContentContainer}>
       <View style={styles.standardflexColumnContainer}>
         <Text style={styles.headingThree}>Mål</Text>
-        {goal ?
-        (<View style={styles.textContainer}><GoalDisplay goal={goal}/></View>)
+        {user.currentGoal ?
+        (<View style={styles.textContainer}><GoalDisplay goal={user.currentGoal}/></View>)
           :
         (<View style={styles.textContainer}>
           <Text>Du har ikke satt deg noen mål enda. Sett deg mål for å minne deg selv på å jobbe jevnt med skole!</Text>

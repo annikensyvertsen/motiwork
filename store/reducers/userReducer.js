@@ -4,15 +4,7 @@ const initialState = {
     name: "",
     points: 0,
     totalWorkload: 0,
-    currentGoal: {
-      // endDate: {},
-      // startDate: {},
-      // goalName: "",
-      // isCompleted: false,
-      // reward: "",
-      // workload: 0,
-      // workloadGoal: 0,
-    },
+    currentGoal: {},
     friends: [],
     incomingFriendRequests: [],
     outgoingFriendRequests: [],
@@ -24,7 +16,6 @@ const initialState = {
 }
 
 export const userReducer = (state=initialState, action) => {
-  //console.log("in user reducer" ,state, action.payload)
   switch(action.type){
     case "SET_LOADING":
       return {
@@ -51,12 +42,13 @@ export const userReducer = (state=initialState, action) => {
         error: null,
         loading: false
       }
-    case "SET_POINTS":
+    case "SET_POINTS_AND_WORKLOAD":
       return {
         ...state,
         user: {
           ...state.user,
-          points: action.payload
+          points: action.payload.points,
+          workload: action.payload.workload
         }
       }
     case "SET_GOAL":

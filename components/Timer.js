@@ -4,7 +4,7 @@ import { Button, DefaultTheme } from "react-native-paper";
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import { buttonStyles, textStyles, containerStyles } from "./styles/sharedStyles";
 import { auth } from "../firebase";
-import { updateUserPoints } from "../hooks/setPointsHook";
+import { updateUserPoints } from "../help-functions/goal";
 
 
 //todo: denne funksjonen kan forenkles

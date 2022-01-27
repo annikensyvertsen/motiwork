@@ -1,49 +1,42 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet , Text} from "react-native";
 import AnimatedCircularProgress from 'react-native-animated-circular-progress';
-import { Card, Button } from "react-native-paper";
+import { Card, Button, Divider } from "react-native-paper";
+import { convertHoursToSeconds, convertSecondsToDaysHoursAndMinutes, returnFormattedTime } from "../help-functions/date-and-time";
 import { cardStyles, textStyles, yellowColor } from "./styles/sharedStyles";
 
 export const GoalDisplay =  ({goal}) => {
 
-  let today = Math.floor(new Date().getTime() / 1000)
-  let hoursWorked = Math.floor(goal.workload/60)
-  let workloadGoal = Math.floor(goal.workloadGoal / 60)
+  console.log("goal", goal)
+  let today = new Date().getTime() / 1000
+  let hoursWorked = goal.workload
+  let workloadGoal = (goal.workloadGoal / 60)
 
+  let secondsWorked = convertHoursToSeconds(hoursWorked)
+  let convertedTime = convertSecondsToDaysHoursAndMinutes(secondsWorked)
+  console.log("secondsworked", secondsWorked)
   const [progress, setProgress] = useState()
   const [remainingDays, setRemainingDays] = useState(0)
 
 
-  const secondsToDhms = (s) => {
-    let seconds = Number(s);
-    let d = Math.floor(seconds / (3600*24));
-    let h = Math.floor(seconds % (3600*24) / 3600);
-    let m = Math.floor(seconds % 3600 / 60);
-    return {
-      days: d,
-      hours: h,
-      minutes: m
-    }
-  }
-
-  const calculateTimeLeft = () => {
-    let timeLeftInSeconds = goal.endDate ? goal.endDate.seconds : 0;
-    let timeLeft = timeLeftInSeconds - today
-    let timeLeftInDays = secondsToDhms(timeLeft).days
+  const calculateDaysLeft = () => {
+    let endDateInSeconds = goal.endDate ? goal.endDate.seconds : 0;
+    let timeLeft = endDateInSeconds - today
+    let timeLeftInDays = convertSecondsToDaysHoursAndMinutes(timeLeft).days
     setRemainingDays(timeLeftInDays)
   }
 
   const calculateProgress = () => {
-
     let workloadGoal = goal.workloadGoal / 60
+
     let percentageWorked = hoursWorked/workloadGoal
     let degrees = 360*percentageWorked
+    console.log("degrees", degrees)
     setProgress(degrees)
-
   }
 
   useEffect(() => {
-    calculateTimeLeft() 
+    calculateDaysLeft() 
     calculateProgress()
   }, [goal])
   
@@ -58,6 +51,12 @@ export const GoalDisplay =  ({goal}) => {
               <Text style={textStyles.greyTextBold}>{remainingDays}</Text>
               <Text style={textStyles.greyText}> dager igjen</Text>
             </View>
+            <View>
+            <Divider />
+            <View style={styles.timeLeftText}>
+              <Text>Du har jobbet: {convertedTime.hours} t, {convertedTime.minutes} min</Text>
+            </View>          
+            </View>
           </View>
           <View style={styles.progressCircle} >
             <AnimatedCircularProgress
@@ -71,7 +70,7 @@ export const GoalDisplay =  ({goal}) => {
               style={styles.childrenStyle}
             >
               <View style={styles.circleText}>
-                <Text>{hoursWorked} / {workloadGoal}</Text>
+                <Text>{Math.floor(hoursWorked)} / {Math.floor(workloadGoal)} t</Text>
               </View>
             </AnimatedCircularProgress>
           </View>
@@ -119,7 +118,12 @@ const styles = StyleSheet.create({
   subTextWrapper: {
     display: "flex",
     flexDirection: "row",
-    marginTop: 4
+    marginTop: 8,
+    marginBottom: 8,
+  },
+  timeLeftText: {
+    marginTop: 8,
+    marginBottom: 8
   }
   
 });

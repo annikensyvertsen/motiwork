@@ -6,8 +6,6 @@ import { textStyles } from "./styles/sharedStyles";
 import { RequestItem } from "./RequestItem";
 import { useSelector } from "react-redux";
 
-
-
 export const FriendsSection = ({bottomSheetModalRef}) => {
   let {user} = useSelector(state => state.user)
 
