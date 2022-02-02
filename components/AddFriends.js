@@ -16,9 +16,7 @@ export const AddFriends = () => {
         <Text style={textStyles.secondaryHeadingText}>Legg til venn</Text>
         <IconButton icon="close"></IconButton>
       </View>
-      <View style={styles.searchField}>
-      </View>
-      <View style={styles.usersList}>
+      <View>
       {usersThatAreNotFriends.map((u, i) => 
         (
           <UserItem currentUser={user} key={i} user={u}/>
@@ -39,11 +37,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between"
   },
-  searchField: {
-
-  },
-  usersList: {
-
-  }
 
 })

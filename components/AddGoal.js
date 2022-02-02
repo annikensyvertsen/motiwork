@@ -12,7 +12,7 @@ const AddGoal = ({bottomSheetModalRef}) => {
     <ScrollView style={styles.wrapper}>
       <Text style={styles.header}>Legg til et nytt mål</Text>
       {submitted ? 
-        <SubmittedMessage bottomSheetModalRef={bottomSheetModalRef} />        
+        <SubmittedMessage message={"Nytt mål opprettet!"} bottomSheetModalRef={bottomSheetModalRef} />        
         : 
         <GoalForm submitted={submitted} setSubmitted={setSubmitted} />
       }

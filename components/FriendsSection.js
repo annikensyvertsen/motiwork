@@ -6,13 +6,14 @@ import { textStyles } from "./styles/sharedStyles";
 import { RequestItem } from "./RequestItem";
 import { useSelector } from "react-redux";
 
-export const FriendsSection = ({bottomSheetModalRef}) => {
+export const FriendsSection = ({handleBottomSheetRender}) => {
   let {user} = useSelector(state => state.user)
 
   let incomingFriendRequests = user.incomingFriendRequests;
 
   const onPress = () => { 
-    bottomSheetModalRef.current.present()
+    //bottomSheetModalRef.current.present()
+    handleBottomSheetRender("add-friends")
   }
 
 

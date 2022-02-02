@@ -1,70 +1,43 @@
-import React, {useState, useRef, useCallback, useMemo, useEffect} from "react";
-import { Text, View, Modal, StyleSheet } from "react-native";
+import React, {useState, useRef, useEffect} from "react";
+import { Text, View, StyleSheet } from "react-native";
 import { Button, Headline } from "react-native-paper";
 import styles from "./sessions/styles";
 import BottomSheetTemplate from "../screens/BottomSheetTemplate";
 import { AddFriends } from "../components/AddFriends";
+import { AddCooperation } from "../components/AddCooperation";
 import { FriendsSection } from "../components/FriendsSection";
 import {  db, fire, auth } from "../firebase";
 import { useSelector } from "react-redux";
-import { doc, onSnapshot } from "firebase/firestore";
+import { CooperationsSection } from "../components/CooperationsSection";
+import { textStyles } from "../components/styles/sharedStyles";
 
 
 
 const CommunityTab = () => {
-
-  let {user} = useSelector(state => state.user)
-  let currentUserId = auth.currentUser.uid
-
-  console.log("currentuserid", currentUserId)
-  const [cooperations, setCooperations] = useState([])
-  const [friends, setFriends] = useState([])
-
+  const [bottomSheetContent, setBottomSheetContent] = useState()
   const bottomSheetModalRef = useRef(null);
-  const handlePresentPress = () => bottomSheetModalRef.current.present()
 
-  useEffect(() => {
-    //LISTEN to changes
-    const unsubscribe = db.collection('usersCollection').doc(currentUserId)
-      .onSnapshot(snapshot => {
-        if (snapshot.size) {
-          //console.log("snapshot", snapshot)
-          //console.log("user", user)
-          setFriends(user.friends)
-        } else {
-          console.log("is empty")
-        }
-      })
-  return () => {
-      unsubscribe()
-    }
-  }, [])
-
+  const handleBottomSheetRender =  (action) => {
+   setBottomSheetContent(action)
+   bottomSheetModalRef.current.present()
+  }
    return (
     <View style={{flex: 1}}>
     <View style={styles.mainContentContainer}>
       <View style={communityStyles.cooperationContainer}>
-        <Headline>Samarbeid</Headline>
-        {cooperations.length > 0 ? (
-          <Text>Samarbeid</Text>
-        ): (
-          <View>
-            <Text>Du har ingen aktive samarbeid. Start et samarbeid med en venn for å motivere hverandre til å jobbe mer.</Text>
-            <View style={{marginTop: 10}}>
-            {friends.length > 0 ? ( 
-                <Button style={{marginTop: 10, marginBottom: 10}} mode="contained" onPress={() => console.log('Pressed')}>Start et samarbeid</Button>
-            ) : (
-              <Text>Du har ingen venner å starte et samarbeid med. Legg til en venn først.</Text>
-            )}
-             </View>
-          </View>
-        )}
+        <CooperationsSection handleBottomSheetRender={handleBottomSheetRender} />
       </View>
       <View>
-        <FriendsSection bottomSheetModalRef={bottomSheetModalRef} />
+        <FriendsSection handleBottomSheetRender={handleBottomSheetRender} />
       </View>
       </View>
-      <BottomSheetTemplate contentComponent={<AddFriends bottomSheetModalRef={bottomSheetModalRef}/>} ref={bottomSheetModalRef} />
+      <BottomSheetTemplate contentComponent={
+        bottomSheetContent === "add-friends" ?
+        <AddFriends bottomSheetModalRef={bottomSheetModalRef}/>
+        :
+        <AddCooperation bottomSheetModalRef={bottomSheetModalRef} />
+      } 
+      ref={bottomSheetModalRef} />
 
     </View>
   )

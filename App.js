@@ -17,6 +17,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { useFonts } from "expo-font";
 import { userReducer } from "./store/reducers/userReducer";
+import { cooperationsReducer } from "./store/reducers/cooperationsReducer";
 
 import {AppContent} from "./AppContent";
 
@@ -33,7 +34,7 @@ export default function App() {
     "roboto-thin": require("./assets/fonts/Roboto-Thin.ttf"),
   });
 
-  const rootReducer = combineReducers({user: userReducer})
+  const rootReducer = combineReducers({user: userReducer, cooperations: cooperationsReducer})
 
   const store = createStore(rootReducer, applyMiddleware(thunk))
 

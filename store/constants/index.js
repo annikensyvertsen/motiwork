@@ -8,6 +8,7 @@ export const SET_ALL_USERS = 'SET_ALL_USERS'
 export const LOADING_USER = 'LOADING_USER' 
 export const SET_ERROR = 'SET_ERROR'
 export const SET_LOADING = 'SET_LOADING'
+export const SET_COOPERATIONS = 'SET_COOPERATIONS'
 
 export const SET_GOAL = 'SET_GOAL'
 

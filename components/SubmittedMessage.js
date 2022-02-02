@@ -5,7 +5,7 @@ import { Avatar } from 'react-native-paper';
 import { textStyles } from './styles/sharedStyles';
 
 
-const SubmittedMessage = ({bottomSheetModalRef}) => {
+const SubmittedMessage = ({bottomSheetModalRef, message}) => {
 
   const onPress = () => {
     bottomSheetModalRef.current.dismiss()
@@ -15,7 +15,7 @@ const SubmittedMessage = ({bottomSheetModalRef}) => {
       <View style={{padding: 10}}>
         <Avatar.Icon size={54} icon="check-decagram" ></Avatar.Icon>
       </View>
-      <Text style={textStyles.secondaryHeadingText}>Nytt mål opprettet!</Text>
+      <Text style={textStyles.secondaryHeadingText}>{message}</Text>
       <Button style={{marginTop: 30}} onPress={onPress} mode="contained">Ferdig</Button>
     </View>
   )

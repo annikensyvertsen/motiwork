@@ -27,6 +27,10 @@ export const textStyles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold"
   },
+  subtitleText: {
+    fontSize: 16,
+    color: 'grey'
+  },
   greyText: {
     fontSize: 16,
     color: "#636363"

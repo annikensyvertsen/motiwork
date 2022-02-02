@@ -7,23 +7,6 @@ import { buttonStyles } from "./styles/sharedStyles";
 
 export const UserItem = ({currentUser, user}) => {
 
-  let currentUserId = currentUser.uid
-  const [isRequestSent, setIsRequestSent] = useState(false)
-  const onPress = () => {
-    sendFriendRequest(currentUserId, user.id)
-  }
-
-  useEffect(() => {
-    if(currentUser.outgoingFriendRequests.length > 0){
-      if(currentUser.outgoingFriendRequests.includes(user.id)){
-        setIsRequestSent(true)
-      }else{
-        setIsRequestSent(false)
-      }
-    }else{
-      setIsRequestSent(false)
-    }
-  }, [onPress])
 
   return(
     <View>

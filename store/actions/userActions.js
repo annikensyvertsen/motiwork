@@ -34,9 +34,7 @@ export const setCurrentUser = async (uid, dispatch) => {
   await db.collection('usersCollection').doc(uid).get()
   .then(doc => {
     if(doc.exists){
-      console.log("data", doc.data())
       dispatch({ type: SET_USER, payload: doc.data()})
-      
     }
     else {
       console.log("There exists absolutley no document with that id")
@@ -45,7 +43,6 @@ export const setCurrentUser = async (uid, dispatch) => {
   .catch(error =>
     dispatch({ type: SET_ERROR, payload: error })
   )
-
 }
 
 export const registerUser = (userData, dispatch) => {
@@ -65,8 +62,11 @@ export const registerUser = (userData, dispatch) => {
           totalWorkload: 0,
           currentGoal: {},
           friends: [],
+          cooperations: [],
           incomingFriendRequests: [],
           outgoingFriendRequests: [],
+          incomingCooperationRequests: [],
+          outgoingCooperationRequests: [],
           name: name
         })      
        .then((result) => {

@@ -7,14 +7,12 @@ import { cardStyles, textStyles, yellowColor } from "./styles/sharedStyles";
 
 export const GoalDisplay =  ({goal}) => {
 
-  console.log("goal", goal)
   let today = new Date().getTime() / 1000
-  let hoursWorked = goal.workload
-  let workloadGoal = (goal.workloadGoal / 60)
+  let hoursWorked = goal.workload || 0
+  let workloadGoal = (goal.workloadGoal / 60) || 0
 
   let secondsWorked = convertHoursToSeconds(hoursWorked)
   let convertedTime = convertSecondsToDaysHoursAndMinutes(secondsWorked)
-  console.log("secondsworked", secondsWorked)
   const [progress, setProgress] = useState()
   const [remainingDays, setRemainingDays] = useState(0)
 
@@ -31,7 +29,6 @@ export const GoalDisplay =  ({goal}) => {
 
     let percentageWorked = hoursWorked/workloadGoal
     let degrees = 360*percentageWorked
-    console.log("degrees", degrees)
     setProgress(degrees)
   }
 

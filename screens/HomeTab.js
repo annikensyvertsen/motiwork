@@ -10,14 +10,15 @@ import { useSelector } from "react-redux";
 import { setCurrentUser } from "../store/actions/userActions";
 
 import { useDispatch} from 'react-redux';
-
-//TODO: denne må settes som en state som oppdateres når man ser om det er noe data lagret 
-let activeChallenges = null;
-let challengeColor = activeChallenges ? 'green' : 'red';
-let currentUser = auth.currentUser;  
+import { setCooperations } from "../store/actions/cooperationsActions";
 
 
 const HomeTab = () => {
+
+    //TODO: denne må settes som en state som oppdateres når man ser om det er noe data lagret 
+  let activeChallenges = null;
+  let challengeColor = activeChallenges ? 'green' : 'red';
+  let currentUser = auth.currentUser;  
 
   const dispatch = useDispatch()
   let {user} = useSelector(state => state.user)
@@ -27,8 +28,10 @@ const HomeTab = () => {
 
   const initialSetup = async () => {
     await setCurrentUser(currentUser.uid, dispatch)
+    await setCooperations(currentUser.uid, dispatch)
   }
 
+  
   useEffect( () => {
     initialSetup()
   }, [])
@@ -41,7 +44,7 @@ const HomeTab = () => {
     <View style={styles.mainContentContainer}>
       <View style={styles.standardflexColumnContainer}>
         <Text style={styles.headingThree}>Mål</Text>
-        {user.currentGoal ?
+        {user.currentGoal.goalName ?
         (<View style={styles.textContainer}><GoalDisplay goal={user.currentGoal}/></View>)
           :
         (<View style={styles.textContainer}>

@@ -6,13 +6,14 @@ import HomeTab from "./screens/HomeTab";
 
 import CommunityTab from "./screens/CommunityTab";
 import ProfileTab from "./screens/ProfileTab";
-import { useDispatch} from 'react-redux';
+import { useDispatch, useSelector} from 'react-redux';
 import { setCurrentUser } from "./store/actions/userActions";
 
 import { FontAwesome } from "@expo/vector-icons";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { setAllUsers } from "./store/actions/allUsersActions";
+import { setCooperations } from "./store/actions/cooperationsActions";
 
 
 export const AppContent = () => {
@@ -20,23 +21,42 @@ export const AppContent = () => {
   let currentUser = auth.currentUser
   const dispatch = useDispatch()
 
-  
+  let {cooperations} = useSelector(state => state.cooperations)
+  let {user} = useSelector(state => state.user)
+
+
   useEffect(() => {
     setCurrentUser(currentUser.uid, dispatch)
     setAllUsers(dispatch)
   }, [currentUser])
 
+  //hør etter når user endrer seg, altså at cooperations feltet f.eks. endrer seg
   useEffect(() => {
-    console.log("currenuser id", currentUser.uid)
-    let doc = db.collection('usersCollection').doc(currentUser.uid)
-    let unsubscribe = doc.onSnapshot(snapshot => {
+    setCooperations(currentUser.uid, dispatch)
+  }, [user])
+
+  useEffect(() => {
+    let userDoc = db.collection('usersCollection').doc(currentUser.uid)
+    let unsubscribe = userDoc.onSnapshot(snapshot => {
         setCurrentUser(currentUser.uid, dispatch)
+        setCooperations(currentUser.uid, dispatch)
     })
+    //TODO: her -> lage en lytter som hører på når samarbeid til denne brukeren endrer seg
+    //let cooperationsDoc = db.collection('cooperations').doc()
     return () => {
       unsubscribe()
     }
   }, [])
 
+  // useEffect(() => {
+  //   let doc = db.collection('cooperationsCollection').doc(currentUser.uid)
+  //   let unsubscribe = doc.onSnapshot(snapshot => {
+  //       setCurrentUser(currentUser.uid, dispatch)
+  //   })
+  //   return () => {
+  //     unsubscribe()
+  //   }
+  // }, [])
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#29434e" }}>
       <Tab.Navigator
