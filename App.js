@@ -1,19 +1,16 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useState } from "react";
-import { Text, SafeAreaView, View } from "react-native";
+import React, { useState } from "react";
+import { View } from "react-native";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { auth } from "./firebase";
 import thunk from 'redux-thunk'
 
-
 import LoginScreen from "./screens/sessions/LoginScreen";
 import RegisterScreen from "./screens/sessions/RegisterScreen";
 
-import {Provider, useDispatch} from 'react-redux';
+import {Provider} from 'react-redux';
 import {applyMiddleware, combineReducers, createStore} from 'redux'
-import { setCurrentUser } from "./store/actions/userActions";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { useFonts } from "expo-font";
 import { userReducer } from "./store/reducers/userReducer";

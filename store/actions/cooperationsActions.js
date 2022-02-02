@@ -28,8 +28,12 @@ export const setCooperations = async (userId, dispatch) => {
     .then((querySnapshot) => {
       querySnapshot.forEach((doc ) => {
         const {members} = doc.data()
+        const cooperation = {
+          ...doc.data(),
+          id: doc.id
+        }
         if(members.receiver === userId || members.sender === userId){
-          cooperations.push(doc.data())
+          cooperations.push(cooperation)
         }
     });
     dispatch({ type: SET_COOPERATIONS, payload: cooperations})

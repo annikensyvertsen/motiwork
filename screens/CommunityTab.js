@@ -9,7 +9,6 @@ import { FriendsSection } from "../components/FriendsSection";
 import {  db, fire, auth } from "../firebase";
 import { useSelector } from "react-redux";
 import { CooperationsSection } from "../components/CooperationsSection";
-import { textStyles } from "../components/styles/sharedStyles";
 
 
 

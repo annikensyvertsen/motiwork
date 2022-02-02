@@ -5,6 +5,7 @@ import SessionTab from "./screens/SessionTab";
 import HomeTab from "./screens/HomeTab";
 
 import CommunityTab from "./screens/CommunityTab";
+import CooperationTab from "./screens/CooperationTab";
 import ProfileTab from "./screens/ProfileTab";
 import { useDispatch, useSelector} from 'react-redux';
 import { setCurrentUser } from "./store/actions/userActions";
@@ -12,6 +13,8 @@ import { setCurrentUser } from "./store/actions/userActions";
 import { FontAwesome } from "@expo/vector-icons";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from '@react-navigation/stack';
+
 import { setAllUsers } from "./store/actions/allUsersActions";
 import { setCooperations } from "./store/actions/cooperationsActions";
 
@@ -21,7 +24,6 @@ export const AppContent = () => {
   let currentUser = auth.currentUser
   const dispatch = useDispatch()
 
-  let {cooperations} = useSelector(state => state.cooperations)
   let {user} = useSelector(state => state.user)
 
 
@@ -41,26 +43,28 @@ export const AppContent = () => {
         setCurrentUser(currentUser.uid, dispatch)
         setCooperations(currentUser.uid, dispatch)
     })
-    //TODO: her -> lage en lytter som hører på når samarbeid til denne brukeren endrer seg
-    //let cooperationsDoc = db.collection('cooperations').doc()
+ 
     return () => {
       unsubscribe()
     }
   }, [])
 
-  // useEffect(() => {
-  //   let doc = db.collection('cooperationsCollection').doc(currentUser.uid)
-  //   let unsubscribe = doc.onSnapshot(snapshot => {
-  //       setCurrentUser(currentUser.uid, dispatch)
-  //   })
-  //   return () => {
-  //     unsubscribe()
-  //   }
-  // }, [])
+  const Stack = createStackNavigator();
+
+  const CommunityScreenNavigator = () => {
+    return(
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="community">
+        <Stack.Screen name="community" component={CommunityTab} />
+        <Stack.Screen name="cooperation" component={CooperationTab} />
+      </Stack.Navigator>
+    )
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#29434e" }}>
       <Tab.Navigator
         screenOptions={({ route }) => ({
+          headerShown: false,
           tabBarIcon: ({ color, size }) => {
             if (route.name === "Hjem") {
               return (
@@ -90,7 +94,7 @@ export const AppContent = () => {
         <Tab.Screen name="Hjem" component={HomeTab} />
         <Tab.Screen
           name="Fellesskap"
-          component={CommunityTab}
+          component={CommunityScreenNavigator}
         />
         <Tab.Screen
           name="Økt"

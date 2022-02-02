@@ -5,7 +5,8 @@ const initialState = {
       name: "",
       members: [],
       archivedChallenges: [],
-      ongoingChallenged: []
+      ongoingChallenged: [],
+      id: ""
     }
 
   ],
