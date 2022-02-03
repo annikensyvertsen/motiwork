@@ -12,7 +12,7 @@ export const addCooperation = async (members, name, dispatch) => {
   await db.collection("cooperationsCollection").add({
     name: name,
     members: members,
-    activeChallenges: [],
+    activeChallenge: {},
     archivedChallenges: [],
   }).then(doc => {
     docId = doc.id
@@ -85,4 +85,33 @@ export const declineCooperationRequest = async (request) => {
   .then(res=> console.log("res", res))
   .catch(err => console.log(err))
   
+}
+
+//challenge:
+
+export const createChallenge = async (members, formData, cooperationId, dispatch) => {
+  let workloadObj = {}
+  workloadObj[members.sender] = 0
+  workloadObj[members.receiver] = 0
+
+  console.log("workloadObj", workloadObj)
+  let challenge = {
+    ...formData,
+    workload: workloadObj
+  }
+  console.log("active challenge", challenge)
+
+  await db.collection('cooperationsCollection').doc(cooperationId).update({
+    activeChallenge: challenge
+  })
+
+}
+
+export const archiveChallenge = async (challenge, cooperationId) => {
+
+  await db.collection('cooperationsCollection').doc(cooperationId).update({
+    archivedChallenges: firebase.firestore.FieldValue.arrayUnion(challenge),
+    activeChallenge: {},
+  })
+
 }

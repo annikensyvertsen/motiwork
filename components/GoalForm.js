@@ -69,13 +69,12 @@ const GoalForm = ({ submitted, setSubmitted}) => {
 
 
   const onSubmit = async () => {
-    let workloadInMinutes = workload * 60
     const data = {
       goalName: goalName,
       reward: reward,
       startDate: startDate,
       endDate: endDate,
-      workloadGoal: workloadInMinutes
+      workloadGoal: workload
     }
     await setUserGoal(data, currentUser.uid, dispatch).then(() => {
       setSubmitted(!submitted)

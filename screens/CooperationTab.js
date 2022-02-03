@@ -4,29 +4,50 @@ import { Button } from "react-native-paper";
 import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
 import { returnCooperationBasedOnId } from "../help-functions/cooperations";
-import { Challenges } from "../components/Cooperation/Challenges";
+import { Challenge } from "../components/Cooperation/Challenge";
 import { ChallengesEmptyState } from "../components/Cooperation/ChallengesEmptyState";
 import BottomSheetTemplate from "../screens/BottomSheetTemplate";
 import { StartChallenge } from "../components/Challenge/StartChallenge";
+import { db } from "../firebase";
+import firebase from 'firebase/app';
+import { useDispatch, useSelector } from "react-redux";
+import { updateUserPoints } from "../help-functions/goal";
+import { setCooperations } from "../store/actions/cooperationsActions";
+
+
 
 
 const CooperationTab = () => {
   const navigation = useNavigation();
   const route = useRoute();
+  let {user} = useSelector(state => state.user)
+  const dispatch = useDispatch()
+
 
   let cooperationId = route.params.cooperationId
   let cooperation = returnCooperationBasedOnId(cooperationId)
-  const {activeChallenges, archivedChallenges, id, members, name} = cooperation
+  const {activeChallenge, archivedChallenges, id, members, name} = cooperation
 
-  
   const bottomSheetModalRef = useRef(null);
   const handlePresentPress = () => bottomSheetModalRef.current.present()
+
   
-
-
   const onPress = () => {
     navigation.goBack()
   }
+
+  
+  useEffect(() => {
+    let userDoc = db.collection('cooperationsCollection').doc(cooperationId)
+    let unsubscribe = userDoc.onSnapshot(snapshot => {
+        setCooperations(user.uid, dispatch)
+    })
+ 
+    return () => {
+      unsubscribe()
+    }
+  }, [])
+
   return(
     <View style={styles.container}>
       <View>
@@ -34,13 +55,13 @@ const CooperationTab = () => {
         <Button style={styles.backButton} onPress={onPress}>Back</Button>
         <Text style={styles.heading}>{name}</Text>
       </View>
-      {activeChallenges && activeChallenges.length > 0 ?
-      (<Challenges activeChallenges={activeChallenges} />)
+      {activeChallenge && Object.keys(activeChallenge).length > 0 ?
+      (<Challenge currentUser={user} activeChallenge={activeChallenge} members={members} />)
       :
       (<ChallengesEmptyState handlePresentPress={handlePresentPress}/>)
       }
       </View>
-      <BottomSheetTemplate contentComponent={<StartChallenge bottomSheetModalRef={bottomSheetModalRef} />} ref={bottomSheetModalRef} />
+      <BottomSheetTemplate contentComponent={<StartChallenge members={members} cooperationId={cooperationId} bottomSheetModalRef={bottomSheetModalRef} />} ref={bottomSheetModalRef} />
     </View>
   )
 }

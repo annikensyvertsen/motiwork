@@ -9,7 +9,7 @@ export const GoalDisplay =  ({goal}) => {
 
   let today = new Date().getTime() / 1000
   let hoursWorked = goal.workload || 0
-  let workloadGoal = (goal.workloadGoal / 60) || 0
+  let workloadGoal = (goal.workloadGoal) || 0
 
   let secondsWorked = convertHoursToSeconds(hoursWorked)
   let convertedTime = convertSecondsToDaysHoursAndMinutes(secondsWorked)
@@ -25,9 +25,10 @@ export const GoalDisplay =  ({goal}) => {
   }
 
   const calculateProgress = () => {
-    let workloadGoal = goal.workloadGoal / 60
+    let workloadGoal = goal.workloadGoal
 
     let percentageWorked = hoursWorked/workloadGoal
+    console.log("percentage workd", percentageWorked)
     let degrees = 360*percentageWorked
     setProgress(degrees)
   }
@@ -37,6 +38,14 @@ export const GoalDisplay =  ({goal}) => {
     calculateProgress()
   }, [goal])
   
+  let remainingDaysText = "dager igjen"
+  useEffect(() => {
+    if(remainingDays === 1){
+      remainingDaysText = "dag igjen"
+    }else{
+      remainingDaysText = "dager igjen"
+    }
+  }, [])
 
   return (
     <View style={styles.wrapper} >
@@ -46,7 +55,7 @@ export const GoalDisplay =  ({goal}) => {
             <Text style={textStyles.tertiaryHeadingText}>{goal && goal.goalName}</Text>
             <View style={styles.subTextWrapper}>
               <Text style={textStyles.greyTextBold}>{remainingDays}</Text>
-              <Text style={textStyles.greyText}> dager igjen</Text>
+              <Text style={textStyles.greyText}> {remainingDaysText}</Text>
             </View>
             <View>
             <Divider />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Menu, Provider, TextInput } from 'react-native-paper';
 import { View, StyleSheet, Text } from 'react-native';
 import { auth } from "../../firebase";
@@ -7,9 +7,10 @@ import { useForm, Controller } from "react-hook-form";
 import { containerStyles } from "../styles/sharedStyles";
 
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { createChallenge } from "../../store/actions/cooperationsActions";
 
 
-export const ChallengeForm = ({setSubmitted, submitted, onSubmitChallenge}) => {
+export const ChallengeForm = ({members, setSubmitted, submitted, cooperationId}) => {
   const {
     control,
     formState: { errors },
@@ -23,6 +24,7 @@ export const ChallengeForm = ({setSubmitted, submitted, onSubmitChallenge}) => {
     }
   });
 
+
   let dispatch = useDispatch()
   let dateTomorrow = new Date((new Date()).getTime() + 86400000);
 
@@ -35,8 +37,6 @@ export const ChallengeForm = ({setSubmitted, submitted, onSubmitChallenge}) => {
 
   const [startDate, setStartDate] = useState(new Date())
   const [endDate, setEndDate] = useState(dateTomorrow)
-
-  let currentUser = auth.currentUser;
 
   const openMenu = () => {
     setVisible(!visible)
@@ -64,20 +64,21 @@ export const ChallengeForm = ({setSubmitted, submitted, onSubmitChallenge}) => {
   };
  
   const onSubmit = async () => {
-    let workloadInMinutes = workload * 60
-    const data = {
+    const formData = {
       goalName: goalName,
       reward: reward,
       startDate: startDate,
       endDate: endDate,
-      workloadGoal: workloadInMinutes
+      workloadGoal: workload,
     }
     //TODO: her skal vi kalle på metoden som setter målet
-    // await setUserGoal(data, currentUser.uid, dispatch).then(() => {
-    //   setSubmitted(!submitted)
-    // })
+    await createChallenge(members, formData, cooperationId, dispatch)
+    .then(() => {
+      setSubmitted(!submitted)
+    })
     .catch(error => console.log("error", error))
   }
+
 
   return(
     <Provider style={styles.provider}>
@@ -115,7 +116,7 @@ export const ChallengeForm = ({setSubmitted, submitted, onSubmitChallenge}) => {
               type="number"
               label="Antall timer"
               mode={"outlined"}
-              value={workload}
+              value={workload.toString()}
               onChangeText={load => checkIfNumbers(load)}
               placeholder={"40"}
 

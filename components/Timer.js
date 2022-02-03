@@ -3,46 +3,14 @@ import { Text, View, StyleSheet, Dimensions } from "react-native";
 import { Button, DefaultTheme } from "react-native-paper";
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import { buttonStyles, textStyles, containerStyles } from "./styles/sharedStyles";
-import { auth } from "../firebase";
 import { updateUserPoints } from "../help-functions/goal";
-
-
-//todo: denne funksjonen kan forenkles
-const formatTime = (t) => {
-  let hours = Math.floor(t/3600)
-  let minutes = 0
-  let seconds = 0
-  let formatted = ""
-
-  if(hours > 0){
-    minutes = Math.floor(t % 3600 / 60).toString()
-    seconds = Math.floor(t % 3600 % 60).toString()
-    
-  }else{
-    minutes = Math.floor(t / 60);
-    seconds = Math.floor(t - minutes * 60)
-  }
-  if(hours < 10){
-    hours = "0" + hours
-  }
-  if(minutes < 10){
-    minutes = "0" + minutes
-  }
-  if(seconds < 10){
-   seconds = "0" + seconds
-  }
-  formatted = hours + " : " + minutes + " : " + seconds
-  return formatted
-}
-
-const convertToSeconds = (h, m) => {
-  let seconds = (m + (60* h))*60
-  return seconds
-}
+import { useSelector } from "react-redux";
+import { convertHousAndMinutesToSeconds, formatTimeToClock } from "../help-functions/date-and-time";
 
 export const Timer = (props) => {
-
-  let currentUser = auth.currentUser;
+  
+  let {user} = useSelector(state => state.user)
+  let {cooperations} = useSelector(state => state.cooperations)
 
   let sizeOfTimer = Dimensions.get('window').width * 0.8;
   let hours = props.values?.hours;
@@ -52,7 +20,7 @@ export const Timer = (props) => {
   const [isRunning, setIsRunning] = useState(false)
   const [countDownTime, setCountDownTime] = useState(totalInitialTime)
 
-  const [formattedTime, setFormattedTime] = useState(formatTime(countDownTime))
+  const [formattedTime, setFormattedTime] = useState(formatTimeToClock(countDownTime))
   const [remainingTime, setRemainingTime] = useState(0)
 
   const [isChangeTime, setIsChangeTime] = useState(false)
@@ -95,7 +63,7 @@ export const Timer = (props) => {
     let totalMinutes = countDownTime/60
     if(totalMinutes >= 10){
       let points = Math.floor(totalMinutes/10)
-      updateUserPoints(hours, points, currentUser.uid)
+      updateUserPoints(hours, points, user, cooperations)
     }
     handleOnStartStoppPress()
   }
@@ -103,7 +71,7 @@ export const Timer = (props) => {
 
   const updateTimer = (e) => {
     setRemainingTime(e)
-    setFormattedTime(formatTime(e))
+    setFormattedTime(formatTimeToClock(e))
     calculateCurrentPoints(e)
   }
 
@@ -118,13 +86,13 @@ export const Timer = (props) => {
   }
 
   useEffect(() => {
-    setFormattedTime(formatTime(remainingTime))
+    setFormattedTime(formatTimeToClock(remainingTime))
 
   }, [remainingTime])
 
   useEffect(() => {
-    let totalSeconds = convertToSeconds(hours, minutes)
-    setFormattedTime(formatTime(totalSeconds))
+    let totalSeconds = convertHousAndMinutesToSeconds(hours, minutes)
+    setFormattedTime(formatTimeToClock(totalSeconds))
     setCountDownTime(totalSeconds)
   }, [props.values?.hours,  props.values?.minutes, ])
 

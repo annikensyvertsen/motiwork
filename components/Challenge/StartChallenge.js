@@ -5,24 +5,22 @@ import { Button } from "react-native-paper";
 import { ChallengeForm } from "../Cooperation/ChallengeForm";
 import SubmittedMessage from "../SubmittedMessage";
 
-export const StartChallenge = ({bottomSheetModalRef}) => {
-
-  const onPress = () => {
-    console.log("click")
-    bottomSheetModalRef.current.dismiss()
-  }
-
-  const onSubmitChallenge = () => {
-    setSteps(steps + 1)
-  }
-
+export const StartChallenge = ({bottomSheetModalRef, cooperationId, members}) => {
   const [submitted, setSubmitted] = useState(false)
   const [steps, setSteps] = useState(1)
+
+  useEffect(() => {
+    if(submitted){
+      setSteps(steps + 1)
+    }
+  }, [submitted])
+
+ 
   return(
     <View style={{flex: 1}}>
       <Text style={styles.header}>Start en utfordring</Text>
       {steps === 1 ? 
-      (<ChallengeForm submitted={submitted} onSubmitChallenge={onSubmitChallenge} setSubmitted={setSubmitted} />)
+      (<ChallengeForm cooperationId={cooperationId} members={members} submitted={submitted} setSubmitted={setSubmitted} />)
       :
       (<SubmittedMessage message={"Utfordring lagt til!"} bottomSheetModalRef={bottomSheetModalRef} />)
     }

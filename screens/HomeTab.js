@@ -17,6 +17,7 @@ const HomeTab = () => {
 
     //TODO: denne må settes som en state som oppdateres når man ser om det er noe data lagret 
   let activeChallenges = null;
+  //activechallenges er i dette tilfelle riktig at er i flertall, siden den skal vise alle de aktive utfordringene du har med venner
   let challengeColor = activeChallenges ? 'green' : 'red';
   let currentUser = auth.currentUser;  
 

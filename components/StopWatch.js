@@ -4,16 +4,18 @@ import { Text, View, StyleSheet, Dimensions } from "react-native";
 import { Button, DefaultTheme, Surface } from "react-native-paper";
 import { updateUserPoints } from "../help-functions/goal";
 import { useStopwatch } from "../hooks/stopWatchHook";
+import { useSelector } from "react-redux";
 import { auth } from "../firebase";
 import { buttonStyles, textStyles, containerStyles } from "./styles/sharedStyles";
 
 export const StopWatch = (props) => {
 
   const {points, isRunning, elapsedTime, startTimer, stopTimer, resetTimer} = useStopwatch();
-  let currentUser = auth.currentUser
   //didmountref = reference used to see if it is initial render or not, maybe not the best way but works for now
   const didMountRef = useRef(false);
 
+  let {user} = useSelector(state => state.user)
+  let {cooperations} = useSelector(state => state.cooperations)
 
   const handleOnStartStopPress = () => {
     if(isRunning){
@@ -26,7 +28,7 @@ export const StopWatch = (props) => {
 
   const handleResetStopwatch = () => {
     let elapsedTimeInHours = (elapsedTime/60)/60
-    updateUserPoints(elapsedTimeInHours, points, currentUser.uid)
+    updateUserPoints(elapsedTimeInHours, points, user, cooperations)
     !isRunning && resetTimer()
   }
 
