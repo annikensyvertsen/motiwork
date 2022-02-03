@@ -106,15 +106,6 @@ const styles = StyleSheet.create({
     width: '100%',
     flex: 1
    },
-  cardStyle: {
-    borderRadius: 10,
-    width: '80%',
-    minHeight: 300,
-    alignSelf: "center",
-    borderWidth: 2,
-    borderColor:  "#BF212F",
-    marginTop: 20,
-  },
   winningCardStyle: {
     borderRadius: 10,
     width: '80%',
@@ -174,17 +165,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row"
 
-  },
-  footer: {
-    backgroundColor: "#BF212F",
-    minHeight: 50,
-    display: "flex",
-    flexDirection: "row",
-    alignItems: 'center',
-    justifyContent: "center",
-    //  litt hacky å sette denne manuelt men blir sånn enn så lenge
-    borderBottomRightRadius: 8,
-    borderBottomLeftRadius: 8,
   },
   loosingFooter: {
     backgroundColor: "#BF212F",

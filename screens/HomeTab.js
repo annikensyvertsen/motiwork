@@ -11,19 +11,20 @@ import { setCurrentUser } from "../store/actions/userActions";
 
 import { useDispatch} from 'react-redux';
 import { setCooperations } from "../store/actions/cooperationsActions";
+import { ListOfActiveChallenges } from '../components/ListOfActiveChallenges'
 
 
 const HomeTab = () => {
 
     //TODO: denne må settes som en state som oppdateres når man ser om det er noe data lagret 
-  let activeChallenges = null;
   //activechallenges er i dette tilfelle riktig at er i flertall, siden den skal vise alle de aktive utfordringene du har med venner
-  let challengeColor = activeChallenges ? 'green' : 'red';
-  let currentUser = auth.currentUser;  
-
+  
   const dispatch = useDispatch()
   let {user} = useSelector(state => state.user)
+  let {cooperations} = useSelector(state => state.cooperations)
+  const [activeChallenges, setActiveChallenges] = useState([])
 
+  let currentUser = auth.currentUser;  
   const bottomSheetModalRef = useRef(null);
   const handlePresentPress = () => bottomSheetModalRef.current.present()
 
@@ -32,9 +33,20 @@ const HomeTab = () => {
     await setCooperations(currentUser.uid, dispatch)
   }
 
-  
+  console.log("cooperations", cooperations)
+
+  const findActiveChallenges = () => {
+    cooperations.forEach(cooperation => 
+      {
+        if(Object.keys(cooperation.activeChallenge).length > 0){}
+        setActiveChallenges(state => [...state, cooperation.activeChallenge])
+      }
+    )     
+  }
+
   useEffect( () => {
     initialSetup()
+    findActiveChallenges()
   }, [])
 
   //TODO: her, eller et annet sted, må jeg sjekke om målet har gått ut på dato
@@ -57,10 +69,10 @@ const HomeTab = () => {
       <View style={styles.standardflexColumnContainer}>
         <View style={{display: "flex", flexDirection: "row"}}> 
           <Text style={styles.headingThree}>Aktive utfordringer med venner</Text>
-          <Text style={{marginLeft: 5, color: challengeColor}}>({activeChallenges || 0})</Text>
+          <Text style={{marginLeft: 5, color: "red"}}>()</Text>
         </View>
-        {activeChallenges ?
-        (<Text>Hei</Text>)
+        {activeChallenges.length > 0 ?
+        (<ListOfActiveChallenges activeChallenges={activeChallenges} />)
           :
         (<View style={styles.textContainer}>
           <Text>Du har ingen aktive utfordringer med venner enda. Legg til venner for å lage utfordringer for å motivere hverandre til å jobbe!</Text>
