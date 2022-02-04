@@ -23,6 +23,7 @@ export const addCooperation = async (members, name, dispatch) => {
 }
 
 export const setCooperations = async (userId, dispatch) => {
+  console.log("calling set cooperations")
   let cooperations = []
   await db.collection("cooperationsCollection").get()
     .then((querySnapshot) => {

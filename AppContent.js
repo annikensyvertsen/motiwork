@@ -17,6 +17,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { setAllUsers } from "./store/actions/allUsersActions";
 import { setCooperations } from "./store/actions/cooperationsActions";
+import { setActiveChallenges } from "./store/actions/challengesActions";
 
 
 export const AppContent = () => {
@@ -25,16 +26,24 @@ export const AppContent = () => {
   const dispatch = useDispatch()
 
   let {user} = useSelector(state => state.user)
+  let {cooperations} = useSelector(state => state.cooperations)
 
+  const initialSetup = async () => {
+    await setAllUsers(dispatch)
 
-  useEffect(() => {
-    setCurrentUser(currentUser.uid, dispatch)
-    setAllUsers(dispatch)
-  }, [currentUser])
+    await setCooperations(currentUser.uid, dispatch)
+    await setActiveChallenges(cooperations, dispatch) 
+  }
+  console.log("App content renders now yyy")
+
+  // useEffect(() => {
+  //   setCurrentUser(currentUser.uid, dispatch)
+  //   setAllUsers(dispatch)
+  // }, [currentUser])
 
   //hør etter når user endrer seg, altså at cooperations feltet f.eks. endrer seg
   useEffect(() => {
-    setCooperations(currentUser.uid, dispatch)
+    initialSetup()
   }, [user])
 
   useEffect(() => {

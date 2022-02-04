@@ -43,6 +43,8 @@ export default function App() {
     }
   })
 
+  console.log("APP JS RENDERS NOW----------------------------")
+
 
   if (!loaded) {
     return null;

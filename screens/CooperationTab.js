@@ -9,13 +9,8 @@ import { ChallengesEmptyState } from "../components/Cooperation/ChallengesEmptyS
 import BottomSheetTemplate from "../screens/BottomSheetTemplate";
 import { StartChallenge } from "../components/Challenge/StartChallenge";
 import { db } from "../firebase";
-import firebase from 'firebase/app';
 import { useDispatch, useSelector } from "react-redux";
-import { updateUserPoints } from "../help-functions/goal";
 import { setCooperations } from "../store/actions/cooperationsActions";
-
-
-
 
 const CooperationTab = () => {
   const navigation = useNavigation();
@@ -36,17 +31,18 @@ const CooperationTab = () => {
     navigation.goBack()
   }
 
+  console.log("renders")
   
-  useEffect(() => {
-    let userDoc = db.collection('cooperationsCollection').doc(cooperationId)
-    let unsubscribe = userDoc.onSnapshot(snapshot => {
-        setCooperations(user.uid, dispatch)
-    })
+  // useEffect(() => {
+  //   let userDoc = db.collection('cooperationsCollection').doc(cooperationId)
+  //   let unsubscribe = userDoc.onSnapshot(snapshot => {
+  //       setCooperations(user.uid, dispatch)
+  //   })
  
-    return () => {
-      unsubscribe()
-    }
-  }, [])
+  //   return () => {
+  //     unsubscribe()
+  //   }
+  // }, [])
 
   return(
     <View style={styles.container}>

@@ -1,16 +1,13 @@
 import React, { useRef, useState, useEffect} from "react";
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { Button } from "react-native-paper";
 import styles from "./sessions/styles";
 import AddGoal from '../components/AddGoal';
 import BottomSheetTemplate from "../screens/BottomSheetTemplate";
 import { GoalDisplay } from "../components/GoalDisplay";
-import { auth, db } from "../firebase";
 import { useSelector } from "react-redux";
-import { setCurrentUser } from "../store/actions/userActions";
 
 import { useDispatch} from 'react-redux';
-import { setCooperations } from "../store/actions/cooperationsActions";
 import { ListOfActiveChallenges } from '../components/ListOfActiveChallenges'
 
 
@@ -21,39 +18,29 @@ const HomeTab = () => {
   
   const dispatch = useDispatch()
   let {user} = useSelector(state => state.user)
-  let {cooperations} = useSelector(state => state.cooperations)
-  const [activeChallenges, setActiveChallenges] = useState([])
+  let {allActiveChallenges} = useSelector(state => state.cooperations)
 
-  let currentUser = auth.currentUser;  
   const bottomSheetModalRef = useRef(null);
   const handlePresentPress = () => bottomSheetModalRef.current.present()
 
-  const initialSetup = async () => {
-    await setCurrentUser(currentUser.uid, dispatch)
-    await setCooperations(currentUser.uid, dispatch)
-  }
+  //tar bort dette fordi det allerede er en setup i appcontent -> kan vel ikke være nødvendig å gjøre det her og?
 
-  console.log("cooperations", cooperations)
+  // const initialSetup = async () => {
+  //   await setCurrentUser(currentUser.uid, dispatch)
+  //   await setCooperations(currentUser.uid, dispatch)
+  // }
 
-  const findActiveChallenges = () => {
-    cooperations.forEach(cooperation => 
-      {
-        if(Object.keys(cooperation.activeChallenge).length > 0){}
-        setActiveChallenges(state => [...state, cooperation.activeChallenge])
-      }
-    )     
-  }
 
-  useEffect( () => {
-    initialSetup()
-    findActiveChallenges()
-  }, [])
+  // useEffect( () => {
+  //   initialSetup()
+  // }, [])
+
 
   //TODO: her, eller et annet sted, må jeg sjekke om målet har gått ut på dato
 
 
   return (
-    <View style={{flex: 1}}>
+    <ScrollView style={{flex: 1}}>
     <View style={styles.mainContentContainer}>
       <View style={styles.standardflexColumnContainer}>
         <Text style={styles.headingThree}>Mål</Text>
@@ -69,10 +56,10 @@ const HomeTab = () => {
       <View style={styles.standardflexColumnContainer}>
         <View style={{display: "flex", flexDirection: "row"}}> 
           <Text style={styles.headingThree}>Aktive utfordringer med venner</Text>
-          <Text style={{marginLeft: 5, color: "red"}}>()</Text>
+          <Text style={{marginLeft: 5, color: "red"}}>( {allActiveChallenges.length} )</Text>
         </View>
-        {activeChallenges.length > 0 ?
-        (<ListOfActiveChallenges activeChallenges={activeChallenges} />)
+        {allActiveChallenges.length > 0 ?
+        (<ListOfActiveChallenges currentUser={user} allActiveChallenges={allActiveChallenges}/>)
           :
         (<View style={styles.textContainer}>
           <Text>Du har ingen aktive utfordringer med venner enda. Legg til venner for å lage utfordringer for å motivere hverandre til å jobbe!</Text>
@@ -82,7 +69,7 @@ const HomeTab = () => {
  
       </View>
         <BottomSheetTemplate contentComponent={<AddGoal bottomSheetModalRef={bottomSheetModalRef} />} ref={bottomSheetModalRef} />
-    </View>
+    </ScrollView>
    
   )
 };

@@ -14,7 +14,6 @@ export const CooperationsSection = ({ handleBottomSheetRender}) => {
     handleBottomSheetRender("add-cooperation")
   }
 
-  console.log("cooperations", cooperations)
   return(
     <View>
    

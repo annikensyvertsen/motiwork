@@ -26,9 +26,7 @@ export const GoalDisplay =  ({goal}) => {
 
   const calculateProgress = () => {
     let workloadGoal = goal.workloadGoal
-
     let percentageWorked = hoursWorked/workloadGoal
-    console.log("percentage workd", percentageWorked)
     let degrees = 360*percentageWorked
     setProgress(degrees)
   }

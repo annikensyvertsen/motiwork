@@ -15,7 +15,6 @@ export const loginUser =  async (userData, dispatch) => {
     await db.collection('usersCollection').doc(uid).get()
     .then(doc => {
       if(doc.exists){
-        console.log("login exxists")
         return async (dispatch) => {
           dispatch({ type: SET_USER, payload: doc.data()})
         }
@@ -31,6 +30,7 @@ export const loginUser =  async (userData, dispatch) => {
 }
 
 export const setCurrentUser = async (uid, dispatch) => {
+  console.log("set current user is called")
   await db.collection('usersCollection').doc(uid).get()
   .then(doc => {
     if(doc.exists){

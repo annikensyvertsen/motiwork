@@ -10,6 +10,9 @@ const initialState = {
     }
 
   ],
+  allActiveChallenges: [
+
+  ],
   loading: false,
   error: null
 }
@@ -31,6 +34,13 @@ export const cooperationsReducer = (state=initialState, action) => {
       return {
         ...state,
         cooperations: action.payload,
+        error: null,
+        loading: false
+      }
+    case "SET_ALL_CHALLENGES": 
+      return {
+        ...state,
+        allActiveChallenges: action.payload,
         error: null,
         loading: false
       }

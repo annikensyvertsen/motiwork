@@ -1,22 +1,20 @@
 import React, {useEffect, useState} from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { Avatar, Button, Card, List, ProgressBar } from "react-native-paper";
+import { Card, List, ProgressBar } from "react-native-paper";
 import { calculateDaysLeft } from "../../help-functions/date-and-time";
 import { returnUserBasedOnId } from "../../help-functions/friends";
 import { textStyles } from "../styles/sharedStyles";
 
 export const Challenge = ({activeChallenge, members, currentUser}) => {
 
-  const {goalName, endDate, startDate, reward, workload, workloadGoal} = activeChallenge
+  const {goalName, endDate, reward, workload, workloadGoal} = activeChallenge
 
   let remainingDays = calculateDaysLeft(endDate.seconds)
 
   const [leader, setLeader] = useState(currentUser)
 
   const calculateProgress = (amountWorked) => {
-    if(amountWorked === 0){
-      return 0
-    }
+    if(amountWorked === 0) return 0
     return amountWorked/workloadGoal
   }
   let friendUserId = members.receiver === currentUser.uid ? members.sender : members.receiver 
@@ -51,7 +49,6 @@ export const Challenge = ({activeChallenge, members, currentUser}) => {
     if(leader.uid === id) return winningColor
     else return losingColor
   }
-  console.log("leader: ", leader)
   
   return(
     <View style={styles.wrapper}>
@@ -164,7 +161,6 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     flexDirection: "row"
-
   },
   loosingFooter: {
     backgroundColor: "#BF212F",
@@ -190,6 +186,5 @@ const styles = StyleSheet.create({
   },
   footerText: {
     color: "white",
-
   }
 })

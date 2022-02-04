@@ -5,7 +5,6 @@ import { Button } from "react-native-paper";
 export const ChallengesEmptyState = ({handlePresentPress}) => {
 
   const onPress = () => {
-    console.log("click")
     handlePresentPress()
   }
   return(

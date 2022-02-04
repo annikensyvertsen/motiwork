@@ -1,9 +1,7 @@
 import { useSelector } from "react-redux";
 
 export const returnUserBasedOnId = (id) => {
-  console.log("id",id)
   let {allUsers} = useSelector(state => state.user)
-  console.log("?", allUsers)
   return allUsers.find(user => user.uid === id)
 }
 
