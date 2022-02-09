@@ -5,6 +5,7 @@ import { Button } from "react-native-paper";
 import styles from "./styles";
 import { auth, db } from "../../firebase";
 import { registerUser } from "../../store/actions/userActions";
+import { useDispatch } from "react-redux";
 
 
 const RegisterScreen = ({ navigation }) => {
@@ -16,46 +17,20 @@ const RegisterScreen = ({ navigation }) => {
     register,
   } = useForm();
 
+  const dispatch = useDispatch()
   const password = useRef({});
   password.current = watch("password", "");
 
   const onSubmit = (data) => {
-    registerUser(data)
-    // auth
-    //const { email, password, name } = data;
-
-    //   .createUserWithEmailAndPassword(email.trim().toLowerCase(), password)
-    //   .then(function (result) {  
-    //     db.collection('usersCollection').doc(result.user.uid).set({
-    //       uid: result.user.uid,
-    //       points: 0,
-    //       totalWorkload: 0,
-    //       currentGoal: {},
-    //       friends: [],
-    //       incomingFriendRequests: [],
-    //       outgoingFriendRequests: [],
-    //       name: name
-    //     })      
-    //    .then(function (result) {
-    //       //todo: skal denne gjøre noe?
-    //       //console.log("result of user collection: ", result)
-    //     }).catch(function(error){
-    //       console.log(error)
-    //     })
-    //     return result.user.updateProfile({
-    //       displayName: name,
-    //     });
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
+    registerUser(data, dispatch)
+  
   };
   return (
     <View style={styles.authFormContainer}>
       <View style={styles.inputField}>
         <Text style={styles.headerOne}>Registrer</Text>
         <View style={styles.inputWrapper}>
-          <Text style={styles.labelStyle}>Navn</Text>
+          <Text style={styles.labelStyle}>Fornavn</Text>
           <Controller
             control={control}
             render={({ field: { onChange, value, onBlur } }) => (
@@ -67,14 +42,37 @@ const RegisterScreen = ({ navigation }) => {
                 placeholder={"Ola Nordmann"}
               />
             )}
-            name="name"
+            name="firstname"
             rules={{ required: true }}
             defaultValue=""
           />
         </View>
         <View style={styles.errorMsg}>
           {errors && errors.email && (
-            <Text style={styles.errorText}>Du må fylle inn navn</Text>
+            <Text style={styles.errorText}>Du må fylle inn fornavn</Text>
+          )}
+        </View>
+        <View style={styles.inputWrapper}>
+          <Text style={styles.labelStyle}>Etternavn</Text>
+          <Controller
+            control={control}
+            render={({ field: { onChange, value, onBlur } }) => (
+              <TextInput
+                onBlur={onBlur}
+                onChangeText={(v) => onChange(v)}
+                value={value}
+                style={styles.formInput}
+                placeholder={"Ola Nordmann"}
+              />
+            )}
+            name="surname"
+            rules={{ required: true }}
+            defaultValue=""
+          />
+        </View>
+        <View style={styles.errorMsg}>
+          {errors && errors.email && (
+            <Text style={styles.errorText}>Du må fylle inn etternavn</Text>
           )}
         </View>
         <View style={styles.inputWrapper}>

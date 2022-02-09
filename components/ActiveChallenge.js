@@ -9,7 +9,7 @@ export const ActiveChallenge = ({activeChallenge, currentUser}) => {
   const {members, cooperationName} = activeChallenge
   const {endDate, goalName, workload, workloadGoal} = activeChallenge.challenge
   let isLeading = true;
-  const [leader, setLeader] = useState(currentUser)
+  const [leader, setLeader] = useState(null)
 
   let remainingDays = calculateDaysLeft(endDate.seconds)
 
@@ -29,7 +29,8 @@ export const ActiveChallenge = ({activeChallenge, currentUser}) => {
 
   const checkLeader = () => {
     if(currentUserProgress > friendProgress) setLeader(currentUser)
-    else setLeader(friend)
+    else if(currentUserProgress < friendProgress) setLeader(friend)
+    else setLeader(null)
   }
 
   useEffect(() => {
@@ -40,13 +41,21 @@ export const ActiveChallenge = ({activeChallenge, currentUser}) => {
     }
   }, [])
 
+   
+  const returnCardStyle = () => {
+    if(leader === null) return styles.losingCardStyle
+    else if(leader.uid === currentUser.uid) return styles.winningCardStyle
+    else return styles.losingCardStyle
+  }
+  
+
   
   useEffect(() => {
     checkLeader()
   }, [])
   return(
     <View style={styles.wrapper}>
-    <Card style={isLeading? styles.winningCardStyle : styles.losingCardStyle}>
+    <Card style={returnCardStyle()}>
     <View style={styles.container}>
       <View style={styles.content}>
         <View style={styles.header}>
@@ -60,7 +69,16 @@ export const ActiveChallenge = ({activeChallenge, currentUser}) => {
           </View>
         </View>
       </View>
-      {leader.uid === currentUser.uid ? 
+      {leader === null ?
+        (
+           <View style={styles.loosingFooter}>
+              <List.Icon color="#FFB61D" icon="alert"></List.Icon>
+              <Text style={styles.footerText}>Det er likt! </Text>
+              <List.Icon color="#FFB61D" icon="alert"></List.Icon>
+          </View>
+        )
+        :
+        leader.uid === currentUser.uid ? 
         (
           <View style={styles.winningFooter}>
           <Text style={styles.footerText}>{"Du"} leder! </Text>
@@ -70,7 +88,7 @@ export const ActiveChallenge = ({activeChallenge, currentUser}) => {
         (
             <View style={styles.loosingFooter}>
               <List.Icon color="#FFB61D" icon="alert"></List.Icon>
-              <Text style={styles.footerText}>{friend.nanme} leder </Text>
+              <Text style={styles.footerText}>{friend.firstname} leder </Text>
               <List.Icon color="#FFB61D" icon="alert"></List.Icon>
           </View>
         )
@@ -103,9 +121,18 @@ const styles = StyleSheet.create({
     borderColor:  "#006F3C",
     marginTop: 20,
   },
+  losingCardStyle: {
+    borderRadius: 10,
+    width: '100%',
+    alignSelf: "center",
+    borderWidth: 2,
+    borderColor:  "#BF212F",
+    marginTop: 20,
+  },
   horizontalHeaderText: {
     display: "flex",
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     justifyContent: "space-between",
   },
@@ -125,18 +152,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row"
   },
-  losingCardStyle: {
-    borderRadius: 10,
-    width: '80%',
-    minHeight: 300,
-    alignSelf: "center",
-    borderWidth: 2,
-    borderColor:  "#BF212F",
-    marginTop: 20,
-  },
   loosingFooter: {
     backgroundColor: "#BF212F",
     minHeight: 30,
+    maxHeight: 30,
     display: "flex",
     flexDirection: "row",
     alignItems: 'center',

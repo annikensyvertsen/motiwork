@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {  View, StyleSheet, Text } from "react-native";
-import { Divider } from "react-native-paper";
+import { Avatar, Divider } from "react-native-paper";
 import { useSelector } from "react-redux";
 import { returnMultipleUsersBasedOnIds } from "../help-functions/friends";
 
@@ -9,6 +9,10 @@ export const FriendsLists = () => {
   let {user} = useSelector(state => state.user)
   let friends = returnMultipleUsersBasedOnIds(user.friends)
 
+  const findInitials = (friend) => {
+    return (friend.firstname[0] + friend.surname[0]).toUpperCase()
+  }
+
   return(
     <View>
     {friends.map(
@@ -16,7 +20,10 @@ export const FriendsLists = () => {
       (
         <View key={i} style={styles.friendWrapper}>
           <View style={styles.textWrapper}>
-            <Text style={styles.nameText} >{friend.name}</Text>
+            <View style={styles.nameAndAvatar}>
+              <Avatar.Text size={24} label={findInitials(friend)}/>
+              <Text style={styles.nameText} >{friend.firstname} {friend.surname}</Text>
+            </View>
             <Text style={styles.pointText} >{friend.points}p</Text>
           </View>
           <Divider />
@@ -38,8 +45,14 @@ const styles = StyleSheet.create({
   friendWrapper: {
     margin: 10
   },
+  nameAndAvatar: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center"
+  },
   nameText: {
-    textTransform: "capitalize"
+    textTransform: "capitalize",
+    marginLeft: 5
   },
   pointText: {
     color: "grey"

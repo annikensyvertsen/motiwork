@@ -8,9 +8,22 @@ export const ChallengesEmptyState = ({handlePresentPress}) => {
     handlePresentPress()
   }
   return(
-    <View>
-      <Text>Dere har ingen aktive utfordringer. Start en utfordring for å motivere hverandre til å jobbe mer!</Text>
-      <Button onPress={onPress}>Start en utfordring</Button>
+    <View style={styles.wrapper}>
+      <Text style={{textAlign: "center"}}>Dere har ingen aktive utfordringer. Start en utfordring for å motivere hverandre til å jobbe mer!</Text>
+      <Button style={styles.button} mode="contained" onPress={onPress}>Start en utfordring</Button>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  wrapper: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 5
+  },
+  button: {
+    width: '80%',
+    margin: 10,
+  }
+})

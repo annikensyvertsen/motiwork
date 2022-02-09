@@ -36,13 +36,16 @@ export const updateUserPoints = async(hours, points, user, cooperations) => {
   }
   cooperations && cooperations.forEach(async cooperation => {
     //foreløpig er det tiltenkt at det bare skal være en aktiv utfordring i hvert samarbeid. Kan vurdere å gjøre dette om til et objekt isteden
-    let activeChallenge = cooperation.activeChallenge
-    if(checkIfGoalOrChallengeHasStarted(activeChallenge.startDate) && !checkIfGoalOrChallengeHasEnded(activeChallenge.endDate)){
-      console.log("it has")
-      await db.collection('cooperationsCollection').doc(cooperation.id).update({
-        [`activeChallenge.workload.` + user.uid]: firebase.firestore.FieldValue.increment(hours),
-      })
+    if(Object.keys(cooperation.activeChallenge).length ){
+       let activeChallenge = cooperation.activeChallenge
+        if(checkIfGoalOrChallengeHasStarted(activeChallenge.startDate) && !checkIfGoalOrChallengeHasEnded(activeChallenge.endDate)){
+          console.log("it has")
+          await db.collection('cooperationsCollection').doc(cooperation.id).update({
+            [`activeChallenge.workload.` + user.uid]: firebase.firestore.FieldValue.increment(hours),
+          })
+        }
     }
+   
 
 
   })

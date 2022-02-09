@@ -6,13 +6,14 @@ import { useSelector } from "react-redux";
 import { CooperationRequests } from "./CooperationRequests";
 import { CooperationItem } from "./CooperationItem";
 
-export const CooperationsSection = ({ handleBottomSheetRender}) => {
+export const CooperationsSection = ({ bottomSheetRef}) => {
   let {user} = useSelector(state => state.user)
   let {cooperations} = useSelector(state => state.cooperations)
 
   const onPress = () => {
-    handleBottomSheetRender("add-cooperation")
+    bottomSheetRef.current.present()
   }
+
 
   return(
     <View>

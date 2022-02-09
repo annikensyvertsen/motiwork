@@ -21,12 +21,12 @@ export const returnAllUsersExceptFriendsAndRequests = (friends, currentUserId) =
   let {allUsers} = useSelector(state => state.user)
   let {user} = useSelector(state => state.user)
   let usersNotIncludingCurrentUser = allUsers.filter(u => u.uid != currentUserId) 
-  let usersWithNoFriendRequests = usersNotIncludingCurrentUser.filter(u => {
-    if(!user.incomingFriendRequests.includes(u.uid) && !user.outgoingFriendRequests.includes(u.uid)){
-      return true
-    }
-    return false
-  })
-  return usersWithNoFriendRequests.filter(u => !friends.includes(u.uid))
+  // let usersWithNoFriendRequests = usersNotIncludingCurrentUser.filter(u => {
+  //   if(!user.incomingFriendRequests.includes(u.uid) && !user.outgoingFriendRequests.includes(u.uid)){
+  //     return true
+  //   }
+  //   return false
+  // })
+  return usersNotIncludingCurrentUser.filter(u => !friends.includes(u.uid))
 }
 

@@ -7,7 +7,7 @@ import HomeTab from "./screens/HomeTab";
 import CommunityTab from "./screens/CommunityTab";
 import CooperationTab from "./screens/CooperationTab";
 import ProfileTab from "./screens/ProfileTab";
-import { useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector, shallowEqual} from 'react-redux';
 import { setCurrentUser } from "./store/actions/userActions";
 
 import { FontAwesome } from "@expo/vector-icons";
@@ -25,16 +25,17 @@ export const AppContent = () => {
   let currentUser = auth.currentUser
   const dispatch = useDispatch()
 
-  let {user} = useSelector(state => state.user)
-  let {cooperations} = useSelector(state => state.cooperations)
+  //let {user} = useSelector(state => state.user, shallowEqual)
+  //let {cooperations} = useSelector(state => state.cooperations, shallowEqual)
 
   const initialSetup = async () => {
     await setAllUsers(dispatch)
 
-    await setCooperations(currentUser.uid, dispatch)
-    await setActiveChallenges(cooperations, dispatch) 
+    //prøve å gjøre dette på home-page isteden, siden vi ikke vil at alt skal rendre på nytt hele tiden
+    //await setCooperations(currentUser.uid, dispatch)
+    //await setActiveChallenges(cooperations, dispatch) 
   }
-  console.log("App content renders now yyy")
+  console.log("App content renders now:")
 
   // useEffect(() => {
   //   setCurrentUser(currentUser.uid, dispatch)
@@ -44,13 +45,13 @@ export const AppContent = () => {
   //hør etter når user endrer seg, altså at cooperations feltet f.eks. endrer seg
   useEffect(() => {
     initialSetup()
-  }, [user])
+  }, [])
 
   useEffect(() => {
     let userDoc = db.collection('usersCollection').doc(currentUser.uid)
     let unsubscribe = userDoc.onSnapshot(snapshot => {
         setCurrentUser(currentUser.uid, dispatch)
-        setCooperations(currentUser.uid, dispatch)
+        //setCooperations(currentUser.uid, dispatch)
     })
  
     return () => {

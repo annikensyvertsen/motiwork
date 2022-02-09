@@ -18,7 +18,7 @@ export const CooperationRequestItem = ({request}) => {
 
   return(
     <View style={styles.wrapper}>
-      <Text style={styles.textStyle}>{requestSender.name}</Text>
+      <Text style={styles.textStyle}>{requestSender.firstname}</Text>
       <View style={styles.buttonWrapper}>
         <Button onPress={() => onPress("accept")}>Godta</Button>
         <Button onPress={() => onPress("decline")}>Avslå</Button>

@@ -5,10 +5,10 @@ import { Avatar } from 'react-native-paper';
 import { textStyles } from './styles/sharedStyles';
 
 
-const SubmittedMessage = ({bottomSheetModalRef, message}) => {
+const SubmittedMessage = ({bottomSheetRef, message}) => {
 
   const onPress = () => {
-    bottomSheetModalRef.current.dismiss()
+    bottomSheetRef.current.dismiss()
   }
   return(
     <View style={styles.wrapper}>

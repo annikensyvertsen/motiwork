@@ -13,31 +13,22 @@ import { CooperationsSection } from "../components/CooperationsSection";
 
 
 const CommunityTab = () => {
-  const [bottomSheetContent, setBottomSheetContent] = useState()
-  const bottomSheetModalRef = useRef(null);
+  const addFriendsBottomSheetRef = useRef(null);
+  const addCooperationBottomSheetRef = useRef(null);
 
-  const handleBottomSheetRender =  (action) => {
-   setBottomSheetContent(action)
-   bottomSheetModalRef.current.present()
-  }
    return (
     <View style={{flex: 1}}>
     <View style={styles.mainContentContainer}>
       <View style={communityStyles.cooperationContainer}>
-        <CooperationsSection handleBottomSheetRender={handleBottomSheetRender} />
+        <CooperationsSection bottomSheetRef={addCooperationBottomSheetRef}/>
       </View>
       <View>
-        <FriendsSection handleBottomSheetRender={handleBottomSheetRender} />
+        <FriendsSection bottomSheetRef={addFriendsBottomSheetRef} />
       </View>
       </View>
-      <BottomSheetTemplate contentComponent={
-        bottomSheetContent === "add-friends" ?
-        <AddFriends bottomSheetModalRef={bottomSheetModalRef}/>
-        :
-        <AddCooperation bottomSheetModalRef={bottomSheetModalRef} />
-      } 
-      ref={bottomSheetModalRef} />
-
+      <BottomSheetTemplate contentComponent={<AddFriends bottomSheetRef={addFriendsBottomSheetRef}/>} ref={addFriendsBottomSheetRef} />
+      <BottomSheetTemplate contentComponent={<AddCooperation bottomSheetRef={addCooperationBottomSheetRef}/>} ref={addCooperationBottomSheetRef} />
+      
     </View>
   )
 };

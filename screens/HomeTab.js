@@ -9,31 +9,37 @@ import { useSelector } from "react-redux";
 
 import { useDispatch} from 'react-redux';
 import { ListOfActiveChallenges } from '../components/ListOfActiveChallenges'
+import { setCurrentUser } from "../store/actions/userActions";
+import { setCooperations } from "../store/actions/cooperationsActions";
+import { auth } from "../firebase";
+import { setActiveChallenges } from "../store/actions/challengesActions";
 
 
 const HomeTab = () => {
 
     //TODO: denne må settes som en state som oppdateres når man ser om det er noe data lagret 
   //activechallenges er i dette tilfelle riktig at er i flertall, siden den skal vise alle de aktive utfordringene du har med venner
-  
+  let currentUser = auth.currentUser
+
   const dispatch = useDispatch()
   let {user} = useSelector(state => state.user)
+
   let {allActiveChallenges} = useSelector(state => state.cooperations)
 
   const bottomSheetModalRef = useRef(null);
   const handlePresentPress = () => bottomSheetModalRef.current.present()
 
-  //tar bort dette fordi det allerede er en setup i appcontent -> kan vel ikke være nødvendig å gjøre det her og?
+  const initialSetup = async () => {
+    await setCurrentUser(currentUser.uid, dispatch)
+    await setCooperations(currentUser.uid, dispatch).then(async (res) => {
+      await setActiveChallenges(res, dispatch) 
 
-  // const initialSetup = async () => {
-  //   await setCurrentUser(currentUser.uid, dispatch)
-  //   await setCooperations(currentUser.uid, dispatch)
-  // }
+    })
+  }
 
-
-  // useEffect( () => {
-  //   initialSetup()
-  // }, [])
+  useEffect( () => {
+    initialSetup()
+  }, [])
 
 
   //TODO: her, eller et annet sted, må jeg sjekke om målet har gått ut på dato

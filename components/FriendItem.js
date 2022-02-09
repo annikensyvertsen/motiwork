@@ -35,14 +35,14 @@ export const FriendItem = ({setChosenFriend, startCooperationStep, setStartCoope
     }else{
       setFriendHasSentRequest(false)
     }
-    
+
   }, [onPress])
 
 
   return(
     <View>
       <View style={styles.wrapper}>
-        <Text style={styles.textStyle}>{friend.name}</Text>
+        <Text style={styles.textStyle}>{friend.firstname} {friend.surname}</Text>
         {
           isRequestSent ? 
           (<Text style={{color: "grey"}}>Forespørsel sendt</Text>)

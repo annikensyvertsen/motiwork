@@ -3,24 +3,27 @@ import { ScrollView, View, Text, StyleSheet } from "react-native"
 import { textStyles } from "./styles/sharedStyles";
 import { useSelector } from "react-redux";
 import { returnMultipleUsersBasedOnIds } from "../help-functions/friends";
+
 import { Avatar, Button, IconButton, TextInput } from "react-native-paper";
 import { FriendItem } from "./FriendItem";
 import SubmittedMessage from './SubmittedMessage';
 import { useDispatch} from 'react-redux';
 import { sendCooperationRequest } from "../store/actions/cooperationsActions";
 import { db } from "../firebase";
+import { returnFriendsNotInCooperation } from "../help-functions/cooperations";
 
 
-export const AddCooperation = ({bottomSheetModalRef}) => {
+export const AddCooperation = ({bottomSheetRef}) => {
   let {user} = useSelector(state => state.user)
-  let friends = returnMultipleUsersBasedOnIds(user.friends)
+  let {cooperations} = useSelector(state => state.cooperations)
 
-  let dispatch = useDispatch()
+  //const [friendsNotInCooperation, setFriendsNotInCooperation] = useState([])
 
   const [startCooperationStep, setStartCooperationStep] = useState(1)
   const [nameOfCooperation, setNameOfCooperation] = useState("")
   const [chosenFriend, setChosenFriend] = useState({})
 
+  let friendsNotInCooperation = returnFriendsNotInCooperation(user.friends, cooperations);
   const onPress = async () => {
     let request = {
       members: {
@@ -29,32 +32,57 @@ export const AddCooperation = ({bottomSheetModalRef}) => {
       },
       name: nameOfCooperation
     }
-    await sendCooperationRequest(request).then(
-      setStartCooperationStep(startCooperationStep + 1)
-    )
+    await sendCooperationRequest(request).then(() => setStartCooperationStep(startCooperationStep + 1))
   }
+  // useEffect(() => {
+  //   setStartCooperationStep(startCooperationStep + 1)
+  // }, [])
+
+  const closeBottomSheet = () => {
+    bottomSheetRef.current.dismiss()
+  }
+
+  // const returnFriends = ( ) => {
+  //   setFriendsNotInCooperation(returnFriendsNotInCooperation(user.friends, cooperations))
+  // }
+
+  // useEffect(() => {
+  //   returnFriends()
+  // }, [])
 
   return (
     <ScrollView style={styles.container}>
       <View >
         <View style={styles.header}>
           <Text style={textStyles.secondaryHeadingText}>Start et samarbeid med en venn</Text>
-          <IconButton icon="close"></IconButton>
+          <IconButton onPress={closeBottomSheet} icon="close"></IconButton>
         </View>
        { startCooperationStep === 1 && (
           <View>
-        {friends.map((friend, i) =>(
-          <View key={i}>
-            <FriendItem setChosenFriend={setChosenFriend} startCooperationStep={startCooperationStep} setStartCooperationStep={setStartCooperationStep} friend={friend} />
-          </View>
-        ))}
+          {friendsNotInCooperation.length > 0 ?
+            (
+              friendsNotInCooperation.map((friend, i) =>(
+                <View key={i}>
+                  <FriendItem setChosenFriend={setChosenFriend} startCooperationStep={startCooperationStep} setStartCooperationStep={setStartCooperationStep} friend={friend} />
+                </View>
+              ))
+
+          )
+          :
+          (
+            <View style={styles.emptyStateText}>
+              <Text>Du har ingen venner å starte et samarbeid med, eller du har startet et samarbeid med alle vennene dine.</Text>
+            </View>
+          )
+        }
+        {}
         </View>)}
         {startCooperationStep === 2 &&
-      ( 
+      (
         <View style={styles.stepTwoContent}>
           <View style={styles.friendNameWrapper}>
             <Avatar.Icon size={24} icon="account" ></Avatar.Icon>
-            <Text style={styles.friendName}>{chosenFriend.name}</Text>
+            <Text style={styles.friendName}>{chosenFriend.firstname}</Text>
           </View>
           <Text style={textStyles.tertiaryHeadingText}>Navn på samarbeid:</Text>
           <TextInput mode="outlined" value={nameOfCooperation} onChangeText={setNameOfCooperation} />
@@ -63,11 +91,11 @@ export const AddCooperation = ({bottomSheetModalRef}) => {
       )}
       {startCooperationStep === 3 &&
       (
-        <SubmittedMessage message={"Forespørsel om samarbeid er sendt!"} bottomSheetModalRef={bottomSheetModalRef} />        
+        <SubmittedMessage message={"Forespørsel om samarbeid er sendt!"} bottomSheetRef={bottomSheetRef} />
 
       )}
 
-    
+
       </View>
     </ScrollView>
 
@@ -86,8 +114,8 @@ const styles = StyleSheet.create({
     width: '90%',
   },
   friendNameWrapper: {
-    display: 'flex', 
-    flexDirection: 'row', 
+    display: 'flex',
+    flexDirection: 'row',
     alignItems: "center",
     marginTop: 8,
     marginBottom: 8
@@ -98,9 +126,12 @@ const styles = StyleSheet.create({
     marginLeft: 8
   },
   stepTwoContent: {
-    display: 'flex', 
+    display: 'flex',
     flexDirection: "column",
     marginTop: 10
+  },
+  emptyStateText: {
+    marginTop: 10,
   }
 
 })

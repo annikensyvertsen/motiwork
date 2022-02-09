@@ -11,7 +11,7 @@ export const Challenge = ({activeChallenge, members, currentUser}) => {
 
   let remainingDays = calculateDaysLeft(endDate.seconds)
 
-  const [leader, setLeader] = useState(currentUser)
+  const [leader, setLeader] = useState(null)
 
   const calculateProgress = (amountWorked) => {
     if(amountWorked === 0) return 0
@@ -24,7 +24,8 @@ export const Challenge = ({activeChallenge, members, currentUser}) => {
 
   const checkLeader = () => {
     if(currentUserProgress > friendProgress) setLeader(currentUser)
-    else setLeader(friend)
+    else if(currentUserProgress < friendProgress) setLeader(friend)
+    else setLeader(null)
   }
  
 
@@ -46,13 +47,19 @@ export const Challenge = ({activeChallenge, members, currentUser}) => {
 
 
   const returnColor = (id) => {
-    if(leader.uid === id) return winningColor
+    if(leader === null) return losingColor
+    else if(leader.uid === id) return winningColor
     else return losingColor
   }
   
+  const returnCardStyle = () => {
+    if(leader === null) return styles.losingCardStyle
+    else if(leader.uid === currentUser.uid) return styles.winningCardStyle
+    else return styles.losingCardStyle
+  }
   return(
     <View style={styles.wrapper}>
-      <Card style={leader.uid === currentUser.uid? styles.winningCardStyle : styles.losingCardStyle}>
+      <Card style={returnCardStyle()}>
       <View style={styles.container}>
         <View style={styles.content}>
           <View style={styles.header}>
@@ -61,11 +68,11 @@ export const Challenge = ({activeChallenge, members, currentUser}) => {
           </View>
           <View style={styles.progress}>
           <View style={styles.progressAndText}>
-            <Text style={styles.progressName}>{friend.name}</Text>
+            <Text style={styles.progressName}>{friend.firstname}</Text>
             <ProgressBar style={styles.progressBar} progress={friendProgress} color={returnColor(friend.uid)}/>
           </View>
           <View style={styles.progressAndText}>
-            <Text style={styles.progressName}>{currentUser.name} (deg)</Text>
+            <Text style={styles.progressName}>{currentUser.firstname} (deg)</Text>
             <ProgressBar style={styles.progressBar} progress={currentUserProgress} color={returnColor(currentUser.uid)}/>
           </View>
           </View>
@@ -74,7 +81,16 @@ export const Challenge = ({activeChallenge, members, currentUser}) => {
             <Text style={textStyles.subtitleText}>{reward}</Text>
           </View>
         </View>
-        {leader.uid === currentUser.uid ? 
+        {leader === null ?
+          (
+             <View style={styles.loosingFooter}>
+                <List.Icon color="#FFB61D" icon="alert"></List.Icon>
+                <Text style={styles.footerText}>Det er likt! </Text>
+                <List.Icon color="#FFB61D" icon="alert"></List.Icon>
+            </View>
+          )
+          :
+          leader.uid === currentUser.uid ? 
           (
             <View style={styles.winningFooter}>
             <Text style={styles.footerText}>{"Du"} leder! </Text>
@@ -84,13 +100,11 @@ export const Challenge = ({activeChallenge, members, currentUser}) => {
           (
               <View style={styles.loosingFooter}>
                 <List.Icon color="#FFB61D" icon="alert"></List.Icon>
-                <Text style={styles.footerText}>{friend.name} leder </Text>
+                <Text style={styles.footerText}>{friend.firstname} leder </Text>
                 <List.Icon color="#FFB61D" icon="alert"></List.Icon>
             </View>
           )
         }
-        
-        
       </View>
       </Card>
     </View>

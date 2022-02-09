@@ -1,7 +1,8 @@
 const initialState = {
   user:  {
     uid: "",
-    name: "",
+    firstname: "",
+    surname: "",
     points: 0,
     totalWorkload: 0,
     currentGoal: {},

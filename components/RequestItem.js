@@ -18,7 +18,7 @@ export const RequestItem = ({currentUserId, requestId}) => {
 
   return(
     <View style={styles.wrapper}>
-      <Text style={styles.textStyle}>{user && user.name}</Text>
+      <Text style={styles.textStyle}>{user && (user.firstname + " " + user.surname)}</Text>
       <View style={styles.buttonWrapper}>
         <Button onPress={() => onPress("accept")}>Godta</Button>
         <Button onPress={() => onPress("decline")}>Avslå</Button>

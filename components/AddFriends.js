@@ -4,17 +4,20 @@ import { IconButton } from "react-native-paper";
 import { useSelector } from "react-redux";
 import { textStyles } from "./styles/sharedStyles";
 import { UserItem } from "./UserItem";
-import { returnAllUsersExceptFriendsAndRequests } from "../help-functions/friends";
+import { returnAllUsersExceptFriends } from "../help-functions/friends";
 
-export const AddFriends = () => {
+export const AddFriends = ({bottomSheetRef}) => {
   let {user} = useSelector(state => state.user)
-  let usersThatAreNotFriends = returnAllUsersExceptFriendsAndRequests(user.friends, user.uid)
+  let usersThatAreNotFriends = returnAllUsersExceptFriends(user.friends, user.uid)
 
+  const onPress = () => {
+    bottomSheetRef.current.dismiss()
+  }
   return(
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={textStyles.secondaryHeadingText}>Legg til venn</Text>
-        <IconButton icon="close"></IconButton>
+        <IconButton onPress={onPress} icon="close"></IconButton>
       </View>
       <View>
       {usersThatAreNotFriends.map((u, i) => 

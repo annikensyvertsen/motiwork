@@ -52,7 +52,7 @@ export const registerUser = (userData, dispatch) => {
     payload: true
   })
 
-  const { email, password, name } = userData;
+  const { email, password, firstname, surname } = userData;
     auth
       .createUserWithEmailAndPassword(email.trim().toLowerCase(), password)
       .then( async (result) => {  
@@ -67,9 +67,11 @@ export const registerUser = (userData, dispatch) => {
           outgoingFriendRequests: [],
           incomingCooperationRequests: [],
           outgoingCooperationRequests: [],
-          name: name
+          firstname: firstname,
+          surname: surname,
         })      
        .then((result) => {
+         console.log("result data", result.data())
           dispatch({ type: SET_USER, payload: result.data()})
         })
         .catch((error) => {
@@ -77,7 +79,7 @@ export const registerUser = (userData, dispatch) => {
           dispatch({ type: SET_ERROR, payload: error })
         })
         return result.user.updateProfile({
-          displayName: name,
+          displayName: firstname,
         });
       })
       .catch((error) => {

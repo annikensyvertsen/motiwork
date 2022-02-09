@@ -37,11 +37,15 @@ export const setCooperations = async (userId, dispatch) => {
           cooperations.push(cooperation)
         }
     });
-    dispatch({ type: SET_COOPERATIONS, payload: cooperations})
+    console.log("cooperations, in set cooperations action", cooperations)
     })
     .catch(err => {
       console.log(err)
     });
+    dispatch({ type: SET_COOPERATIONS, payload: cooperations})
+
+    return cooperations
+
 
 }
 
@@ -104,7 +108,9 @@ export const createChallenge = async (members, formData, cooperationId, dispatch
 
   await db.collection('cooperationsCollection').doc(cooperationId).update({
     activeChallenge: challenge
-  })
+  }).then(
+    setCooperations(currentUser.uid, dispatch)
+  )
 
 }
 
