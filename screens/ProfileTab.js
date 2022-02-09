@@ -1,6 +1,6 @@
 import React from "react";
-import { View, Text } from "react-native";
-import { Button } from "react-native-paper";
+import { View, Text, StyleSheet } from "react-native";
+import { Avatar, Button, List } from "react-native-paper";
 import { auth } from "../firebase";
 import { useSelector } from "react-redux";
 import { convertSecondsToDaysHoursAndMinutes, convertHoursToSeconds, returnFormattedTime } from "../help-functions/date-and-time";
@@ -12,16 +12,60 @@ const ProfileTab = () => {
   let workloadInSeconds = convertHoursToSeconds(user.totalWorkload)
   let workloadInDHM = convertSecondsToDaysHoursAndMinutes(workloadInSeconds)
 
+  let initials = (user.firstname[0] + user.surname[0]).toUpperCase()
+  
   return (
-    <View>
-      <Text>Profile</Text>
-      <Text>Email: {currentUser.email}</Text>
-      <Text>Username: {currentUser.displayName}</Text>
-      <Text>Points: {user.points}</Text>
-      <Text>Total workload: {returnFormattedTime(workloadInDHM)}</Text>
+      <View style={styles.wrapper}>
+      <View>
+        <View style={styles.authenticationInfo}>
+          <Avatar.Text size={70} label={initials} />
+          <Text style={styles.nameText}>{user.firstname} {user.surname}</Text>
+          <Text>{currentUser.email}</Text>
+        </View>
+        <View style={styles.progress}>
+          <View style={styles.iconAndText}>
+            <List.Icon icon="clock-outline" />
+           <Text>{returnFormattedTime(workloadInDHM)}</Text>
+          </View>
+          <View style={styles.iconAndText}>
+            <List.Icon icon="star-circle-outline"/>
+            <Text>{user.points} poeng</Text>
+          </View>
 
+        </View>
+      </View>
       <Button onPress={() => auth.signOut()}>Logg ut</Button>
     </View>
   );
 };
 export default ProfileTab;
+
+const styles = StyleSheet.create({
+  wrapper: {
+    height: '80%',
+    marginTop: 20,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between"
+  },
+  authenticationInfo: {
+    display: "flex",
+    alignItems: "center",
+    margin: 40
+  },
+  iconAndText: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  nameText: {
+    textTransform: "capitalize",
+    fontSize: 20,
+    marginTop: 20,
+    marginBottom: 5
+  },
+  progress: {
+    display: "flex",
+    flexDirection: "column",
+  }
+})

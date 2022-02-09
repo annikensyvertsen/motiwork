@@ -4,13 +4,17 @@ import { Avatar, Button, Card, List, ProgressBar } from "react-native-paper";
 import { calculateDaysLeft } from "../help-functions/date-and-time";
 import { returnUserBasedOnId } from "../help-functions/friends";
 import { textStyles } from "./styles/sharedStyles";
+import { useNavigation } from '@react-navigation/native';
 
 export const ActiveChallenge = ({activeChallenge, currentUser}) => {
   const {members, cooperationName} = activeChallenge
   const {endDate, goalName, workload, workloadGoal} = activeChallenge.challenge
   let isLeading = true;
   const [leader, setLeader] = useState(null)
+  const navigation = useNavigation();
 
+
+  console.log("ACTIVE CHALLENGE", activeChallenge)
   let remainingDays = calculateDaysLeft(endDate.seconds)
 
   const calculateProgress = (amountWorked) => {
@@ -48,14 +52,18 @@ export const ActiveChallenge = ({activeChallenge, currentUser}) => {
     else return styles.losingCardStyle
   }
   
-
   
   useEffect(() => {
     checkLeader()
   }, [])
+
+  const onPress = () => {
+    navigation.navigate("cooperation", {cooperationId: activeChallenge.cooperationId})
+  }
+
   return(
     <View style={styles.wrapper}>
-    <Card style={returnCardStyle()}>
+    <Card onPress={onPress} style={returnCardStyle()}>
     <View style={styles.container}>
       <View style={styles.content}>
         <View style={styles.header}>

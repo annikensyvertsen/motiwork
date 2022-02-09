@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   nameText: {
     textTransform: "capitalize",
-    marginLeft: 5
+    marginLeft: 10
   },
   pointText: {
     color: "grey"
