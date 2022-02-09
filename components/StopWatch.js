@@ -17,9 +17,11 @@ export const StopWatch = (props) => {
   let {user} = useSelector(state => state.user)
   let {cooperations} = useSelector(state => state.cooperations)
 
+  
   const handleOnStartStopPress = () => {
     if(isRunning){
       stopTimer()
+      props.values.setCurrentPoints(points)
       props.values.activateDialog()
     }else{
       startTimer()

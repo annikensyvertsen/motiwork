@@ -17,9 +17,9 @@ const SessionTab = () => {
   const [visibleDialog, setVisibleDialog] = useState(false);
   const [isEndSession, setIsEndSession] = useState(false);
   const [isTimerRunning, setIsTimerRunning] = useState(false)
+  const [currentPoints,setCurrentPoints ] = useState(0)
 
-  const onToggleSwitch = () => setIsTimer(!isTimer)
-
+  const [isRunning, setIsRunning] = useState(false)
   const bottomSheetModalRef = useRef(null);
   const handlePresentPress = () => bottomSheetModalRef.current.present()
   
@@ -28,37 +28,45 @@ const SessionTab = () => {
   }
 
   const activateDialog = () => {
-    setVisibleDialog(!visibleDialog)
+    setVisibleDialog(true)
   }
 
-  const stopDialog = (endSession) => {
-    setVisibleDialog(!visibleDialog)
-    setIsEndSession(endSession)
+  const closeDialogAndContinueSession = () => {
+    setVisibleDialog(false)
+    setIsEndSession(false)
+  }
+
+  const closeDialogAndStopSession = () => {
+    setVisibleDialog(false)
+    setIsEndSession(true)
+    if(isTimer){
+      resetComponent()
+    }
   }
 
   return (
     <Provider>
     <Portal>
-      <ComponentDialog stopDialog={stopDialog} visibleDialog={visibleDialog}/>
+    {visibleDialog && <ComponentDialog isTimer={isTimer} closeDialogAndStopSession={closeDialogAndStopSession} closeDialogAndContinueSession={closeDialogAndContinueSession}currentPoints={currentPoints} visibleDialog={visibleDialog}/>}
     </Portal>
 
     <View style={styles.sessionWrapper}>
      <View style={styles.container}>
         <View style={styles.toggleButtonsContainer}>
           <View >
-            <Button onPress={onToggleSwitch} style={styles.timerButton} color={isTimer ? 'white' : DefaultTheme.colors.primary} mode="contained">Stopwatch</Button>
+            <Button onPress={() => setIsTimer(false)} style={styles.timerButton} color={isTimer ? 'white' : DefaultTheme.colors.primary} mode="contained">Stopwatch</Button>
           </View>
           <View>
-            <Button onPress={onToggleSwitch} style={styles.stopWatchButton} color={!isTimer ? 'white' : DefaultTheme.colors.primary} mode="contained">Timer</Button>
+            <Button onPress={() => setIsTimer(true)} style={styles.stopWatchButton} color={!isTimer ? 'white' : DefaultTheme.colors.primary} mode="contained">Timer</Button>
           </View>
         </View>
      </View>
 
      <View style={styles.flexBoxWithMarginTop}>
       {isTimer ? 
-        <Timer key={isTimerRunning} values={{activateDialog, hours, minutes, resetComponent, setHours, setMinutes, visibleDialog, isEndSession}} handlePresentPress={handlePresentPress} /> 
+        <Timer key={isTimerRunning} isRunning={isRunning} setIsRunning={setIsRunning} values={{activateDialog, setCurrentPoints, hours, minutes, resetComponent, setHours, setMinutes, visibleDialog, isEndSession}} handlePresentPress={handlePresentPress} /> 
         : 
-        <StopWatch values={{activateDialog,visibleDialog, isEndSession}}/>}
+        <StopWatch values={{activateDialog,visibleDialog, setCurrentPoints, isEndSession}}/>}
      </View>
 
      <BottomSheetTemplate contentComponent={<ChooseTime values={{hours, minutes, seconds, setSeconds, setHours, setMinutes, bottomSheetModalRef}} />} ref={bottomSheetModalRef} />

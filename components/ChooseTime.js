@@ -26,7 +26,7 @@ export const ChooseTime = ({values}) => {
 
     <View style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
       <Subheading> Hvor lenge ønsker du å arbeide? </Subheading>
-      <TimePicker hoursUnit="timer" minutesUnit="min" value={{hours, minutes}} onChange={handleChange} />
+      <TimePicker  hoursUnit="timer" minutesUnit="min" value={{hours, minutes}} onChange={handleChange} />
       <Button onPress={onButtonPress} style={{width: 100}} mode="contained"> Velg</Button>
     </View>
   )

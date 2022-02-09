@@ -7,17 +7,16 @@ import { updateUserPoints } from "../help-functions/goal";
 import { useSelector } from "react-redux";
 import { convertHousAndMinutesToSeconds, formatTimeToClock } from "../help-functions/date-and-time";
 
-export const Timer = (props) => {
+export const Timer = ({values, handlePresentPress,setIsRunning, isRunning}) => {
   
   let {user} = useSelector(state => state.user)
   let {cooperations} = useSelector(state => state.cooperations)
 
   let sizeOfTimer = Dimensions.get('window').width * 0.8;
-  let hours = props.values?.hours;
-  let minutes = props.values?.minutes;
+  let hours = values?.hours;
+  let minutes = values?.minutes;
   let totalInitialTime = (hours*60*60) + (minutes*60)
 
-  const [isRunning, setIsRunning] = useState(false)
   const [countDownTime, setCountDownTime] = useState(totalInitialTime)
 
   const [formattedTime, setFormattedTime] = useState(formatTimeToClock(countDownTime))
@@ -26,37 +25,18 @@ export const Timer = (props) => {
   const [isChangeTime, setIsChangeTime] = useState(false)
 
   const [currentPoints, setCurrentPoints] = useState(0)
-  const didMountRef = useRef(false);
 
   const handleOnStartStoppPress = () => { 
     setIsRunning(!isRunning)
     if(isRunning){
-      props.values.activateDialog()
+      values.activateDialog()
     }
   }
 
-  const handleResetStopwatch = () => {
-    props.values.resetComponent()
-  }
-
-  useEffect(() => {
-    //if renders for the firsttime
-    if(didMountRef.current){
-      if(!props.values.visibleDialog){
-        if(props.values.isEndSession){  
-          handleResetStopwatch()
-        }else{
-          setIsRunning(!isRunning)
-        }
-      }
-    }else {
-      didMountRef.current = true
-    }
-  }, [props.values.visibleDialog])
 
   const onTimePress = () => {
     setIsChangeTime(!isChangeTime)
-    props.handlePresentPress()
+    handlePresentPress()
   }
 
   const onCountdownComplete = async () => {
@@ -80,7 +60,7 @@ export const Timer = (props) => {
     let timeElapsed = totalTime - t
     let totalMinutes = timeElapsed/60
     if(totalMinutes >= 10){
-      let points = Math.floor(totalMinutes/10)
+      let points = Math.floor(totalMinutes)
       setCurrentPoints(points)
     }
   }
@@ -94,7 +74,7 @@ export const Timer = (props) => {
     let totalSeconds = convertHousAndMinutesToSeconds(hours, minutes)
     setFormattedTime(formatTimeToClock(totalSeconds))
     setCountDownTime(totalSeconds)
-  }, [props.values?.hours,  props.values?.minutes, ])
+  }, [values?.hours,  values?.minutes, ])
 
 
   return (
