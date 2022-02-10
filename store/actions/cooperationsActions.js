@@ -118,7 +118,7 @@ export const createChallenge = async (members, formData, cooperationId, dispatch
   await db.collection('cooperationsCollection').doc(cooperationId).update({
     activeChallenge: challenge
   }).then(
-    setCooperations(currentUser.uid, dispatch)
+    setCooperations(members.sender, dispatch)
   ).catch(err => console.log(err))
 
 }

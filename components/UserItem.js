@@ -13,7 +13,7 @@ export const UserItem = ({currentUser, user}) => {
     sendFriendRequest(currentUser.uid, user.uid)
   }
 
-  useEffect(() => {
+  const checkIfRequestIsAlreadySent = () => {
     if(currentUser.outgoingFriendRequests.length > 0){
       if(currentUser.outgoingFriendRequests.includes(user.uid)) setIsRequestSent(true)
       else setIsRequestSent(false)
@@ -26,7 +26,10 @@ export const UserItem = ({currentUser, user}) => {
     }else{
       setFriendHasSentRequest(false)
     }
-    
+  }
+
+  useEffect(() => {
+    checkIfRequestIsAlreadySent()
   }, [onPress])
 
   return(

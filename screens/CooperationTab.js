@@ -77,7 +77,7 @@ const CooperationTab = () => {
         )
       }
       
-      <BottomSheetTemplate contentComponent={<StartChallenge members={members} cooperationId={cooperationId} bottomSheetModalRef={bottomSheetModalRef} />} ref={bottomSheetModalRef} />
+      <BottomSheetTemplate contentComponent={<StartChallenge members={members} activeChallenge={activeChallenge} cooperationId={cooperationId} bottomSheetModalRef={bottomSheetModalRef} />} ref={bottomSheetModalRef} />
     </View>
   )
 }

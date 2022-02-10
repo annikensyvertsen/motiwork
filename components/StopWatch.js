@@ -37,6 +37,19 @@ export const StopWatch = ({values}) => {
     !isRunning && resetTimer()
   }
 
+  const stopOrContinueSession = () => {
+    console.log("values stopstopwatch", values.stopStopWatch, "isEnd", values.isEndSession)
+      if(values.isEndSession){
+        handleResetStopwatch()
+      }else{
+        startTimer()
+    }
+  }
+
+  // useEffect(() => {
+  //   stopOrContinueSession()
+  // }, [values.stopStopWatch])
+
   useEffect(() => {
     if(didMountRef.current){
       if(!values.visibleDialog ){
@@ -50,7 +63,7 @@ export const StopWatch = ({values}) => {
       didMountRef.current = true
     }
     
-  }, [values.visibleDialog])
+  }, [values.stopStopWatch])
 
   const formatTime = () => {
     let minutes = Math.floor(elapsedTime / 60);

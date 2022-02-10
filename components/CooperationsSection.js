@@ -2,22 +2,38 @@ import React, {useEffect, useState} from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { DefaultTheme, IconButton, Button } from "react-native-paper";
 import { textStyles } from "./styles/sharedStyles";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CooperationRequests } from "./CooperationRequests";
 import { CooperationItem } from "./CooperationItem";
+import {  db } from "../firebase";
+import { setCurrentUser } from "../store/actions/userActions";
+import { ScrollView } from "react-native-gesture-handler";
+import { setCooperations } from "../store/actions/cooperationsActions";
 
 export const CooperationsSection = ({ bottomSheetRef}) => {
   let {user} = useSelector(state => state.user)
   let {cooperations} = useSelector(state => state.cooperations)
 
+
+  const dispatch = useDispatch()
   const onPress = () => {
     bottomSheetRef.current.present()
   }
 
+  useEffect(() => {
+    let userDoc = db.collection('usersCollection').doc(user.uid)
+    let unsubscribe = userDoc.onSnapshot(snapshot => {
+        setCurrentUser(user.uid, dispatch)
+        setCooperations(user.uid, dispatch)
+    })
+ 
+    return () => {
+      unsubscribe()
+    }
+  }, [])
 
   return(
-    <View>
-   
+    <ScrollView>
       <View style={styles.header}>
         <Text style={textStyles.secondaryHeadingText}>Samarbeid</Text>
         <IconButton onPress={onPress} color={DefaultTheme.colors.primary} icon="plus-circle-outline"></IconButton>
@@ -44,7 +60,7 @@ export const CooperationsSection = ({ bottomSheetRef}) => {
         )
     }
       </View>
-    </View>
+    </ScrollView>
   )
 }
 

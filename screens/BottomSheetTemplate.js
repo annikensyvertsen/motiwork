@@ -4,6 +4,7 @@ import {
   BottomSheetModal,
   BottomSheetModalProvider,
 } from '@gorhom/bottom-sheet';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const BottomSheet =  React.forwardRef((props, ref)  => {
 
@@ -22,7 +23,9 @@ const BottomSheet =  React.forwardRef((props, ref)  => {
           snapPoints={snapPoints}
           onChange={handleSheetChanges}
         >
-        {ContentComponent}
+        <ScrollView>
+          {ContentComponent}
+        </ScrollView>
         </BottomSheetModal>
     </BottomSheetModalProvider>
   );

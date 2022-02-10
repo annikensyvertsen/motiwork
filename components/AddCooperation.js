@@ -17,8 +17,6 @@ export const AddCooperation = ({bottomSheetRef}) => {
   let {user} = useSelector(state => state.user)
   let {cooperations} = useSelector(state => state.cooperations)
 
-  //const [friendsNotInCooperation, setFriendsNotInCooperation] = useState([])
-
   const [startCooperationStep, setStartCooperationStep] = useState(1)
   const [nameOfCooperation, setNameOfCooperation] = useState("")
   const [chosenFriend, setChosenFriend] = useState({})
@@ -34,24 +32,13 @@ export const AddCooperation = ({bottomSheetRef}) => {
     }
     await sendCooperationRequest(request).then(() => setStartCooperationStep(startCooperationStep + 1))
   }
-  // useEffect(() => {
-  //   setStartCooperationStep(startCooperationStep + 1)
-  // }, [])
 
   const closeBottomSheet = () => {
     bottomSheetRef.current.dismiss()
   }
 
-  // const returnFriends = ( ) => {
-  //   setFriendsNotInCooperation(returnFriendsNotInCooperation(user.friends, cooperations))
-  // }
-
-  // useEffect(() => {
-  //   returnFriends()
-  // }, [])
-
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container} >
       <View >
         <View style={styles.header}>
           <Text style={textStyles.secondaryHeadingText}>Start et samarbeid med en venn</Text>
@@ -97,7 +84,7 @@ export const AddCooperation = ({bottomSheetRef}) => {
 
 
       </View>
-    </ScrollView>
+    </View>
 
   )
 }

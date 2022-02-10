@@ -10,7 +10,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { createChallenge } from "../../store/actions/cooperationsActions";
 
 
-export const ChallengeForm = ({members, setSubmitted, submitted, cooperationId}) => {
+export const ChallengeForm = ({members, steps, setSteps, setSubmitted, submitted, cooperationId}) => {
   const {
     control,
     formState: { errors },
@@ -75,9 +75,11 @@ export const ChallengeForm = ({members, setSubmitted, submitted, cooperationId})
     //TODO: her skal vi kalle på metoden som setter målet
     await createChallenge(members, formData, cooperationId, dispatch)
     .then(() => {
+      setSteps(steps + 1)
+
       setSubmitted(!submitted)
     })
-    .catch(error => console.log("error", error))
+    .catch(error => console.log("error??", error))
   }
 
 

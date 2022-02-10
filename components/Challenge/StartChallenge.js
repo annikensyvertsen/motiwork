@@ -5,25 +5,29 @@ import { Button } from "react-native-paper";
 import { ChallengeForm } from "../Cooperation/ChallengeForm";
 import SubmittedMessage from "../SubmittedMessage";
 
-export const StartChallenge = ({bottomSheetModalRef, cooperationId, members}) => {
+export const StartChallenge = ({bottomSheetModalRef, activeChallenge, cooperationId, members}) => {
   const [submitted, setSubmitted] = useState(false)
   const [steps, setSteps] = useState(1)
 
-  useEffect(() => {
-    if(submitted){
-      setSteps(steps + 1)
-    }
-  }, [submitted])
+  let cooperationHasActiveChallenge = activeChallenge && Object.keys(activeChallenge).length > 0 
 
- 
+  useEffect(() => {
+    console.log("steps", steps)
+  }, [steps])
   return(
-    <View style={{flex: 1}}>
-      <Text style={styles.header}>Start en utfordring</Text>
-      {steps === 1 ? 
-      (<ChallengeForm cooperationId={cooperationId} members={members} submitted={submitted} setSubmitted={setSubmitted} />)
-      :
-      (<SubmittedMessage message={"Utfordring lagt til!"} bottomSheetModalRef={bottomSheetModalRef} />)
-    }
+    <View style={styles.wrapper}>
+
+        <View>
+        <Text style={styles.header}>Start en utfordring</Text>
+
+        {steps === 1 ? 
+          (<ChallengeForm setSteps={setSteps} steps={steps} cooperationId={cooperationId} members={members} submitted={submitted} setSubmitted={setSubmitted} />)
+          :
+          (<SubmittedMessage message={"Utfordring lagt til!"} bottomSheetModalRef={bottomSheetModalRef} />)
+        }
+      </View>
+      
+     
     </View>
   )
 }

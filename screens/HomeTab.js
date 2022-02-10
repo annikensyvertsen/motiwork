@@ -32,6 +32,7 @@ const HomeTab = () => {
   const initialSetup = async () => {
     await setCurrentUser(currentUser.uid, dispatch)
     await setCooperations(currentUser.uid, dispatch).then(async (res) => {
+      //console.log("what the fuck", res)
       await setActiveChallenges(res, dispatch) 
 
     })

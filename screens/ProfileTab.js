@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Avatar, Button, List } from "react-native-paper";
 import { auth } from "../firebase";
@@ -7,13 +7,15 @@ import { convertSecondsToDaysHoursAndMinutes, convertHoursToSeconds, returnForma
 
 
 const ProfileTab = () => {
+  const [initials, setInitials] = useState("")
   let currentUser = auth.currentUser; 
   let {user} = useSelector(state => state.user)
   let workloadInSeconds = convertHoursToSeconds(user.totalWorkload)
   let workloadInDHM = convertSecondsToDaysHoursAndMinutes(workloadInSeconds)
-
-  let initials = (user.firstname[0] + user.surname[0]).toUpperCase()
   
+  useEffect(() => {
+    setInitials((user.firstname[0] + user.surname[0]).toUpperCase())
+  }, [user])
   return (
       <View style={styles.wrapper}>
       <View>

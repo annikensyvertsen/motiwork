@@ -4,6 +4,7 @@ import { ActiveChallenge } from "./ActiveChallenge";
 
 
 export const ListOfActiveChallenges = ({allActiveChallenges, currentUser}) => {
+  //console.log("allactivechallenges", allActiveChallenges)
   return(
     <View>
     {allActiveChallenges.length > 0 ?

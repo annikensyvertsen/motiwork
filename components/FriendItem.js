@@ -16,26 +16,25 @@ export const FriendItem = ({setChosenFriend, startCooperationStep, setStartCoope
     setChosenFriend(friend)
   }
 
-  useEffect(() => {
+  const checkIfRequestIsAlreadySent = () => {
     if(user.outgoingCooperationRequests.length > 0){
-      user.outgoingCooperationRequests.forEach(request => {
+      let isInOutgoingCooperationRequests = user.outgoingCooperationRequests.some(request => {
         let {members} = request
-        if(members.receiver === friend.uid) setIsRequestSent(true)
-        else setIsRequestSent(false)
+        return members.receiver === friend.uid
       })
-    }else{
-      setIsRequestSent(false)
+      setIsRequestSent(isInOutgoingCooperationRequests)
     }
     if(user.incomingCooperationRequests.length > 0){
-      user.incomingCooperationRequests.forEach(request => {
+      let isInIncomingCooperationRequests = user.incomingCooperationRequests.some(request => {
         let {members} = request
-        if(members.sender === friend.uid) setFriendHasSentRequest(true)
-        else setFriendHasSentRequest(false)
+        return members.sender === friend.uid
       })
-    }else{
-      setFriendHasSentRequest(false)
+      setFriendHasSentRequest(isInIncomingCooperationRequests)
     }
+  }
 
+  useEffect(() => {
+    checkIfRequestIsAlreadySent()
   }, [onPress])
 
 

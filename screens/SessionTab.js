@@ -16,6 +16,8 @@ const SessionTab = () => {
   const [visibleDialog, setVisibleDialog] = useState(false);
   const [isEndSession, setIsEndSession] = useState(false);
   const [timerKey, setTimerKey] = useState(false)
+  const [stopStopWatch, setStopStopWatch] = useState(false)
+
   const [currentPoints,setCurrentPoints ] = useState(0)
 
   const [isTimerRunning, setIsTimerRunning] = useState(false)
@@ -36,6 +38,9 @@ const SessionTab = () => {
   const closeDialogAndContinueSession = () => {
     setVisibleDialog(false)
     setIsEndSession(false)
+    if(!isTimer){
+      setStopStopWatch(!stopStopWatch)
+    }
   }
 
   const closeDialogAndStopSession = () => {
@@ -43,6 +48,8 @@ const SessionTab = () => {
     setIsEndSession(true)
     if(isTimer){
       resetTimer()
+    }else{
+      setStopStopWatch(!stopStopWatch)
     }
   }
 
@@ -72,7 +79,7 @@ const SessionTab = () => {
       {isTimer ? 
         <Timer key={timerKey} isTimerRunning={isTimerRunning} setIsTimerRunning={setIsTimerRunning} values={{activateDialog, setCurrentPoints, hours, minutes, setHours, setMinutes, visibleDialog, isEndSession}} handlePresentPress={handlePresentPress} /> 
         : 
-        <StopWatch values={{activateDialog,visibleDialog, setCurrentPoints, isEndSession, isStopwatchRunning, setIsStopwatchRunning}}/>}
+        <StopWatch values={{stopStopWatch, activateDialog,visibleDialog, setCurrentPoints, isEndSession, isStopwatchRunning, setIsStopwatchRunning}}/>}
      </View>
 
      <BottomSheetTemplate contentComponent={<ChooseTime values={{hours, minutes, seconds, setSeconds, setHours, setMinutes, bottomSheetModalRef}} />} ref={bottomSheetModalRef} />
