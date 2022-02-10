@@ -7,7 +7,7 @@ import { updateUserPoints } from "../help-functions/goal";
 import { useSelector } from "react-redux";
 import { convertHousAndMinutesToSeconds, formatTimeToClock } from "../help-functions/date-and-time";
 
-export const Timer = ({values, handlePresentPress,setIsRunning, isRunning}) => {
+export const Timer = ({values, handlePresentPress,setIsTimerRunning, isTimerRunning}) => {
   
   let {user} = useSelector(state => state.user)
   let {cooperations} = useSelector(state => state.cooperations)
@@ -27,12 +27,11 @@ export const Timer = ({values, handlePresentPress,setIsRunning, isRunning}) => {
   const [currentPoints, setCurrentPoints] = useState(0)
 
   const handleOnStartStoppPress = () => { 
-    setIsRunning(!isRunning)
-    if(isRunning){
+    setIsTimerRunning(!isTimerRunning)
+    if(isTimerRunning){
       values.activateDialog()
     }
   }
-
 
   const onTimePress = () => {
     setIsChangeTime(!isChangeTime)
@@ -87,7 +86,7 @@ export const Timer = ({values, handlePresentPress,setIsRunning, isRunning}) => {
 
       <View style={containerStyles.flexBoxWithMarginTop}>
         <CountdownCircleTimer
-          isPlaying={isRunning}
+          isPlaying={isTimerRunning}
           duration={countDownTime}
           colors={[DefaultTheme.colors.primary, '#F7B801', '#A30000', '#A30000']}
           colorsTime={[7, 5, 2, 0]}
@@ -109,7 +108,7 @@ export const Timer = ({values, handlePresentPress,setIsRunning, isRunning}) => {
 
       <View style={containerStyles.flexBoxWithMarginTop}>      
         <Button labelStyle={textStyles.secondaryButtonText} mode="contained" style={buttonStyles.secondaryButton} onPress={handleOnStartStoppPress}>
-          {isRunning ? "Stop" : "Start"}
+          {isTimerRunning ? "Stop" : "Start"}
         </Button>            
       </View>
 

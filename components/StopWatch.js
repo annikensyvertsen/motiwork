@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { auth } from "../firebase";
 import { buttonStyles, textStyles, containerStyles } from "./styles/sharedStyles";
 
-export const StopWatch = (props) => {
+export const StopWatch = ({values}) => {
 
   const {points, isRunning, elapsedTime, startTimer, stopTimer, resetTimer} = useStopwatch();
   //didmountref = reference used to see if it is initial render or not, maybe not the best way but works for now
@@ -17,16 +17,19 @@ export const StopWatch = (props) => {
   let {user} = useSelector(state => state.user)
   let {cooperations} = useSelector(state => state.cooperations)
 
-  
   const handleOnStartStopPress = () => {
     if(isRunning){
       stopTimer()
-      props.values.setCurrentPoints(points)
-      props.values.activateDialog()
+      values.setCurrentPoints(points)
+      values.activateDialog()
     }else{
       startTimer()
     };
   }
+  useEffect(() => {
+    values.setIsStopwatchRunning(isRunning)
+  }, [isRunning])
+
 
   const handleResetStopwatch = () => {
     let elapsedTimeInHours = (elapsedTime/60)/60
@@ -36,8 +39,8 @@ export const StopWatch = (props) => {
 
   useEffect(() => {
     if(didMountRef.current){
-      if(!props.values.visibleDialog ){
-        if(props.values.isEndSession){  
+      if(!values.visibleDialog ){
+        if(values.isEndSession){  
           handleResetStopwatch()
         }else{
           startTimer()
@@ -47,7 +50,7 @@ export const StopWatch = (props) => {
       didMountRef.current = true
     }
     
-  }, [props.values.visibleDialog])
+  }, [values.visibleDialog])
 
   const formatTime = () => {
     let minutes = Math.floor(elapsedTime / 60);

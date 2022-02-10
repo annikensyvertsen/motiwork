@@ -19,6 +19,7 @@ export const Challenge = ({activeChallenge, members, currentUser}) => {
   }
   let friendUserId = members.receiver === currentUser.uid ? members.sender : members.receiver 
   let friend = returnUserBasedOnId(friendUserId)
+  
   let currentUserProgress = calculateProgress(workload[currentUser.uid])
   let friendProgress = calculateProgress(workload[friendUserId])
 

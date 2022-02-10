@@ -12,9 +12,6 @@ export const ActiveChallenge = ({activeChallenge, currentUser}) => {
   let isLeading = true;
   const [leader, setLeader] = useState(null)
   const navigation = useNavigation();
-
-
-  console.log("ACTIVE CHALLENGE", activeChallenge)
   let remainingDays = calculateDaysLeft(endDate.seconds)
 
   const calculateProgress = (amountWorked) => {
