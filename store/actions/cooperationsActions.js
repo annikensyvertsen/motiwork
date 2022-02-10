@@ -22,12 +22,29 @@ export const addCooperation = async (members, name, dispatch) => {
   return docId
 }
 
+export const findExpiredChallenges = async () => {
+  let todayInSeconds = (new Date().getTime() / 1000)
+  await db.collection("cooperationsCollection").get()
+  .then((querySnapshot) => {
+    querySnapshot.forEach(async(doc) => {
+      const {activeChallenge} = doc.data()
+      if(Object.keys(activeChallenge).length > 0){
+        if(activeChallenge.endDate.seconds < todayInSeconds){
+          await archiveChallenge(activeChallenge, doc.id)
+            .then()
+            .catch(err => console.log(err))
+        }
+      }
+    })
+  })
+}
+
 export const setCooperations = async (userId, dispatch) => {
-  console.log("calling set cooperations")
   let cooperations = []
+  await findExpiredChallenges().catch(err => console.log(err))
   await db.collection("cooperationsCollection").get()
     .then((querySnapshot) => {
-      querySnapshot.forEach((doc ) => {
+      querySnapshot.forEach(async(doc) => {
         const {members} = doc.data()
         const cooperation = {
           ...doc.data(),
@@ -37,16 +54,12 @@ export const setCooperations = async (userId, dispatch) => {
           cooperations.push(cooperation)
         }
     });
-    console.log("cooperations, in set cooperations action", cooperations)
     })
     .catch(err => {
       console.log(err)
     });
     dispatch({ type: SET_COOPERATIONS, payload: cooperations})
-
     return cooperations
-
-
 }
 
 export const sendCooperationRequest = async (request, dispatch) => {
@@ -54,10 +67,10 @@ export const sendCooperationRequest = async (request, dispatch) => {
 
   await db.collection('usersCollection').doc(members.sender).update({
     outgoingCooperationRequests: firebase.firestore.FieldValue.arrayUnion(request)
-  })
+  }).catch(err => console.log(err))
   await db.collection('usersCollection').doc(members.receiver).update({
     incomingCooperationRequests: firebase.firestore.FieldValue.arrayUnion(request)
-  })
+  }).catch(err => console.log(err))
 }
 
 export const acceptCooperationRequest = async (request, dispatch) => {
@@ -69,11 +82,11 @@ export const acceptCooperationRequest = async (request, dispatch) => {
   await db.collection('usersCollection').doc(members.sender).update({
     cooperations: firebase.firestore.FieldValue.arrayUnion(cooperationId),
     outgoingCooperationRequests: firebase.firestore.FieldValue.arrayRemove(request),
-  })
+  }).catch(err => console.log(err))
   await db.collection('usersCollection').doc(members.receiver).update({
     cooperations: firebase.firestore.FieldValue.arrayUnion(cooperationId),
     incomingCooperationRequests: firebase.firestore.FieldValue.arrayRemove(request)
-  })
+  }).catch(err => console.log(err))
 
 }
 
@@ -98,27 +111,22 @@ export const createChallenge = async (members, formData, cooperationId, dispatch
   let workloadObj = {}
   workloadObj[members.sender] = 0
   workloadObj[members.receiver] = 0
-
-  console.log("workloadObj", workloadObj)
   let challenge = {
     ...formData,
     workload: workloadObj
   }
-  console.log("active challenge", challenge)
-
   await db.collection('cooperationsCollection').doc(cooperationId).update({
     activeChallenge: challenge
   }).then(
     setCooperations(currentUser.uid, dispatch)
-  )
+  ).catch(err => console.log(err))
 
 }
 
 export const archiveChallenge = async (challenge, cooperationId) => {
-
   await db.collection('cooperationsCollection').doc(cooperationId).update({
     archivedChallenges: firebase.firestore.FieldValue.arrayUnion(challenge),
     activeChallenge: {},
-  })
+  }).catch(err => console.log(err))
 
 }
