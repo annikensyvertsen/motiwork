@@ -55,7 +55,11 @@ export const ActiveChallenge = ({activeChallenge, currentUser}) => {
   }, [])
 
   const onPress = () => {
-    navigation.navigate("cooperation", {cooperationId: activeChallenge.cooperationId})
+    navigation.navigate("Fellesskap", {screen: "cooperation", params: {
+      cooperationId: activeChallenge.cooperationId
+
+    }})
+
   }
 
   return(

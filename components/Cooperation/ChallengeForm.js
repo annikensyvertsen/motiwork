@@ -70,6 +70,7 @@ export const ChallengeForm = ({members, setSubmitted, submitted, cooperationId})
       startDate: startDate,
       endDate: endDate,
       workloadGoal: workload,
+      settled: false,
     }
     //TODO: her skal vi kalle på metoden som setter målet
     await createChallenge(members, formData, cooperationId, dispatch)

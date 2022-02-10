@@ -10,7 +10,7 @@ export const setActiveChallenges = async (cooperations, dispatch) => {
             challenge: cooperation.activeChallenge,
             members: cooperation.members,
             cooperationId: cooperation.id,
-            cooperationName: cooperation.name
+            cooperationName: cooperation.name,
           }
           if(activeChallenges.length > 0){
             activeChallenges.forEach(c => {

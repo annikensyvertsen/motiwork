@@ -12,6 +12,7 @@ import { db } from "../firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { setCooperations } from "../store/actions/cooperationsActions";
 import { returnUserBasedOnId } from "../help-functions/friends";
+import { UnsettledChallenges } from "../components/Challenge/UnsettledChallenges";
 
 const CooperationTab = () => {
   const navigation = useNavigation();
@@ -29,7 +30,8 @@ const CooperationTab = () => {
 
   
   const onPress = () => {
-    navigation.goBack()
+    //navigation.goBack()
+    navigation.navigate("community")
   }
 
   console.log("renders")
@@ -67,6 +69,14 @@ const CooperationTab = () => {
       (<ChallengesEmptyState handlePresentPress={handlePresentPress}/>)
       }
       </View>
+      {cooperation.archivedChallenges.length > 0 &&
+        (
+          <View>
+            <UnsettledChallenges archivedChallenges={cooperation.archivedChallenges} />
+        </View>
+        )
+      }
+      
       <BottomSheetTemplate contentComponent={<StartChallenge members={members} cooperationId={cooperationId} bottomSheetModalRef={bottomSheetModalRef} />} ref={bottomSheetModalRef} />
     </View>
   )
