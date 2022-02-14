@@ -5,7 +5,6 @@ import styles from './startScreenStyle';
 
 
 const StartScreen = () => {
-  
   return (
     <View style={styles.standardPage}>
       <Image source={require('../../assets/placeholderimg.svg')}/>

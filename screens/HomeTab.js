@@ -1,25 +1,49 @@
-import React, {useState, useRef, useCallback, useMemo} from "react";
-import { Text, View, Modal } from "react-native";
+import React, { useRef, useState, useEffect} from "react";
+import { ScrollView, Text, View } from "react-native";
 import { Button } from "react-native-paper";
 import styles from "./sessions/styles";
-import {
-  BottomSheetModal,
-  BottomSheetModalProvider,
-} from '@gorhom/bottom-sheet';
-import BottomSheet from "./BottomSheet";
+import AddGoal from '../components/AddGoal';
+import BottomSheetTemplate from "../screens/BottomSheetTemplate";
+import { GoalDisplay } from "../components/GoalDisplay";
+import { useSelector } from "react-redux";
 
-
-let goals = null;
-let activeChallenges = null;
-let challengeColor = activeChallenges ? 'green' : 'red';
+import { useDispatch} from 'react-redux';
+import { ListOfActiveChallenges } from '../components/ListOfActiveChallenges'
+import { setCurrentUser } from "../store/actions/userActions";
+import { setCooperations } from "../store/actions/cooperationsActions";
+import { auth } from "../firebase";
+import { setActiveChallenges } from "../store/actions/challengesActions";
 
 
 const HomeTab = () => {
-  const [modalVisible, setModalVisible] = useState(false);
 
-  const bottomSheetModalRef = useRef(null);
+    //TODO: denne må settes som en state som oppdateres når man ser om det er noe data lagret 
+  //activechallenges er i dette tilfelle riktig at er i flertall, siden den skal vise alle de aktive utfordringene du har med venner
+  let currentUser = auth.currentUser
 
-  const handlePresentPress = () => bottomSheetModalRef.current.present()
+  const dispatch = useDispatch()
+  let {user} = useSelector(state => state.user)
+
+  let {allActiveChallenges} = useSelector(state => state.cooperations)
+
+  const bottomSheetRef = useRef(null);
+  const handlePresentPress = () => bottomSheetRef.current.present()
+
+  const initialSetup = async () => {
+    await setCurrentUser(currentUser.uid, dispatch)
+    await setCooperations(currentUser.uid, dispatch).then(async (res) => {
+      //console.log("what the fuck", res)
+      await setActiveChallenges(res, dispatch) 
+
+    })
+  }
+
+  useEffect( () => {
+    initialSetup()
+  }, [])
+
+
+  //TODO: her, eller et annet sted, må jeg sjekke om målet har gått ut på dato
 
 
   return (
@@ -27,8 +51,8 @@ const HomeTab = () => {
     <View style={styles.mainContentContainer}>
       <View style={styles.standardflexColumnContainer}>
         <Text style={styles.headingThree}>Mål</Text>
-        {goals ?
-        (<Text>mål</Text>)
+        {user.currentGoal.goalName ?
+        (<View style={styles.textContainer}><GoalDisplay goal={user.currentGoal}/></View>)
           :
         (<View style={styles.textContainer}>
           <Text>Du har ikke satt deg noen mål enda. Sett deg mål for å minne deg selv på å jobbe jevnt med skole!</Text>
@@ -39,10 +63,10 @@ const HomeTab = () => {
       <View style={styles.standardflexColumnContainer}>
         <View style={{display: "flex", flexDirection: "row"}}> 
           <Text style={styles.headingThree}>Aktive utfordringer med venner</Text>
-          <Text style={{marginLeft: 5, color: challengeColor}}>({activeChallenges || 0})</Text>
+          <Text style={{marginLeft: 5, color: "red"}}>( {allActiveChallenges.length} )</Text>
         </View>
-        {activeChallenges ?
-        (<Text>Hei</Text>)
+        {allActiveChallenges.length > 0 ?
+        (<ListOfActiveChallenges currentUser={user} allActiveChallenges={allActiveChallenges}/>)
           :
         (<View style={styles.textContainer}>
           <Text>Du har ingen aktive utfordringer med venner enda. Legg til venner for å lage utfordringer for å motivere hverandre til å jobbe!</Text>
@@ -51,27 +75,9 @@ const HomeTab = () => {
       </View>
  
       </View>
-        <BottomSheet ref={bottomSheetModalRef} />
+        <BottomSheetTemplate contentComponent={<AddGoal bottomSheetRef={bottomSheetRef} />} ref={bottomSheetRef} />
     </View>
    
   )
 };
 export default HomeTab;
-
-
-
-// <Modal
-// animationType="slide"
-// transparent={true}
-// visible={modalVisible}
-// onRequestClose={() => {
-//   Alert.alert("Modal has been closed.");
-//   setModalVisible(!modalVisible);
-// }}
-// >
-// <View style={styles.modalView}>
-// <Text>mOdal</Text>
-// <Button onPress={() => setModalVisible(!modalVisible)}>Close</Button>
-
-// </View>
-// </Modal>

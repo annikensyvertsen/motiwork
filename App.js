@@ -1,66 +1,28 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { Text, SafeAreaView, View } from "react-native";
+import { View } from "react-native";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { auth } from "./firebase";
+import thunk from 'redux-thunk'
+
 import LoginScreen from "./screens/sessions/LoginScreen";
 import RegisterScreen from "./screens/sessions/RegisterScreen";
-import SessionTab from "./screens/SessionTab";
-import HomeTab from "./screens/HomeTab";
 
-import BottomSheet from "./screens/BottomSheet";
-
-
-import CommunityTab from "./screens/CommunityTab";
-import ProfileTab from "./screens/ProfileTab";
-
-import { FontAwesome } from "@expo/vector-icons";
-
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {Provider} from 'react-redux';
+import {applyMiddleware, combineReducers, createStore} from 'redux'
 
 import { useFonts } from "expo-font";
+import { userReducer } from "./store/reducers/userReducer";
+import { cooperationsReducer } from "./store/reducers/cooperationsReducer";
+
+import {AppContent} from "./AppContent";
 
 const Stack = createStackNavigator();
 
-
-// const HomeStackNavigator = () => {
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen name="Hjem" component={HomeTab} />
-//     </Stack.Navigator>
-//   );
-// };
-
-// const SessionStackNavigator = () => {
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen name="Økt" component={SessionTab} />
-//     </Stack.Navigator>
-//   );
-// };
-
-// const CommunityStackNavigator = () => {
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen name="Fellesskap" component={CommunityTab} />
-//     </Stack.Navigator>
-//   );
-// };
-
-// const ProfileStackNavigator = () => {
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen name="Profil" component={ProfileTab} />
-//     </Stack.Navigator>
-//   );
-// };
-
 export default function App() {
   const [signedIn, setSignedIn] = useState(false);
-
-  const Tab = createBottomTabNavigator();
-
+  
   const [loaded] = useFonts({
     "roboto-bold": require("./assets/fonts/Roboto-Bold.ttf"),
     "roboto-italic": require("./assets/fonts/Roboto-Italic.ttf"),
@@ -69,64 +31,33 @@ export default function App() {
     "roboto-thin": require("./assets/fonts/Roboto-Thin.ttf"),
   });
 
+  const rootReducer = combineReducers({user: userReducer, cooperations: cooperationsReducer})
+
+  const store = createStore(rootReducer, applyMiddleware(thunk))
+
   auth.onAuthStateChanged((user) => {
     if (user) {
       setSignedIn(true);
     } else {
       setSignedIn(false);
     }
-  });
+  })
+
+  console.log("APP JS RENDERS NOW----------------------------")
+
+
   if (!loaded) {
     return null;
   }
   return (
+    <Provider store={store}>
     <NavigationContainer theme={DefaultTheme}>
       {signedIn ? (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#29434e" }}>
-          <Tab.Navigator
-            screenOptions={({ route }) => ({
-              tabBarIcon: ({ color, size }) => {
-                if (route.name === "Hjem") {
-                  return (
-                    <FontAwesome name="home" size={size} color={color} />
-                  );
-                }
-                if (route.name === "Fellesskap") {
-                  return (
-                    <FontAwesome name="trophy" size={size} color={color} />
-                  );
-                }
-                if (route.name === "Økt") {
-                  //should be changed to stopwatch or similar
-                  return <FontAwesome name="play" size={size} color={color} />;
-                }
-                if (route.name === "Profil") {
-                  return <FontAwesome name="user" size={size} color={color} />;
-                }
-              },
-              tabBarActiveTintColor: "green",
-              tabBarInactiveTintColor: "#819ca9",
-              style: {
-                backgroundColor: "#29434e",
-              },
-            })}
-          >
-            <Tab.Screen name="Hjem" component={HomeTab} />
-            <Tab.Screen
-              name="Fellesskap"
-              component={CommunityTab}
-            />
-            <Tab.Screen
-              name="Økt"
-              component={SessionTab}
-            />
-            <Tab.Screen name="Profil" component={ProfileTab} />
-          </Tab.Navigator>
-        </SafeAreaView>
+        <AppContent />
       ) : (
-        <View>
+        <View style={{flex: 1}}>
           <StatusBar style="light" />
-          <Stack.Navigator presentation="card" screenOptions={{}}>
+          <Stack.Navigator presentation="card">
             <Stack.Screen
               name="signIn"
               component={LoginScreen}
@@ -143,5 +74,6 @@ export default function App() {
         </View>
       )}
     </NavigationContainer>
+    </Provider>
   );
 }
