@@ -5,14 +5,14 @@ import GoalForm from './GoalForm';
 
 import SubmittedMessage from './SubmittedMessage';
 
-const AddGoal = ({bottomSheetModalRef}) => {
+const AddGoal = ({bottomSheetRef}) => {
   const [submitted, setSubmitted] = useState(false)
 
   return(
     <ScrollView style={styles.wrapper}>
       <Text style={styles.header}>Legg til et nytt mål</Text>
       {submitted ? 
-        <SubmittedMessage message={"Nytt mål opprettet!"} bottomSheetModalRef={bottomSheetModalRef} />        
+        <SubmittedMessage message={"Nytt mål opprettet!"} bottomSheetRef={bottomSheetRef} />        
         : 
         <GoalForm submitted={submitted} setSubmitted={setSubmitted} />
       }

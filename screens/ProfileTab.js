@@ -14,7 +14,7 @@ const ProfileTab = () => {
   let workloadInDHM = convertSecondsToDaysHoursAndMinutes(workloadInSeconds)
   
   useEffect(() => {
-    setInitials((user.firstname[0] + user.surname[0]).toUpperCase())
+    user && setInitials((user.firstname[0] + user.surname[0]).toUpperCase())
   }, [user])
   return (
       <View style={styles.wrapper}>

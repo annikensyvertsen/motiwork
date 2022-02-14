@@ -26,8 +26,8 @@ const HomeTab = () => {
 
   let {allActiveChallenges} = useSelector(state => state.cooperations)
 
-  const bottomSheetModalRef = useRef(null);
-  const handlePresentPress = () => bottomSheetModalRef.current.present()
+  const bottomSheetRef = useRef(null);
+  const handlePresentPress = () => bottomSheetRef.current.present()
 
   const initialSetup = async () => {
     await setCurrentUser(currentUser.uid, dispatch)
@@ -47,7 +47,7 @@ const HomeTab = () => {
 
 
   return (
-    <ScrollView style={{flex: 1}}>
+    <View style={{flex: 1}}>
     <View style={styles.mainContentContainer}>
       <View style={styles.standardflexColumnContainer}>
         <Text style={styles.headingThree}>Mål</Text>
@@ -75,8 +75,8 @@ const HomeTab = () => {
       </View>
  
       </View>
-        <BottomSheetTemplate contentComponent={<AddGoal bottomSheetModalRef={bottomSheetModalRef} />} ref={bottomSheetModalRef} />
-    </ScrollView>
+        <BottomSheetTemplate contentComponent={<AddGoal bottomSheetRef={bottomSheetRef} />} ref={bottomSheetRef} />
+    </View>
    
   )
 };

@@ -23,9 +23,9 @@ const SessionTab = () => {
   const [isTimerRunning, setIsTimerRunning] = useState(false)
   const [isStopwatchRunning, setIsStopwatchRunning] = useState(false)
 
-  const bottomSheetModalRef = useRef(null);
+  const bottomSheetRef = useRef(null);
 
-  const handlePresentPress = () => bottomSheetModalRef.current.present()
+  const handlePresentPress = () => bottomSheetRef.current.present()
   
   const resetTimer = () => {
     setTimerKey(!timerKey)
@@ -82,7 +82,7 @@ const SessionTab = () => {
         <StopWatch values={{stopStopWatch, activateDialog,visibleDialog, setCurrentPoints, isEndSession, isStopwatchRunning, setIsStopwatchRunning}}/>}
      </View>
 
-     <BottomSheetTemplate contentComponent={<ChooseTime values={{hours, minutes, seconds, setSeconds, setHours, setMinutes, bottomSheetModalRef}} />} ref={bottomSheetModalRef} />
+     <BottomSheetTemplate contentComponent={<ChooseTime values={{hours, minutes, seconds, setSeconds, setHours, setMinutes, bottomSheetRef}} />} ref={bottomSheetRef} />
     </View>
     </Provider>
   );

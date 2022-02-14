@@ -46,10 +46,6 @@ export const StopWatch = ({values}) => {
     }
   }
 
-  // useEffect(() => {
-  //   stopOrContinueSession()
-  // }, [values.stopStopWatch])
-
   useEffect(() => {
     if(didMountRef.current){
       if(!values.visibleDialog ){

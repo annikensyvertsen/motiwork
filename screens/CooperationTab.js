@@ -25,8 +25,8 @@ const CooperationTab = () => {
   let cooperation = returnCooperationBasedOnId(cooperationId)
   const {activeChallenge, archivedChallenges, id, members, name} = cooperation
 
-  const bottomSheetModalRef = useRef(null);
-  const handlePresentPress = () => bottomSheetModalRef.current.present()
+  const bottomSheetRef = useRef(null);
+  const handlePresentPress = () => bottomSheetRef.current.present()
 
   
   const onPress = () => {
@@ -77,7 +77,7 @@ const CooperationTab = () => {
         )
       }
       
-      <BottomSheetTemplate contentComponent={<StartChallenge members={members} activeChallenge={activeChallenge} cooperationId={cooperationId} bottomSheetModalRef={bottomSheetModalRef} />} ref={bottomSheetModalRef} />
+      <BottomSheetTemplate contentComponent={<StartChallenge members={members} activeChallenge={activeChallenge} cooperationId={cooperationId} bottomSheetRef={bottomSheetRef} />} ref={bottomSheetRef} />
     </View>
   )
 }

@@ -13,7 +13,7 @@ export const FriendsSection = ({bottomSheetRef}) => {
   let incomingFriendRequests = user.incomingFriendRequests;
 
   const onPress = () => { 
-    //bottomSheetModalRef.current.present()
+    //bottomSheetRef.current.present()
     bottomSheetRef.current.present()
   }
 

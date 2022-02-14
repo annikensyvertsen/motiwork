@@ -121,7 +121,7 @@ const GoalForm = ({ submitted, setSubmitted}) => {
               mode={"outlined"}
               value={workload}
               onChangeText={load => checkIfNumbers(load)}
-              placeholder={"40"}
+              placeholder={40}
 
             />
           )}
