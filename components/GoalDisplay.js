@@ -17,6 +17,7 @@ export const GoalDisplay =  ({goal}) => {
   const [remainingDays, setRemainingDays] = useState(0)
 
 
+  console.log("GOAL", goal)
   const calculateDaysLeft = () => {
     let endDateInSeconds = goal.endDate ? goal.endDate.seconds : 0;
     let timeLeft = endDateInSeconds - today

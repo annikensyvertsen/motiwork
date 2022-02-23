@@ -48,8 +48,19 @@ const GoalForm = ({ submitted, setSubmitted}) => {
 
   //TODO: denne skal kun akseptere nummer -> how
   const checkIfNumbers = (load) => {
-    setWorkload(load)
+    console.log("load", load)
+    if(isNaN(parseInt(load))){
+      console.log("hello")
+      return 
+    }
+    else {
+      setWorkload(parseInt(load))
+    }
   }
+
+  const allowOnlyNumber=(value)=>{
+    return value.replace(/[^0-9]/g, '')
+ }
 
   const closeMenu = () => setVisible(!visible);
 
@@ -93,7 +104,7 @@ const GoalForm = ({ submitted, setSubmitted}) => {
          rules={{
          required: true,
          }}
-         render={({ field: { onChange, onBlur, value } }) => (
+         render={({ field: { onChangeText, onBlur, value } }) => (
            <TextInput
             label="Navn på målet"
              mode={"outlined"}
@@ -112,7 +123,6 @@ const GoalForm = ({ submitted, setSubmitted}) => {
         control={control}
           rules={{
           required: true,
-          pattern: /^\d+$/
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
@@ -120,9 +130,7 @@ const GoalForm = ({ submitted, setSubmitted}) => {
               label="Antall timer"
               mode={"outlined"}
               value={workload}
-              onChangeText={load => checkIfNumbers(load)}
-              placeholder={40}
-
+              onChangeText={load => setWorkload(load)}
             />
           )}
           name="numberOfHours"

@@ -44,7 +44,8 @@ export const Timer = ({values, handlePresentPress,setIsTimerRunning, isTimerRunn
       let points = Math.floor(totalMinutes/10)
       updateUserPoints(hours, points, user, cooperations)
     }
-    handleOnStartStoppPress()
+    setIsTimerRunning(!isTimerRunning)
+    //handleOnStartStoppPress()
   }
 
 

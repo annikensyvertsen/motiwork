@@ -12,6 +12,7 @@ const initialState = {
     incomingFriendRequests: [],
     outgoingCooperationRequests: [],
     incomingCooperationRequests: [],
+    archivedGoals:  [],
     },
   allUsers: [],
   loading: false,

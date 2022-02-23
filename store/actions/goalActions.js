@@ -17,7 +17,7 @@ export const setUserGoal = async (data, uid, dispatch) => {
       startDate: startDate,
       endDate: endDate,
       workloadGoal: workloadGoal,
-      isCompleted: false,
+      isReached: false,
       workload: 0
     }
   })

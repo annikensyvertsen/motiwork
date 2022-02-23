@@ -29,12 +29,23 @@ export const loginUser =  async (userData, dispatch) => {
   .catch(err => console.log(err));
 }
 
+export const checkIfGoalIsDue = (goal) => {
+  let todayInSeconds = (new Date().getTime() / 1000)
+  return goal.endDate.seconds < todayInSeconds
+}
+
 export const setCurrentUser = async (uid, dispatch) => {
-  console.log("set current user is called")
   await db.collection('usersCollection').doc(uid).get()
   .then(doc => {
     if(doc.exists){
-      dispatch({ type: SET_USER, payload: doc.data()})
+      let userData = doc.data()
+      if(userData.currentGoal){
+        if(checkIfGoalIsDue(userData.currentGoal)){
+          userData.archivedGoals.push(userData.currentGoal)
+          userData.currentGoal = {}
+        }
+      }
+      dispatch({ type: SET_USER, payload: userData})
     }
     else {
       console.log("There exists absolutley no document with that id")
@@ -67,6 +78,7 @@ export const registerUser = (userData, dispatch) => {
           outgoingFriendRequests: [],
           incomingCooperationRequests: [],
           outgoingCooperationRequests: [],
+          archivedGoals: [],
           firstname: firstname,
           surname: surname,
         })      
