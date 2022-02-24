@@ -39,7 +39,7 @@ export const setCurrentUser = async (uid, dispatch) => {
   .then(doc => {
     if(doc.exists){
       let userData = doc.data()
-      if(userData.currentGoal){
+      if(Object.keys(userData.currentGoal).length > 0){
         if(checkIfGoalIsDue(userData.currentGoal)){
           userData.archivedGoals.push(userData.currentGoal)
           userData.currentGoal = {}
