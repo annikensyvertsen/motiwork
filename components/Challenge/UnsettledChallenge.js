@@ -23,8 +23,8 @@ export const UnsettledChallenge = ({challenge, members}) => {
   return(
     <View style={styles.wrapper}>
       <Card style={styles.card}>
-        <Text styles={textStyles.tertiaryHeadingText}>{challenge.goalName}</Text>
-        <Text styles={textStyles.greyText}>Utfordringen ble ferdig {returnFormattedDate(challenge.endDate.seconds)}</Text>
+        <Text style={textStyles.tertiaryHeadingText}>{challenge.goalName}</Text>
+        <Text style={textStyles.greyText}>Utfordringen ble ferdig {returnFormattedDate(challenge.endDate.seconds)}</Text>
         <View>
         {winnerUser ? (
           <View>
