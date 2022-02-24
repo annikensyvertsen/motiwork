@@ -3188,7 +3188,7 @@
   "resolved" "https://registry.npmjs.org/expo-updates-interface/-/expo-updates-interface-0.5.1.tgz"
   "version" "0.5.1"
 
-"expo-updates@~0.11.6":
+"expo-updates@^0.11.6":
   "integrity" "sha512-nTzEc/z0/QHwu6gJhYSh5TWDSzNLO9bmtP4aQzStfqT8RRoh1bYRomszxjc7e3CsZT8xrG88XKlZ4iKL6zHLoQ=="
   "resolved" "https://registry.npmjs.org/expo-updates/-/expo-updates-0.11.6.tgz"
   "version" "0.11.6"
