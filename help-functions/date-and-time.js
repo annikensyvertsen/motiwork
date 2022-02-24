@@ -59,3 +59,9 @@ export const calculateDaysLeft = (deadline) => {
 
   // let daysLeft = new Date(timeLeft)
 }
+
+export const returnFormattedDate = (seconds) => {
+  let options = { year: 'numeric', month: 'long', day: 'numeric' };
+  let date = new Date(seconds*1000) 
+  return new Intl.DateTimeFormat('no', options).format(date)
+} 

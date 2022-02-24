@@ -37,6 +37,8 @@ const CooperationTab = () => {
   console.log("renders")
   
    useEffect(() => {
+    console.log("user id", user.uid)
+    if(cooperationId){
     let userDoc = db.collection('cooperationsCollection').doc(cooperationId)
      let unsubscribe = userDoc.onSnapshot(snapshot => {
         setCooperations(user.uid, dispatch)
@@ -45,11 +47,11 @@ const CooperationTab = () => {
     return () => {
       unsubscribe()
      }
+    }
    }, [])
 
   let friendUserId = members.receiver === user.uid ? members.sender : members.receiver 
   let friend = returnUserBasedOnId(friendUserId)
-
   return(
     <View style={styles.container}>
       <View>
@@ -71,8 +73,8 @@ const CooperationTab = () => {
       </View>
       {cooperation.archivedChallenges.length > 0 &&
         (
-          <View>
-            <UnsettledChallenges archivedChallenges={cooperation.archivedChallenges} />
+          <View style={{flex: 1}}>
+            <UnsettledChallenges members={members} archivedChallenges={cooperation.archivedChallenges} />
         </View>
         )
       }

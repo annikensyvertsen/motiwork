@@ -5,7 +5,7 @@ import { textStyles } from "./styles/sharedStyles";
 import { useDispatch, useSelector } from "react-redux";
 import { CooperationRequests } from "./CooperationRequests";
 import { CooperationItem } from "./CooperationItem";
-import {  db } from "../firebase";
+import {  db, auth } from "../firebase";
 import { setCurrentUser } from "../store/actions/userActions";
 import { ScrollView } from "react-native-gesture-handler";
 import { setCooperations } from "../store/actions/cooperationsActions";
@@ -13,7 +13,7 @@ import { setCooperations } from "../store/actions/cooperationsActions";
 export const CooperationsSection = ({ bottomSheetRef}) => {
   let {user} = useSelector(state => state.user)
   let {cooperations} = useSelector(state => state.cooperations)
-
+  let userid = auth.currentUser.uid
 
   const dispatch = useDispatch()
   const onPress = () => {
@@ -21,15 +21,17 @@ export const CooperationsSection = ({ bottomSheetRef}) => {
   }
 
   useEffect(() => {
-    let userDoc = db.collection('usersCollection').doc(user.uid)
+    console.log("user id", user.uid, "user", userid)
+    let userDoc = db.collection('usersCollection').doc(userid)
     let unsubscribe = userDoc.onSnapshot(snapshot => {
-        setCurrentUser(user.uid, dispatch)
-        setCooperations(user.uid, dispatch)
+        setCurrentUser(userid, dispatch)
+        setCooperations(userid, dispatch)
     })
- 
+  
     return () => {
       unsubscribe()
     }
+
   }, [])
 
   return(
