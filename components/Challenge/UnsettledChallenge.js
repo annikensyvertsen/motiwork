@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { Card } from "react-native-paper";
+import { Card, Checkbox } from "react-native-paper";
 import { useSelector } from "react-redux";
 import { returnFormattedDate } from "../../help-functions/date-and-time";
 import { returnUserBasedOnId } from "../../help-functions/friends";
@@ -10,6 +10,7 @@ export const UnsettledChallenge = ({challenge, members}) => {
   const {user} = useSelector(state => state.user)
   let winnerUser = challenge.winner ? returnUserBasedOnId(challenge.winner) : null
 
+  const [checked, setChecked] = useState(challenge.settled)
   const findLoser = () => {
     if(members){
       if(winnerUser){
@@ -17,19 +18,22 @@ export const UnsettledChallenge = ({challenge, members}) => {
       } else return null
     }else return null
   }
+
+  // const settleChallenge = () => {
+    
+  // }
   
   let loserUser = findLoser()
   let currentUserIsWinner = user.uid === winnerUser
   return(
     <View style={styles.wrapper}>
       <Card style={styles.card}>
-        <Text style={textStyles.tertiaryHeadingText}>{challenge.goalName}</Text>
-        <Text style={textStyles.greyText}>Utfordringen ble ferdig {returnFormattedDate(challenge.endDate.seconds)}</Text>
+        <Text style={textStyles.tertiaryHeadingText}>Utfordring: "{challenge.goalName}"</Text>
+        <Text style={textStyles.greyItalicText}>Avsluttet {returnFormattedDate(challenge.endDate.seconds)}</Text>
         <View>
         {winnerUser ? (
           <View>
-          <Text>{winnerUser.firstname} vant</Text>
-          {challenge.reward && (
+          {challenge.reward ? (
             currentUserIsWinner ?
             <View style={styles.textWrapper}>
               <Text>Du vant!</Text>
@@ -37,10 +41,26 @@ export const UnsettledChallenge = ({challenge, members}) => {
             </View>
             :
             <View style={styles.textWrapper}>
-              <Text>{winnerUser.firstname} vant!</Text>
-              <Text>Du skylder {winnerUser.firstname} {challenge.reward}.</Text>
+            <View style={{display: 'flex', flexDirection: "row"}}>
+              <Text style={{textTransform: 'capitalize'}}>{winnerUser.firstname}</Text><Text> vant!</Text>
+            </View>
+            <View>
+              <Text>Du skylder {winnerUser.firstname} "{challenge.reward}""</Text>
+            </View>
           </View>
-          )}
+          ):
+        (
+          currentUserIsWinner ?
+            <View style={styles.textWrapper}>
+              <Text>Du vant!</Text>
+            </View>
+            :
+            <View style={styles.textWrapper}>
+            <View style={{display: 'flex', flexDirection: "row"}}>
+              <Text style={{textTransform: 'capitalize'}}>{winnerUser.firstname}</Text><Text> vant!</Text>
+            </View>
+          </View>
+        )}
           </View>
         ): (
           <Text>Ingen vant</Text>
@@ -62,6 +82,7 @@ const styles = StyleSheet.create({
   },
   textWrapper: {
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
+    marginTop: 10,
   }
 })
