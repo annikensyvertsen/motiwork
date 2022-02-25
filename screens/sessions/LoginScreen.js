@@ -6,6 +6,7 @@ import styles from "./styles";
 import { auth } from "../../firebase";
 import { loginUser } from "../../store/actions/userActions";
 import { useDispatch} from 'react-redux';
+import { ScrollView } from "react-native-gesture-handler";
 
 const LoginScreen = ({ navigation }) => {
   const {
@@ -21,7 +22,7 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.authFormContainer}>
+    <ScrollView style={styles.authFormContainer}>
       <Image
         source={require("../../assets/doinghomework.png")}
         style={{ width: 185, height: 150, alignSelf: "center" }}
@@ -99,7 +100,7 @@ const LoginScreen = ({ navigation }) => {
           Registrer konto
         </Button>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 export default LoginScreen;

@@ -6,6 +6,7 @@ import styles from "./styles";
 import { auth, db } from "../../firebase";
 import { registerUser } from "../../store/actions/userActions";
 import { useDispatch } from "react-redux";
+import { ScrollView } from "react-native-gesture-handler";
 
 
 const RegisterScreen = ({ navigation }) => {
@@ -26,7 +27,7 @@ const RegisterScreen = ({ navigation }) => {
   
   };
   return (
-    <View style={styles.authFormContainer}>
+    <ScrollView style={styles.authFormContainer}>
       <View style={styles.inputField}>
         <Text style={styles.headerOne}>Registrer</Text>
         <View style={styles.inputWrapper}>
@@ -174,7 +175,7 @@ const RegisterScreen = ({ navigation }) => {
           Logg inn
         </Button>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 export default RegisterScreen;
