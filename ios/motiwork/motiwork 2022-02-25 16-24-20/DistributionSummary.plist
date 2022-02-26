@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>motiwork.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>buildNumber</key>
+			<string>1.0.0</string>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>213AA2AFC68DBB271222E32F230722CCF244F1C5</string>
+				<key>dateExpires</key>
+				<string>25/02/2023</string>
+				<key>type</key>
+				<string>Cloud Managed Apple Distribution</string>
+			</dict>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>6M3WU7284K.com.annikers.motiwork</string>
+				<key>aps-environment</key>
+				<string>production</string>
+				<key>com.apple.developer.team-identifier</key>
+				<string>6M3WU7284K</string>
+				<key>get-task-allow</key>
+				<false/>
+			</dict>
+			<key>name</key>
+			<string>motiwork.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>eccb0f57-9e44-4aea-acde-1858e7b22b02</string>
+				<key>dateExpires</key>
+				<string>25/02/2023</string>
+				<key>name</key>
+				<string>iOS Team Ad Hoc Provisioning Profile: com.annikers.motiwork</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>6M3WU7284K</string>
+				<key>name</key>
+				<string>Anniken Syvertsen</string>
+			</dict>
+			<key>versionNumber</key>
+			<string>1.0.0</string>
+		</dict>
+	</array>
+</dict>
+</plist>
