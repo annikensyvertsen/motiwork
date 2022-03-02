@@ -30,7 +30,7 @@ const HomeTab = () => {
   const handlePresentPress = () => bottomSheetRef.current.present()
 
   const initialSetup = async () => {
-    await setCurrentUser(currentUser.uid, dispatch)
+    await setCurrentUser(currentUser.uid, dispatch).then().catch(err => console.log(err))
     await setCooperations(currentUser.uid, dispatch).then(async (res) => {
       //console.log("what the fuck", res)
       await setActiveChallenges(res, dispatch) 

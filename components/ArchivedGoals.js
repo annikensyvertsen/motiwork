@@ -2,18 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler';
 import { Card, List } from 'react-native-paper';
+import { returnFormattedDate } from '../help-functions/date-and-time';
 import { textStyles } from './styles/sharedStyles';
 
 export const ArchivedGoals = ({archivedGoals}) => {
-
-
-  console.log("archivedgoals", archivedGoals)
-
-  const returnFormattedDate = (seconds) => {
-    let options = { year: 'numeric', month: 'long', day: 'numeric' };
-    let date = new Date(seconds*1000) 
-    return new Intl.DateTimeFormat('no', options).format(date)
-  } 
 
   return(
     <View>

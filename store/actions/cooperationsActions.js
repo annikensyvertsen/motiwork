@@ -22,7 +22,16 @@ export const addCooperation = async (members, name, dispatch) => {
   return docId
 }
 
-export const findExpiredChallenges = async () => {
+export const calculateWinner = async (members, workload) => {
+  if(workload[members.receiver] > workload[members.sender]){
+    return members.receiver
+  }else if(workload[members.receiver] < workload[members.sender]){
+    return members.sender
+  }else{
+    return null
+  }
+}
+export const findExpiredChallenges = async (members) => {
   let todayInSeconds = (new Date().getTime() / 1000)
   await db.collection("cooperationsCollection").get()
   .then((querySnapshot) => {
@@ -30,6 +39,11 @@ export const findExpiredChallenges = async () => {
       const {activeChallenge} = doc.data()
       if(Object.keys(activeChallenge).length > 0){
         if(activeChallenge.endDate.seconds < todayInSeconds){
+          await calculateWinner(members, activeChallenge.workload).then(
+            result =>
+            {console.log("result", result)
+            activeChallenge.winner = result}
+          )
           await archiveChallenge(activeChallenge, doc.id)
             .then()
             .catch(err => console.log(err))
@@ -41,11 +55,12 @@ export const findExpiredChallenges = async () => {
 
 export const setCooperations = async (userId, dispatch) => {
   let cooperations = []
-  await findExpiredChallenges().catch(err => console.log(err))
+  let cooperationMembers;
   await db.collection("cooperationsCollection").get()
     .then((querySnapshot) => {
       querySnapshot.forEach(async(doc) => {
         const {members} = doc.data()
+        cooperationMembers = members;
         const cooperation = {
           ...doc.data(),
           id: doc.id
@@ -58,6 +73,7 @@ export const setCooperations = async (userId, dispatch) => {
     .catch(err => {
       console.log(err)
     });
+    await findExpiredChallenges(cooperationMembers).catch(err => console.log(err))
     dispatch({ type: SET_COOPERATIONS, payload: cooperations})
     return cooperations
 }

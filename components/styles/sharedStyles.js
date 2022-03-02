@@ -35,6 +35,11 @@ export const textStyles = StyleSheet.create({
     fontSize: 16,
     color: "#636363"
   },
+  greyItalicText: {
+    fontSize: 14,
+    color: "#636363",
+    fontStyle: "italic"
+  },
   greyTextBold: {
     fontSize: 16,
     color: "#636363",
