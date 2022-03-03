@@ -332,6 +332,7 @@
 			baseConfigurationReference = 6C2E3173556A471DD304B334 /* Pods-motiwork.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = motiwork/motiwork.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -370,6 +371,7 @@
 			baseConfigurationReference = 7A4D352CD337FB3A3BF06240 /* Pods-motiwork.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = motiwork/motiwork.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";

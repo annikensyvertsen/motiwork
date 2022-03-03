@@ -28,10 +28,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>127.0.0.1</string>
+			<string>com.annikers.motiwork</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>127.0.0.1</string>
+				<string>motiwork</string>
 			</array>
 		</dict>
 	</array>
