@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { View, Text, Image, TextInput } from "react-native";
+import { View, ScrollView, Text, Image, TextInput } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { Button } from "react-native-paper";
 import styles from "./styles";
@@ -26,7 +26,7 @@ const RegisterScreen = ({ navigation }) => {
   
   };
   return (
-    <View style={styles.authFormContainer}>
+    <ScrollView style={styles.authFormContainer}>
       <View style={styles.inputField}>
         <Text style={styles.headerOne}>Registrer</Text>
         <View style={styles.inputWrapper}>
@@ -174,7 +174,7 @@ const RegisterScreen = ({ navigation }) => {
           Logg inn
         </Button>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 export default RegisterScreen;

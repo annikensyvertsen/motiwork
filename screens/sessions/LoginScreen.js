@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, TextInput } from "react-native";
+import { View, Text, ScrollView, useWindowDimensions, Image,StyleSheet, TextInput } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { Button } from "react-native-paper";
 import styles from "./styles";
@@ -16,15 +16,18 @@ const LoginScreen = ({ navigation }) => {
 
   const dispatch = useDispatch()
 
+  const { height, width } = useWindowDimensions()
+
+  console.log("height: ", height)
   const onSubmit = (data) => {
     loginUser(data, dispatch)
   };
 
   return (
-    <View style={styles.authFormContainer}>
+    <ScrollView style={height <= 700 ? loginStyles.smallAuthFormContainer : loginStyles.authFormContainer }>
       <Image
         source={require("../../assets/doinghomework.png")}
-        style={{ width: 185, height: 150, alignSelf: "center" }}
+        style={loginStyles.image}
       />
       <View style={styles.inputField}>
         <Text style={styles.headerOne}>Logg inn</Text>
@@ -99,7 +102,29 @@ const LoginScreen = ({ navigation }) => {
           Registrer konto
         </Button>
       </View>
-    </View>
+    </ScrollView>
   );
 };
+const loginStyles = StyleSheet.create({
+   image: {
+    padding: 0, 
+    width: 185, 
+    height: 150, 
+    alignSelf: "center",
+    
+   },
+   authFormContainer: {
+    paddingTop: '20%',
+    backgroundColor: "#fff",
+    width: "100%",
+    flex: 1,
+   },
+   smallAuthFormContainer: {
+    paddingTop: '6%',
+    backgroundColor: "#fff",
+    width: "100%",
+    flex: 1,
+   }
+})
+
 export default LoginScreen;
