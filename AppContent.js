@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { SafeAreaView } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { SafeAreaView, AppState } from "react-native";
 import { auth, db } from "./firebase";
 import SessionTab from "./screens/SessionTab";
 import HomeTab from "./screens/HomeTab";
@@ -16,14 +16,17 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { setAllUsers } from "./store/actions/allUsersActions";
-import { setCooperations } from "./store/actions/cooperationsActions";
-import { setActiveChallenges } from "./store/actions/challengesActions";
+import { SET_APP_STATE } from "./store/constants";
 
 
 export const AppContent = () => {
   const Tab = createBottomTabNavigator();
   let currentUser = auth.currentUser
   const dispatch = useDispatch()
+
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current)
+
 
   const initialSetup = async () => {
     await setAllUsers(dispatch)
@@ -34,10 +37,31 @@ export const AppContent = () => {
   }, [])
 
   useEffect(() => {
+    const subscription = AppState.addEventListener("change", nextAppState => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === "active"
+      ) {
+        //console.log("App has come to the foreground!");
+      }
+
+      appState.current = nextAppState;
+      setAppStateVisible(appState.current);
+      dispatch({ type: SET_APP_STATE, payload: appState.current})
+
+     console.log("AppState", appState.current);
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+
+  useEffect(() => {
     let userDoc = db.collection('usersCollection').doc(currentUser.uid)
     let unsubscribe = userDoc.onSnapshot(snapshot => {
         setCurrentUser(currentUser.uid, dispatch)
-        //setCooperations(currentUser.uid, dispatch)
     })
  
     return () => {

@@ -16,8 +16,11 @@ import {applyMiddleware, combineReducers, createStore} from 'redux'
 import { useFonts } from "expo-font";
 import { userReducer } from "./store/reducers/userReducer";
 import { cooperationsReducer } from "./store/reducers/cooperationsReducer";
+import { appStateReducer } from "./store/reducers/appStateReducer";
 
 import {AppContent} from "./AppContent";
+
+
 
 const Stack = createStackNavigator();
 
@@ -32,7 +35,7 @@ export default function App() {
     "roboto-thin": require("./assets/fonts/Roboto-Thin.ttf"),
   });
 
-  const rootReducer = combineReducers({user: userReducer, cooperations: cooperationsReducer})
+  const rootReducer = combineReducers({user: userReducer, cooperations: cooperationsReducer, appState: appStateReducer})
 
   const store = createStore(rootReducer, applyMiddleware(thunk))
 
@@ -43,9 +46,6 @@ export default function App() {
       setSignedIn(false);
     }
   })
-
-  console.log("APP JS RENDERS NOW----------------------------")
-
 
   if (!loaded) {
     return null;

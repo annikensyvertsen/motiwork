@@ -6,6 +6,7 @@ import {StopWatch} from "../components/StopWatch"
 import {Timer} from "../components/Timer"
 import BottomSheetTemplate from "../screens/BottomSheetTemplate";
 import ComponentDialog from '../components/Dialog'
+import { useSelector } from "react-redux";
 
 const SessionTab = () => {
 
@@ -24,6 +25,9 @@ const SessionTab = () => {
   const [isStopwatchRunning, setIsStopwatchRunning] = useState(false)
 
   const bottomSheetRef = useRef(null);
+
+  let {appState} = useSelector(state => state.appState)
+
 
   const handlePresentPress = () => bottomSheetRef.current.present()
   
@@ -56,6 +60,13 @@ const SessionTab = () => {
   const onPress = (timer) => {
     setIsTimer(timer)
   }
+
+  useEffect(() => {
+    console.log("this is the current appState. I hope. ", appState)
+    //når denne blir inaktiv
+    //send push notification og paus session/send den dialogen
+    
+  }, [appState])
 
   return (
     <Provider>

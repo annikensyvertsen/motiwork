@@ -11,6 +11,8 @@ export const SET_ERROR = 'SET_ERROR'
 export const SET_LOADING = 'SET_LOADING'
 export const SET_COOPERATIONS = 'SET_COOPERATIONS'
 
+export const SET_APP_STATE = 'SET_APP_STATE'
+
 export const SET_GOAL = 'SET_GOAL'
 
 //ui reducer types
