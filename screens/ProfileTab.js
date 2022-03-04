@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   },
   userInformation: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   authenticationInfo: {
     display: "flex",

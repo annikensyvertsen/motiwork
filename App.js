@@ -1,7 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { View } from "react-native";
-import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
+import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native";
+import { useColorScheme} from 'react-native-paper'
 import { createStackNavigator } from "@react-navigation/stack";
 import { auth } from "./firebase";
 import thunk from 'redux-thunk'
@@ -51,7 +52,7 @@ export default function App() {
   }
   return (
     <Provider store={store}>
-    <NavigationContainer theme={DefaultTheme}>
+    <NavigationContainer theme={useColorScheme === 'dark'? DarkTheme: DefaultTheme}>
       {signedIn ? (
         <AppContent />
       ) : (

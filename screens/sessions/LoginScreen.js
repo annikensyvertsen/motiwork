@@ -16,9 +16,8 @@ const LoginScreen = ({ navigation }) => {
 
   const dispatch = useDispatch()
 
-  const { height, width } = useWindowDimensions()
+  const { height } = useWindowDimensions()
 
-  console.log("height: ", height)
   const onSubmit = (data) => {
     loginUser(data, dispatch)
   };
