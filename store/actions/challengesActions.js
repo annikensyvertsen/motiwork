@@ -5,7 +5,7 @@ export const setActiveChallenges = async (cooperations, dispatch) => {
   console.log("hvor mange ganger kalles denne")
   let activeChallengeWithMembers = {}
   //hvorfor setter den uendelig mange her?
-    cooperations && cooperations.forEach(cooperation => 
+  Object.keys(cooperations).length > 0 && cooperations.forEach(cooperation => 
       {
         if(Object.keys(cooperation.activeChallenge).length > 0){
           activeChallengeWithMembers = {

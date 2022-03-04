@@ -16,7 +16,7 @@ const ProfileTab = () => {
   
   useEffect(() => {
     user.firstname && setInitials((user.firstname[0] + user.surname[0]).toUpperCase())
-    console.log("user: ",)
+    console.log("archived", user)
   }, [user])
 
 

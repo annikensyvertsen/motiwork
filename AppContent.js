@@ -25,23 +25,9 @@ export const AppContent = () => {
   let currentUser = auth.currentUser
   const dispatch = useDispatch()
 
-  //let {user} = useSelector(state => state.user, shallowEqual)
-  //let {cooperations} = useSelector(state => state.cooperations, shallowEqual)
-
   const initialSetup = async () => {
     await setAllUsers(dispatch)
-
-    //prøve å gjøre dette på home-page isteden, siden vi ikke vil at alt skal rendre på nytt hele tiden
-    //await setCooperations(currentUser.uid, dispatch)
-    //await setActiveChallenges(cooperations, dispatch) 
   }
-  console.log("App content renders now:")
-
-  // useEffect(() => {
-  //   setCurrentUser(currentUser.uid, dispatch)
-  //   setAllUsers(dispatch)
-  // }, [currentUser])
-
   //hør etter når user endrer seg, altså at cooperations feltet f.eks. endrer seg
   useEffect(() => {
     initialSetup()

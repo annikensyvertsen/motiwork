@@ -40,6 +40,7 @@ const HomeTab = () => {
 
   useEffect( () => {
     initialSetup()
+    console.log("USER HOMETAB", user)
   }, [])
 
 
