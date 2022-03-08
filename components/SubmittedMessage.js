@@ -5,10 +5,11 @@ import { Avatar } from 'react-native-paper';
 import { textStyles } from './styles/sharedStyles';
 
 
-const SubmittedMessage = ({bottomSheetRef, message}) => {
+const SubmittedMessage = ({bottomSheetRef, message, setIsOpenEditGoalForm}) => {
 
   const onPress = () => {
     bottomSheetRef.current.dismiss()
+    setIsOpenEditGoalForm(false)
   }
   return(
     <View style={styles.wrapper}>

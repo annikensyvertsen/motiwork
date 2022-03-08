@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { Button, Menu, Provider, TextInput } from 'react-native-paper';
 import { View, StyleSheet, Text } from 'react-native';
-import { auth } from "../firebase";
+import { auth } from "../../firebase";
 import { useDispatch} from 'react-redux';
 import { useForm, Controller } from "react-hook-form";
-import { containerStyles } from "./styles/sharedStyles";
-import { setUserGoal } from '../store/actions/goalActions';
+import { containerStyles } from "../styles/sharedStyles";
+import { setUserGoal } from '../../store/actions/goalActions';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 
-const GoalForm = ({ submitted, setSubmitted}) => {
+const EditGoalForm = ({ goal, submitted, setSubmitted}) => {
    const {
      control,
      formState: { errors },
@@ -30,15 +30,17 @@ const GoalForm = ({ submitted, setSubmitted}) => {
   let dispatch = useDispatch()
   let dateTomorrow = new Date((new Date()).getTime() + 86400000);
 
-  const [reward, setReward] = useState('');
+  console.log("goal", goal)
+  const [reward, setReward] = useState(goal.reward);
   const predefinedRewards = ["Ingenting", "En gratis middag", "En kinodate", "En kaffedate"]
   const [visible, setVisible] = useState(!visible);
 
-  const [workload, setWorkload] = useState(0)
-  const [goalName, setGoalName] = useState("")
+  //todo - fikse så dette ikke er string når jeg fikser workload
+  const [workload, setWorkload] = useState(goal.workload.toString())
+  const [goalName, setGoalName] = useState(goal.goalName)
 
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(dateTomorrow)
+  const [startDate, setStartDate] = useState(new Date(goal.startDate.seconds * 1000))
+  const [endDate, setEndDate] = useState(new Date(goal.endDate.seconds * 1000))
 
   let currentUser = auth.currentUser;
 
@@ -86,7 +88,7 @@ const GoalForm = ({ submitted, setSubmitted}) => {
       startDate: startDate,
       endDate: endDate,
       workloadGoal: workload,
-      workload: 0,
+      workload: goal.workload
     }
     await setUserGoal(data, currentUser.uid, dispatch).then(() => {
       setSubmitted(!submitted)
@@ -236,7 +238,7 @@ const GoalForm = ({ submitted, setSubmitted}) => {
 
 }
 
-export default GoalForm;
+export default EditGoalForm;
 
 const styles = StyleSheet.create({
   provider: {

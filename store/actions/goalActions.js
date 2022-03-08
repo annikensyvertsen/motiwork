@@ -7,7 +7,7 @@ export const setUserGoal = async (data, uid, dispatch) => {
     type: SET_LOADING,
     payload: true
   })
-  const {goalName, reward, startDate, endDate, workloadGoal} = data
+  const {goalName, reward, startDate, workload, endDate, workloadGoal} = data
 
   await db.collection('usersCollection').doc(uid).update({
     
@@ -18,7 +18,7 @@ export const setUserGoal = async (data, uid, dispatch) => {
       endDate: endDate,
       workloadGoal: workloadGoal,
       isReached: false,
-      workload: 0
+      workload: workload
     }
   })
   .then(result => 

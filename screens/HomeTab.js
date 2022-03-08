@@ -13,6 +13,7 @@ import { setCurrentUser } from "../store/actions/userActions";
 import { setCooperations } from "../store/actions/cooperationsActions";
 import { auth } from "../firebase";
 import { setActiveChallenges } from "../store/actions/challengesActions";
+import EditGoal from "../components/Goals/EditGoal";
 
 
 const HomeTab = () => {
@@ -24,10 +25,23 @@ const HomeTab = () => {
   const dispatch = useDispatch()
   let {user} = useSelector(state => state.user)
 
+  //const [goal, setGoal] = useState({})
+  const [isOpenEditGoalForm, setIsOpenEditGoalForm] = useState(false)
+
+  useEffect(() => {
+    //user && user.currentGoal && setGoal(user.currentGoal)
+  }, [])
+
+
   let {allActiveChallenges} = useSelector(state => state.cooperations)
 
   const bottomSheetRef = useRef(null);
   const handlePresentPress = () => bottomSheetRef.current.present()
+
+  const handleEditGoalPress = () => {
+    setIsOpenEditGoalForm(true)
+    bottomSheetRef.current.present()
+  }
 
   const initialSetup = async () => {
     await setCurrentUser(currentUser.uid, dispatch).then().catch(err => console.log(err))
@@ -52,7 +66,7 @@ const HomeTab = () => {
       <View style={styles.standardflexColumnContainer}>
         <Text style={styles.headingThree}>Mål</Text>
         {user.currentGoal.goalName ?
-        (<View style={styles.textContainer}><GoalDisplay goal={user.currentGoal}/></View>)
+        (<View style={styles.textContainer}><GoalDisplay handleEditGoalPress={handleEditGoalPress} goal={user.currentGoal}/></View>)
           :
         (<View style={styles.textContainer}>
           <Text>Du har ikke satt deg noen mål enda. Sett deg mål for å minne deg selv på å jobbe jevnt med skole!</Text>
@@ -75,7 +89,7 @@ const HomeTab = () => {
       </View>
  
       </View>
-        <BottomSheetTemplate contentComponent={<AddGoal bottomSheetRef={bottomSheetRef} />} ref={bottomSheetRef} />
+        <BottomSheetTemplate contentComponent={isOpenEditGoalForm ? <EditGoal goal={user.currentGoal} bottomSheetRef={bottomSheetRef} setIsOpenEditGoalForm={setIsOpenEditGoalForm} /> :<AddGoal bottomSheetRef={bottomSheetRef} />} ref={bottomSheetRef} />
     </View>
    
   )
