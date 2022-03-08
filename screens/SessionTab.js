@@ -42,10 +42,22 @@ const SessionTab = () => {
   
   const resetTimer = () => {
     setTimerKey(!timerKey)
+    setMinutes(45)
   }
 
   const activateDialog = () => {
     setVisibleDialog(true)
+  }
+
+  const closeSessionCompleteDialog = () => {
+    setIsEndSession(true)
+    //resett poeng her: hvis den brått ikke fungerer lenger, så kan det hende den må endres her
+    setCurrentPoints(0)
+    if(isTimer){
+      resetTimer()
+    }else{
+      setStopStopWatch(!stopStopWatch)
+    }
   }
 
   const closeDialogAndContinueSession = () => {
@@ -61,6 +73,8 @@ const SessionTab = () => {
   const closeDialogAndStopSession = () => {
     setVisibleDialog(false)
     setIsEndSession(true)
+    //resett poeng her: hvis den brått ikke fungerer lenger, så kan det hende den må endres her
+    setCurrentPoints(0)
     if(isTimer){
       setIsSessionComplete(true)
       resetTimer()
@@ -124,7 +138,7 @@ const SessionTab = () => {
     <Provider>
     <Portal>
     {visibleDialog && <ComponentDialog isTimer={isTimer} closeDialogAndStopSession={closeDialogAndStopSession} closeDialogAndContinueSession={closeDialogAndContinueSession}currentPoints={currentPoints} visibleDialog={visibleDialog}/>}
-    {isSessionComplete && <SessionCompleteDialog isSessionComplete={isSessionComplete} currentPoints={currentPoints} setIsSessionComplete={setIsSessionComplete} />}
+    {isSessionComplete && <SessionCompleteDialog closeSessionCompleteDialog={closeSessionCompleteDialog} isSessionComplete={isSessionComplete} currentPoints={currentPoints} setIsSessionComplete={setIsSessionComplete} />}
     </Portal>
     
     <View style={styles.sessionWrapper}>

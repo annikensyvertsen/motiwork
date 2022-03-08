@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet , Text} from "react-native";
 import AnimatedCircularProgress from 'react-native-animated-circular-progress';
 import { Card, Button, Divider } from "react-native-paper";
-import { convertHoursToSeconds, convertSecondsToDaysHoursAndMinutes, returnFormattedTime } from "../help-functions/date-and-time";
+import { convertHoursToSeconds, convertSecondsToDaysHoursAndMinutes, convertSecondsToHoursAndMinutes, returnFormattedTime } from "../help-functions/date-and-time";
 import { cardStyles, textStyles, yellowColor } from "./styles/sharedStyles";
 
 export const GoalDisplay =  ({goal}) => {
@@ -11,22 +11,22 @@ export const GoalDisplay =  ({goal}) => {
   let workloadGoal = (goal.workloadGoal) || 0
 
   let secondsWorked = convertHoursToSeconds(hoursWorked)
-  let convertedTime = convertSecondsToDaysHoursAndMinutes(secondsWorked)
+  let convertedTime = convertSecondsToHoursAndMinutes(secondsWorked)
   const [progress, setProgress] = useState()
-  const [remainingDays, setRemainingDays] = useState(0)
-
+  const [remainingTimeLeft, setRemainingTimeLeft] = useState({})
 
   const calculateDaysLeft = () => {
     let endDateInSeconds = goal.endDate ? goal.endDate.seconds : 0;
     let timeLeft = endDateInSeconds - today
-    let timeLeftInDays = convertSecondsToDaysHoursAndMinutes(timeLeft).days
-    setRemainingDays(timeLeftInDays)
+
+    setRemainingTimeLeft(convertSecondsToDaysHoursAndMinutes(timeLeft))
   }
 
   const calculateProgress = () => {
     let workloadGoal = goal.workloadGoal
     let percentageWorked = hoursWorked/workloadGoal
     let degrees = 360*percentageWorked
+    if(degrees>360) degrees = 360 
     setProgress(degrees)
   }
 
@@ -35,14 +35,7 @@ export const GoalDisplay =  ({goal}) => {
     calculateProgress()
   }, [goal])
   
-  let remainingDaysText = "dager igjen"
-  useEffect(() => {
-    if(remainingDays === 1){
-      remainingDaysText = "dag igjen"
-    }else{
-      remainingDaysText = "dager igjen"
-    }
-  }, [])
+ 
 
   return (
     <View style={styles.wrapper} >
@@ -51,8 +44,12 @@ export const GoalDisplay =  ({goal}) => {
           <View style={styles.textWrapper}>
             <Text style={textStyles.tertiaryHeadingText}>{goal && goal.goalName}</Text>
             <View style={styles.subTextWrapper}>
-              <Text style={textStyles.greyTextBold}>{remainingDays}</Text>
-              <Text style={textStyles.greyText}> {remainingDaysText}</Text>
+              <Text style={textStyles.greyTextBold}>{remainingTimeLeft.days}</Text>
+              <Text style={textStyles.greyText}> d </Text>
+              <Text style={textStyles.greyTextBold}>{remainingTimeLeft.hours}</Text>
+              <Text style={textStyles.greyText}> t </Text>
+              <Text style={textStyles.greyTextBold}>{remainingTimeLeft.minutes}</Text>
+              <Text style={textStyles.greyText}> min til fristen</Text>
             </View>
             <View>
             <Divider />
@@ -66,8 +63,8 @@ export const GoalDisplay =  ({goal}) => {
               color={yellowColor}
               startDeg={45}
               endDeg={progress}
-              radius={40}
-              innerRadius={28}
+              radius={44}
+              innerRadius={34}
               innerBackgroundColor={"white"}
               duration={1000}
               style={styles.childrenStyle}

@@ -57,9 +57,9 @@ const CooperationTab = () => {
       </View>
       <View style={styles.members}>
         <List.Icon icon="account"/>
-        <Text style={styles.name}>{friend.firstname} {friend.surname}</Text>
+        <Text style={styles.name}>{friend && friend.firstname} {friend && friend.surname}</Text>
         <List.Icon icon="account"/>
-        <Text style={styles.name}>{user.firstname} {user.surname}</Text>
+        <Text style={styles.name}>{user && user.firstname} {user && user.surname}</Text>
       </View>
       {activeChallenge && Object.keys(activeChallenge).length > 0 ?
       (<Challenge currentUser={user} activeChallenge={activeChallenge} members={members} />)

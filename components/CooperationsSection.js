@@ -21,13 +21,13 @@ export const CooperationsSection = ({ bottomSheetRef}) => {
   }
 
   useEffect(() => {
-    console.log("user id", user.uid, "user", userid)
     let userDoc = db.collection('usersCollection').doc(userid)
     let unsubscribe = userDoc.onSnapshot(snapshot => {
         setCurrentUser(userid, dispatch)
         setCooperations(userid, dispatch)
     })
   
+    console.log("cooperations", cooperations)
     return () => {
       unsubscribe()
     }
@@ -44,7 +44,7 @@ export const CooperationsSection = ({ bottomSheetRef}) => {
         <CooperationRequests />
       )}
       <View>
-      {cooperations.length > 0 ? (cooperations.map((cooperation, i) => (
+      {Object.keys(cooperations).length > 0 ? (cooperations.map((cooperation, i) => (
         <CooperationItem cooperation={cooperation} key={i}/>
         )
       )):

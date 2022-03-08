@@ -9,6 +9,15 @@ export const convertSecondsToDaysHoursAndMinutes = (s) => {
     minutes: m
   }
 }
+export const convertSecondsToHoursAndMinutes = (s) => {
+  let seconds = Number(s);
+  let h = Math.floor(seconds / 3600);
+  let m = Math.floor(seconds % 3600 / 60);
+  return {
+    hours: h,
+    minutes: m
+  }
+}
 
 export const convertHoursToSeconds = (h) => {
   return  h * 60 * 60

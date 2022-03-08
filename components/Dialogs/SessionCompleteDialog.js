@@ -4,11 +4,12 @@ import { Button, Paragraph, Dialog, List } from 'react-native-paper';
 import ConfettiCannon from 'react-native-confetti-cannon';
 
 
-const SessionCompleteDialog = ({currentPoints, isSessionComplete, setIsSessionComplete}) => {
+const SessionCompleteDialog = ({currentPoints, isSessionComplete, setIsSessionComplete, closeSessionCompleteDialog}) => {
 
   let confettiRef = useRef(null)
   const onPress = () => {
     setIsSessionComplete(false)
+    closeSessionCompleteDialog()
   
   }
 

@@ -24,8 +24,6 @@ export const Timer = ({values, setIsSessionComplete, resetTimer, currentPoints, 
 
   const [isChangeTime, setIsChangeTime] = useState(false)
 
-  //const [currentPoints, setCurrentPoints] = useState(0)
-
   const handleOnStartStoppPress = () => { 
     setIsTimerRunning(!isTimerRunning)
     if(isTimerRunning){
@@ -41,14 +39,13 @@ export const Timer = ({values, setIsSessionComplete, resetTimer, currentPoints, 
   const onCountdownComplete = async () => {
     let totalMinutes = countDownTime/60
     if(totalMinutes >= 10){
-      //let points = Math.floor(totalMinutes/10)
-      console.log("userpoints", currentPoints)
-      await updateUserPoints(hours, currentPoints, user, cooperations)
+      let points = (totalMinutes) - ( totalMinutes % 10)
+      await setCurrentPoints(points)
+      await updateUserPoints(hours, points, user, cooperations)
     }
     setIsTimerRunning(!isTimerRunning)
     setIsSessionComplete(true)
     resetTimer()
-    //handleOnStartStoppPress()
   }
 
 
@@ -56,16 +53,13 @@ export const Timer = ({values, setIsSessionComplete, resetTimer, currentPoints, 
     setRemainingTime(e)
     setFormattedTime(formatTimeToClock(e))
     calculateCurrentPoints(e)
-    console.log("is timer running now", isTimerRunning)
   }
 
   const calculateCurrentPoints = async (remainingSeconds) => {
     let totalTime = (hours * 60 * 60) + (minutes * 60)
     let timeElapsed = totalTime - remainingSeconds
-    console.log("timeelapsed", timeElapsed, "remainingsecn", remainingSeconds)
     let totalMinutes = Math.floor(timeElapsed/60)
-    console.log("totalMinutes", totalMinutes)
-    if(totalMinutes >= 0){
+    if(totalMinutes >= 10){
       let points = (totalMinutes) - ( totalMinutes % 10)
       await setCurrentPoints(points)
     }

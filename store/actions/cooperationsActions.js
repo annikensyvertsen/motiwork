@@ -22,15 +22,22 @@ export const addCooperation = async (members, name, dispatch) => {
   return docId
 }
 
-export const calculateWinner = async (members, workload) => {
+export const calculateWinner = (members, workload) => {
   if(workload[members.receiver] > workload[members.sender]){
     return members.receiver
   }else if(workload[members.receiver] < workload[members.sender]){
     return members.sender
-  }else{
-    return null
-  }
+  }else return null
 }
+
+export const findMembersWhoReachedGoal = (members, workload) => {
+  let membersWhoReachedGoal = []
+  if(workload[members.receiver] >= workload) membersWhoReachedGoal.push(members.receiver)
+  if(workload[members.sender] >= workload) membersWhoReachedGoal.push(members.sender)
+  return membersWhoReachedGoal
+
+}
+
 export const findExpiredChallenges = async (members) => {
   let todayInSeconds = (new Date().getTime() / 1000)
   await db.collection("cooperationsCollection").get()
@@ -48,9 +55,29 @@ export const findExpiredChallenges = async (members) => {
             .then()
             .catch(err => console.log(err))
         }
+         let isChallengeCompleted = await checkIfChallengeIsCompleted(members, activeChallenge)
+         if(isChallengeCompleted){
+          await archiveChallenge(activeChallenge, doc.id)
+          .then()
+          .catch(err => console.log(err))
+         }
       }
     })
   })
+}
+
+export const checkIfChallengeIsCompleted = async (members, activeChallenge) => {
+  if(Object.keys(activeChallenge).length > 0){
+    let membersWhoReachedGoal = findMembersWhoReachedGoal(members, activeChallenge.workload)
+    if(membersWhoReachedGoal.length > 1){
+      activeChallenge.winner = null
+      return true
+    } else if(membersWhoReachedGoal.length === 1){
+      activeChallenge.winner = membersWhoReachedGoal[0]
+      return true
+    } else return false
+  }
+
 }
 
 export const setCooperations = async (userId, dispatch) => {
@@ -74,6 +101,7 @@ export const setCooperations = async (userId, dispatch) => {
       console.log(err)
     });
     await findExpiredChallenges(cooperationMembers).catch(err => console.log(err))
+    //await findCompletedChallenges(cooperationMembers).catch(err => console.log(err))
     dispatch({ type: SET_COOPERATIONS, payload: cooperations})
     return cooperations
 }
