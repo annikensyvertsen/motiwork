@@ -19,7 +19,8 @@ import { cooperationsReducer } from "./store/reducers/cooperationsReducer";
 import { appStateReducer } from "./store/reducers/appStateReducer";
 
 import {AppContent} from "./AppContent";
-
+// import firebase from "./firebase";
+// import PushNotification from 'react-native-push-notification';
 
 
 const Stack = createStackNavigator();

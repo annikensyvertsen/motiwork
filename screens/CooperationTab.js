@@ -30,14 +30,10 @@ const CooperationTab = () => {
 
   
   const onPress = () => {
-    //navigation.goBack()
     navigation.navigate("community")
   }
-
-  console.log("renders")
   
    useEffect(() => {
-    console.log("user id", user.uid)
     if(cooperationId){
     let userDoc = db.collection('cooperationsCollection').doc(cooperationId)
      let unsubscribe = userDoc.onSnapshot(snapshot => {
@@ -74,7 +70,7 @@ const CooperationTab = () => {
       {cooperation.archivedChallenges.length > 0 &&
         (
           <View style={{flex: 1}}>
-            <UnsettledChallenges members={members} archivedChallenges={cooperation.archivedChallenges} />
+            <UnsettledChallenges members={members} archivedChallenges={archivedChallenges} />
         </View>
         )
       }

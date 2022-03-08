@@ -7,7 +7,7 @@ import { updateUserPoints } from "../help-functions/goal";
 import { useSelector } from "react-redux";
 import { convertHousAndMinutesToSeconds, formatTimeToClock } from "../help-functions/date-and-time";
 
-export const Timer = ({values, handlePresentPress,setIsTimerRunning, isTimerRunning}) => {
+export const Timer = ({values, setIsSessionComplete, resetTimer, currentPoints, setCurrentPoints, handlePresentPress,setIsTimerRunning, isTimerRunning}) => {
   
   let {user} = useSelector(state => state.user)
   let {cooperations} = useSelector(state => state.cooperations)
@@ -24,7 +24,7 @@ export const Timer = ({values, handlePresentPress,setIsTimerRunning, isTimerRunn
 
   const [isChangeTime, setIsChangeTime] = useState(false)
 
-  const [currentPoints, setCurrentPoints] = useState(0)
+  //const [currentPoints, setCurrentPoints] = useState(0)
 
   const handleOnStartStoppPress = () => { 
     setIsTimerRunning(!isTimerRunning)
@@ -41,10 +41,13 @@ export const Timer = ({values, handlePresentPress,setIsTimerRunning, isTimerRunn
   const onCountdownComplete = async () => {
     let totalMinutes = countDownTime/60
     if(totalMinutes >= 10){
-      let points = Math.floor(totalMinutes/10)
-      updateUserPoints(hours, points, user, cooperations)
+      //let points = Math.floor(totalMinutes/10)
+      console.log("userpoints", currentPoints)
+      await updateUserPoints(hours, currentPoints, user, cooperations)
     }
     setIsTimerRunning(!isTimerRunning)
+    setIsSessionComplete(true)
+    resetTimer()
     //handleOnStartStoppPress()
   }
 
@@ -53,15 +56,18 @@ export const Timer = ({values, handlePresentPress,setIsTimerRunning, isTimerRunn
     setRemainingTime(e)
     setFormattedTime(formatTimeToClock(e))
     calculateCurrentPoints(e)
+    console.log("is timer running now", isTimerRunning)
   }
 
-  const calculateCurrentPoints = (t) => {
+  const calculateCurrentPoints = async (remainingSeconds) => {
     let totalTime = (hours * 60 * 60) + (minutes * 60)
-    let timeElapsed = totalTime - t
-    let totalMinutes = timeElapsed/60
-    if(totalMinutes >= 10){
-      let points = Math.floor(totalMinutes)
-      setCurrentPoints(points)
+    let timeElapsed = totalTime - remainingSeconds
+    console.log("timeelapsed", timeElapsed, "remainingsecn", remainingSeconds)
+    let totalMinutes = Math.floor(timeElapsed/60)
+    console.log("totalMinutes", totalMinutes)
+    if(totalMinutes >= 0){
+      let points = (totalMinutes) - ( totalMinutes % 10)
+      await setCurrentPoints(points)
     }
   }
 
@@ -75,7 +81,6 @@ export const Timer = ({values, handlePresentPress,setIsTimerRunning, isTimerRunn
     setFormattedTime(formatTimeToClock(totalSeconds))
     setCountDownTime(totalSeconds)
   }, [values?.hours,  values?.minutes, ])
-
 
   return (
 

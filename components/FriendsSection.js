@@ -13,10 +13,10 @@ export const FriendsSection = ({bottomSheetRef}) => {
   let incomingFriendRequests = user.incomingFriendRequests;
 
   const onPress = () => { 
-    //bottomSheetRef.current.present()
     bottomSheetRef.current.present()
   }
 
+  //console.log("user", user)
   
 
 

@@ -5548,6 +5548,11 @@
   "resolved" "https://registry.npmjs.org/react-native-animated-circular-progress/-/react-native-animated-circular-progress-1.0.6.tgz"
   "version" "1.0.6"
 
+"react-native-confetti-cannon@^1.5.2":
+  "integrity" "sha512-IZuWjlW7QsdxEGNnvpD6W+7iKCCQhnd5BvuNvMtirU7Nxm8WS2N6LPGMBz1ZYDuusG+GRZkoXXTNCdoAAGpCTg=="
+  "resolved" "https://registry.npmjs.org/react-native-confetti-cannon/-/react-native-confetti-cannon-1.5.2.tgz"
+  "version" "1.5.2"
+
 "react-native-countdown-circle-timer@^3.0.5":
   "integrity" "sha512-IcelVEdv2fB+H5KaoGQI8AnflPLShR51GAn67SH3Fa+RgFQ3TS8cHdOPdpFMaE8NQ9hXluc1Y6AdNNu47kWXyQ=="
   "resolved" "https://registry.npmjs.org/react-native-countdown-circle-timer/-/react-native-countdown-circle-timer-3.0.5.tgz"

@@ -116,7 +116,6 @@ const styles = StyleSheet.create({
   wrapper: {
     display: "flex",
     width: '100%',
-    flex: 1
    },
   winningCardStyle: {
     borderRadius: 10,

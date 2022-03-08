@@ -9,7 +9,7 @@ export const UnsettledChallenges = ({archivedChallenges, members}) => {
 
   //const {endDate, goalName, reward} = archivedChallenges
 
-  console.log("archivedchallenges", archivedChallenges)
+  //console.log("archivedchallenges", archivedChallenges)
   //let dateOfEndedChallenge = new Date(endDate.seconds * 1000)
   const dateOfEndedChallenge = (d) => {
     return new Date(d * 1000)

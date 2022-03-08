@@ -17,6 +17,7 @@ export const checkIfGoalOrChallengeHasEnded = (endDate) => {
 export const updateUserPoints = async(hours, points, user, cooperations) => {
   //console.log("in update user points", hours, "points", points, "user", user, "cooperations", cooperations)
   //todo: sjekk om brukeren har noen aktive mål
+  console.log("updateuserpoints", user.uid, points)
   await db.collection('usersCollection').doc(user.uid).update({
     points: firebase.firestore.FieldValue.increment(points),
     totalWorkload: firebase.firestore.FieldValue.increment(hours),
