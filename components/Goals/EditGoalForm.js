@@ -18,23 +18,20 @@ const EditGoalForm = ({ goal, submitted, setSubmitted}) => {
    } = useForm({
      defaultValues: {
       nameOfGoal: "",
-      numerOfHours: "",
+      numberOfHours: "",
       reward: "",
       startDate: "",
       endDate: "",
      }
    });
 
-   //todo: legge til error i form
-
   let dispatch = useDispatch()
-  let dateTomorrow = new Date((new Date()).getTime() + 86400000);
 
-  console.log("goal", goal)
   const [reward, setReward] = useState(goal.reward);
   const predefinedRewards = ["Ingenting", "En gratis middag", "En kinodate", "En kaffedate"]
   const [visible, setVisible] = useState(!visible);
 
+  const [isWorkloadString, setIsWorkloadString] = useState(false)
   //todo - fikse så dette ikke er string når jeg fikser workload
   const [workload, setWorkload] = useState(goal.workloadGoal.toString())
   const [goalName, setGoalName] = useState(goal.goalName)
@@ -47,22 +44,6 @@ const EditGoalForm = ({ goal, submitted, setSubmitted}) => {
   const openMenu = () => {
     setVisible(!visible)
   };
-
-  //TODO: denne skal kun akseptere nummer -> how
-  const checkIfNumbers = (load) => {
-    console.log("load", load)
-    if(isNaN(parseInt(load))){
-      console.log("hello")
-      return 
-    }
-    else {
-      setWorkload(parseInt(load))
-    }
-  }
-
-  const allowOnlyNumber=(value)=>{
-    return value.replace(/[^0-9]/g, '')
- }
 
   const closeMenu = () => setVisible(!visible);
 
@@ -82,19 +63,25 @@ const EditGoalForm = ({ goal, submitted, setSubmitted}) => {
 
 
   const onSubmit = async () => {
-    const data = {
-      goalName: goalName,
-      reward: reward,
-      startDate: startDate,
-      endDate: endDate,
-      workloadGoal: workload,
-      workload: goal.workload
+    if(/^\d+$/.test(workload)){
+      setIsWorkloadString(false)
+      const data = {
+        goalName: goalName,
+        reward: reward,
+        startDate: startDate,
+        endDate: endDate,
+        workloadGoal: parseInt(workload),
+        workload: goal.workload
+      }
+      await setUserGoal(data, currentUser.uid, dispatch).then(() => {
+        setSubmitted(!submitted)
+      })
+      .catch(error => console.log("error", error))
+    }else{
+      setIsWorkloadString(true)
     }
-    await setUserGoal(data, currentUser.uid, dispatch).then(() => {
-      setSubmitted(!submitted)
-    })
-    .catch(error => console.log("error", error))
   }
+
 
   return(
 
@@ -126,18 +113,29 @@ const EditGoalForm = ({ goal, submitted, setSubmitted}) => {
         control={control}
           rules={{
           required: true,
+          pattern: {
+            value: /([1-9][0-9]*)|0/,
+            message: "Du må oppgi et tall"
+          }
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-              type="number"
+              type="string"
               label="Antall timer"
               mode={"outlined"}
-              value={workload}
-              onChangeText={load => setWorkload(load)}
+              value={workload.toString()}
+              onChangeText={load => setWorkload(load.toString())}
             />
           )}
           name="numberOfHours"
+          defaultValue=""
       />
+
+      <View style={styles.errorMsg}>
+          {isWorkloadString && (
+            <Text style={styles.errorText}>Du må oppgi et tall</Text>
+          )}
+        </View>
 
       </View>
 
@@ -272,6 +270,13 @@ const styles = StyleSheet.create({
   },
   menu: {
     top:10
+  },
+  errorMsg: {
+    marginLeft: 10,
+    marginBottom: 10,
+  },
+  errorText: {
+    color: 'red',
   },
 
 });

@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { Card, List, ProgressBar } from "react-native-paper";
+import { Card, IconButton, List, ProgressBar } from "react-native-paper";
 import { calculateDaysLeft } from "../../help-functions/date-and-time";
 import { returnUserBasedOnId } from "../../help-functions/friends";
 import { textStyles } from "../styles/sharedStyles";
 
-export const Challenge = ({activeChallenge, members, currentUser}) => {
+export const Challenge = ({activeChallenge, handleEditPress, members, currentUser}) => {
 
   const {goalName, endDate, reward, workload, workloadGoal} = activeChallenge
 
@@ -46,6 +46,9 @@ export const Challenge = ({activeChallenge, members, currentUser}) => {
     checkLeader()
   }, [])
 
+  const onEditPress = () => {
+    handleEditPress()
+  }
 
   const returnColor = (id) => {
     if(leader === null) return losingColor
@@ -63,18 +66,24 @@ export const Challenge = ({activeChallenge, members, currentUser}) => {
       <Card style={returnCardStyle()}>
       <View style={styles.container}>
         <View style={styles.content}>
-          <View style={styles.header}>
-            <Text style={textStyles.tertiaryHeadingText}>{goalName}</Text>
-            <Text>{remainingDays} {remainingDaysText}</Text>
+
+          <View style={styles.headerWrapper}>
+            <View style={{width: 22}}></View>
+            <View style={styles.header}>
+              <Text style={textStyles.tertiaryHeadingText}>{goalName}</Text>
+              <Text>{remainingDays} {remainingDaysText}</Text>
+            </View>
+            <IconButton style={{margin: 0}} icon="pencil-box-outline" color="grey" size={22} onPress={onEditPress} />
           </View>
+
           <View style={styles.progress}>
           <View style={styles.progressAndText}>
-            <Text style={styles.progressName}>{friend.firstname}</Text>
-            <ProgressBar style={styles.progressBar} progress={friendProgress} color={returnColor(friend.uid)}/>
+            <Text style={styles.progressName}>{friend && friend.firstname}</Text>
+            <ProgressBar style={styles.progressBar} progress={friendProgress} color={friend && returnColor(friend.uid)}/>
           </View>
           <View style={styles.progressAndText}>
-            <Text style={styles.progressName}>{currentUser.firstname} (deg)</Text>
-            <ProgressBar style={styles.progressBar} progress={currentUserProgress} color={returnColor(currentUser.uid)}/>
+            <Text style={styles.progressName}>{currentUser && currentUser.firstname} (deg)</Text>
+            <ProgressBar style={styles.progressBar} progress={currentUserProgress} color={currentUser && returnColor(currentUser.uid)}/>
           </View>
           </View>
           <View style={styles.reward}>
@@ -134,6 +143,12 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor:  "#BF212F",
     marginTop: 20,
+  },
+  headerWrapper: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: '100%'
   },
   header: {
     display: "flex",

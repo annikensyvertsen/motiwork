@@ -17,7 +17,7 @@ export const ChallengeForm = ({members, steps, setSteps, setSubmitted, submitted
   } = useForm({
     defaultValues: {
      nameOfGoal: "",
-     numerOfHours: "",
+     numberOfHours: "",
      reward: "",
      startDate: "",
      endDate: "",
@@ -42,10 +42,7 @@ export const ChallengeForm = ({members, steps, setSteps, setSubmitted, submitted
     setVisible(!visible)
   };
 
-  //TODO: denne skal kun akseptere nummer -> how
-  const checkIfNumbers = (load) => {
-    setWorkload(load)
-  }
+  const [isWorkloadString, setIsWorkloadString] = useState(false)
 
   const closeMenu = () => setVisible(!visible);
 
@@ -64,23 +61,34 @@ export const ChallengeForm = ({members, steps, setSteps, setSubmitted, submitted
   };
  
   const onSubmit = async () => {
-    const formData = {
-      goalName: goalName,
-      reward: reward,
-      startDate: startDate,
-      endDate: endDate,
-      workloadGoal: workload,
-      settled: false,
-      winner: null,
-    }
-    //TODO: her skal vi kalle på metoden som setter målet
-    await createChallenge(members, formData, cooperationId, dispatch)
-    .then(() => {
-      setSteps(steps + 1)
+    if(/^\d+$/.test(workload)){
+      setIsWorkloadString(false)
+      let workloadObj = {}
+      workloadObj[members.sender] = 0
+      workloadObj[members.receiver] = 0
 
-      setSubmitted(!submitted)
-    })
-    .catch(error => console.log("error??", error))
+      const formData = {
+        goalName: goalName,
+        reward: reward,
+        startDate: startDate,
+        endDate: endDate,
+        workloadGoal: workload,
+        settled: false,
+        winner: null,
+        workload: workloadObj,
+      }
+      //TODO: her skal vi kalle på metoden som setter målet
+      await createChallenge(members, formData, cooperationId, dispatch)
+      .then(() => {
+        setSteps(steps + 1)
+  
+        setSubmitted(!submitted)
+      })
+      .catch(error => console.log("error??", error))
+    }else{
+      setIsWorkloadString(true)
+    }
+    
   }
 
 
@@ -117,19 +125,23 @@ export const ChallengeForm = ({members, steps, setSteps, setSubmitted, submitted
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-              type="number"
+              type="string"
               label="Antall timer"
               mode={"outlined"}
               value={workload.toString()}
-              onChangeText={load => checkIfNumbers(load)}
+              onChangeText={load => setWorkload(load.toString())}
               placeholder={"40"}
 
             />
           )}
           name="numberOfHours"
       />
-
       </View>
+      <View style={styles.errorMsg}>
+      {isWorkloadString && (
+        <Text style={styles.errorText}>Du må oppgi et tall</Text>
+      )}
+    </View>
 
       <View style={containerStyles.flexWithMarginTop}>
         <Controller
@@ -258,6 +270,13 @@ const styles = StyleSheet.create({
   },
   menu: {
     top:10
+  },
+  errorMsg: {
+    marginLeft: 10,
+    marginBottom: 10,
+  },
+  errorText: {
+    color: 'red',
   },
 
 });

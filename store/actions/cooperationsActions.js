@@ -152,15 +152,8 @@ export const declineCooperationRequest = async (request) => {
 //challenge:
 
 export const createChallenge = async (members, formData, cooperationId, dispatch) => {
-  let workloadObj = {}
-  workloadObj[members.sender] = 0
-  workloadObj[members.receiver] = 0
-  let challenge = {
-    ...formData,
-    workload: workloadObj
-  }
   await db.collection('cooperationsCollection').doc(cooperationId).update({
-    activeChallenge: challenge
+    activeChallenge: formData
   }).then(
     setCooperations(members.sender, dispatch)
   ).catch(err => console.log(err))

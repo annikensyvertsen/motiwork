@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCooperations } from "../store/actions/cooperationsActions";
 import { returnUserBasedOnId } from "../help-functions/friends";
 import { UnsettledChallenges } from "../components/Challenge/UnsettledChallenges";
+import { EditChallenge } from "../components/Challenge/EditChallenge";
 
 const CooperationTab = () => {
   const navigation = useNavigation();
@@ -20,6 +21,7 @@ const CooperationTab = () => {
   let {user} = useSelector(state => state.user)
   const dispatch = useDispatch()
 
+  const [editChallenge, setEditChallenge] = useState(false)
 
   let cooperationId = route.params.cooperationId
   let cooperation = returnCooperationBasedOnId(cooperationId)
@@ -33,6 +35,11 @@ const CooperationTab = () => {
     navigation.navigate("community")
   }
   
+  const handleEditPress = () => {
+    setEditChallenge(true)
+    bottomSheetRef.current.present()
+  }
+
    useEffect(() => {
     if(cooperationId){
     let userDoc = db.collection('cooperationsCollection').doc(cooperationId)
@@ -62,7 +69,7 @@ const CooperationTab = () => {
         <Text style={styles.name}>{user && user.firstname} {user && user.surname}</Text>
       </View>
       {activeChallenge && Object.keys(activeChallenge).length > 0 ?
-      (<Challenge currentUser={user} activeChallenge={activeChallenge} members={members} />)
+      (<Challenge handleEditPress={handleEditPress} currentUser={user} activeChallenge={activeChallenge} members={members} />)
       :
       (<ChallengesEmptyState handlePresentPress={handlePresentPress}/>)
       }
@@ -75,7 +82,7 @@ const CooperationTab = () => {
         )
       }
       
-      <BottomSheetTemplate contentComponent={<StartChallenge members={members} activeChallenge={activeChallenge} cooperationId={cooperationId} bottomSheetRef={bottomSheetRef} />} ref={bottomSheetRef} />
+      <BottomSheetTemplate contentComponent={editChallenge ? <EditChallenge setEditChallenge={setEditChallenge} members={members} activeChallenge={activeChallenge} cooperationId={cooperationId} bottomSheetRef={bottomSheetRef}  /> : <StartChallenge members={members} activeChallenge={activeChallenge} cooperationId={cooperationId} bottomSheetRef={bottomSheetRef} />} ref={bottomSheetRef} />
     </View>
   )
 }
