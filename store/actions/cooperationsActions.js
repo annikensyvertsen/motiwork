@@ -46,21 +46,20 @@ export const findExpiredChallenges = async (members) => {
       const {activeChallenge} = doc.data()
       if(Object.keys(activeChallenge).length > 0){
         if(activeChallenge.endDate.seconds < todayInSeconds){
-          await calculateWinner(members, activeChallenge.workload).then(
-            result =>
-            {console.log("result", result)
-            activeChallenge.winner = result}
-          )
+          let winner = await calculateWinner(members, activeChallenge.workload)
+          activeChallenge.winner = winner
           await archiveChallenge(activeChallenge, doc.id)
             .then()
             .catch(err => console.log(err))
+        }else{
+          let isChallengeCompleted = await checkIfChallengeIsCompleted(members, activeChallenge)
+          console.log("isChallengeCompleted", isChallengeCompleted)
+          if(isChallengeCompleted){
+           await archiveChallenge(activeChallenge, doc.id)
+           .then()
+           .catch(err => console.log(err))
+          }
         }
-         let isChallengeCompleted = await checkIfChallengeIsCompleted(members, activeChallenge)
-         if(isChallengeCompleted){
-          await archiveChallenge(activeChallenge, doc.id)
-          .then()
-          .catch(err => console.log(err))
-         }
       }
     })
   })
@@ -157,8 +156,8 @@ export const createChallenge = async (members, formData, cooperationId, dispatch
   }).then(
     setCooperations(members.sender, dispatch)
   ).catch(err => console.log(err))
-
 }
+
 
 export const archiveChallenge = async (challenge, cooperationId) => {
   await db.collection('cooperationsCollection').doc(cooperationId).update({

@@ -37,7 +37,7 @@ export const checkIfGoalIsDue = (goal) => {
 }
 
 export const checkIfGoalIsReached = (goal) => {
-  return parseInt(goal.totalWorkload) >= parseInt(goal.workloadGoal)
+  return parseInt(goal.workload) >= parseInt(goal.workloadGoal)
 }
 
 export const updateActiveChallenge = async (uid) => {
@@ -53,8 +53,19 @@ export const updateActiveChallenge = async (uid) => {
         currentGoal: {}
       }
       ).then(res => console.log(res)).catch(err => console.log(err))
-    }else if(checkIfGoalIsReached(user.currentGoal)){
-      console.log("goalisReached")
+    }
+    else if(checkIfGoalIsReached(user.currentGoal)){
+      await db.collection('usersCollection').doc(uid).update(
+        {
+          [`currentGoal.isReached`]: true,
+        }
+        ).then(res => console.log(res)).catch(err => console.log(err))
+    }else if(!checkIfGoalIsReached(user.currentGoal)) {
+      await db.collection('usersCollection').doc(uid).update(
+        {
+          [`currentGoal.isReached`]: false,
+        }
+        ).then(res => console.log(res)).catch(err => console.log(err))
     }
   }
 }

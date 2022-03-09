@@ -66,7 +66,7 @@ const HomeTab = () => {
       <View style={styles.standardflexColumnContainer}>
         <Text style={styles.headingThree}>Mål</Text>
         {user.currentGoal.goalName ?
-        (<View style={styles.textContainer}><GoalDisplay handleEditGoalPress={handleEditGoalPress} goal={user.currentGoal}/></View>)
+        (<View style={styles.textContainer}><GoalDisplay userId={user.uid} handleEditGoalPress={handleEditGoalPress} goal={user.currentGoal}/></View>)
           :
         (<View style={styles.textContainer}>
           <Text>Du har ikke satt deg noen mål enda. Sett deg mål for å minne deg selv på å jobbe jevnt med skole!</Text>

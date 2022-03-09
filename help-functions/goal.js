@@ -15,13 +15,13 @@ export const checkIfGoalOrChallengeHasEnded = (endDate) => {
 }
 
 export const checkIfGoalisReached = (workload, workloadGoal) => {
-  return workload > workloadGoal
+  return workload >= workloadGoal
 }
 
 export const updateCooperations = async (cooperations, user, hours) => {
   Object.keys(cooperations).length > 0 &&  
   cooperations.forEach(async cooperation => {
-    if(Object.keys(cooperation.activeChallenge).length ){
+    if(cooperation.activeChallenge && Object.keys(cooperation.activeChallenge).length ){
        let activeChallenge = cooperation.activeChallenge
         if(checkIfGoalOrChallengeHasStarted(activeChallenge.startDate) && !checkIfGoalOrChallengeHasEnded(activeChallenge.endDate)){
           await db.collection('cooperationsCollection').doc(cooperation.id).update({
@@ -52,5 +52,25 @@ export const updateUserPoints = async(hours, points, user, cooperations) => {
   
   updateUserGoal(user, hours)
   updateCooperations(cooperations, user, hours)
+
+}
+
+export const archiveGoal = async(uid) => {
+  const userCollectionRef = db.collection('usersCollection').doc(uid)
+  let doc = await userCollectionRef.get()
+  let user = doc.data()
+
+  let currentGoal = user && user.currentGoal
+  console.log("currentgoal", currentGoal)
+
+  if(checkIfGoalisReached(currentGoal.workload, currentGoal.workloadGoal)){
+    console.log("here we will archive goal")
+    // await db.collection('usersCollection').doc(uid).update(
+    //   {
+    //     archivedGoals: firebase.firestore.FieldValue.arrayUnion(user.currentGoal),
+    //     currentGoal: {}
+    //   }
+    //   ).then(res => console.log(res)).catch(err => console.log(err))
+  }
 
 }

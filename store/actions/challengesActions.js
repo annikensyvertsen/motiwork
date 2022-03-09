@@ -7,7 +7,7 @@ export const setActiveChallenges = async (cooperations, dispatch) => {
   //hvorfor setter den uendelig mange her?
   Object.keys(cooperations).length > 0 && cooperations.forEach(cooperation => 
       {
-        if(Object.keys(cooperation.activeChallenge).length > 0){
+        if(cooperation.activeChallenge && Object.keys(cooperation.activeChallenge).length > 0){
           activeChallengeWithMembers = {
             challenge: cooperation.activeChallenge,
             members: cooperation.members,

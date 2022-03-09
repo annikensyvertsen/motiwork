@@ -26,9 +26,7 @@ export const CooperationsSection = ({ bottomSheetRef}) => {
         setCurrentUser(userid, dispatch)
         setCooperations(userid, dispatch)
     })
-  
-    console.log("cooperations", cooperations)
-    return () => {
+      return () => {
       unsubscribe()
     }
 

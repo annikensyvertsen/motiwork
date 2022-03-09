@@ -2,6 +2,8 @@ import { StyleSheet } from 'react-native';
 import { DefaultTheme } from 'react-native-paper';
 
 export const yellowColor = "#FFB61D"
+export const greenColor = "#006F3C"
+export const redColor = "#BF212F"
 
 export const buttonStyles = StyleSheet.create({
   primaryButtonSmall: {
@@ -65,5 +67,12 @@ export const cardStyles = StyleSheet.create({
     borderColor: DefaultTheme.colors.primary,
     borderWidth: 1.5,
     padding: 10
+  },
+  successCard: {
+    borderRadius: 10,
+    borderColor: greenColor,
+    borderWidth: 1.5,
+    padding: 10,
+    alignItems: "center"
   }
 })
