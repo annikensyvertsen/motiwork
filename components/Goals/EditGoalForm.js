@@ -36,7 +36,7 @@ const EditGoalForm = ({ goal, submitted, setSubmitted}) => {
   const [visible, setVisible] = useState(!visible);
 
   //todo - fikse så dette ikke er string når jeg fikser workload
-  const [workload, setWorkload] = useState(goal.workload.toString())
+  const [workload, setWorkload] = useState(goal.workloadGoal.toString())
   const [goalName, setGoalName] = useState(goal.goalName)
 
   const [startDate, setStartDate] = useState(new Date(goal.startDate.seconds * 1000))
