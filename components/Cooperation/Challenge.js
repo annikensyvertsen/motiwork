@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { Card, IconButton, List, ProgressBar } from "react-native-paper";
+import { Card, IconButton, List, ProgressBar, Button } from "react-native-paper";
 import { calculateDaysLeft } from "../../help-functions/date-and-time";
 import { returnUserBasedOnId } from "../../help-functions/friends";
+import { archiveChallenge } from "../../store/actions/cooperationsActions";
 import { textStyles } from "../styles/sharedStyles";
 
-export const Challenge = ({activeChallenge, handleEditPress, members, currentUser}) => {
+export const Challenge = ({activeChallenge, handlePresentPress, cooperationId, handleEditPress, members, currentUser}) => {
 
   const {goalName, endDate, reward, workload, workloadGoal} = activeChallenge
 
@@ -28,7 +29,10 @@ export const Challenge = ({activeChallenge, handleEditPress, members, currentUse
     else if(currentUserProgress < friendProgress) setLeader(friend)
     else setLeader(null)
   }
+
+  let winner = activeChallenge.winner && returnUserBasedOnId(activeChallenge.winner)
  
+  console.log("winner", winner)
 
   const winningColor = "#006F3C"
   const losingColor = "#BF212F"
@@ -44,7 +48,7 @@ export const Challenge = ({activeChallenge, handleEditPress, members, currentUse
 
   useEffect(() => {
     checkLeader()
-  }, [])
+  }, [currentUser])
 
   const onEditPress = () => {
     handleEditPress()
@@ -61,6 +65,14 @@ export const Challenge = ({activeChallenge, handleEditPress, members, currentUse
     else if(leader.uid === currentUser.uid) return styles.winningCardStyle
     else return styles.losingCardStyle
   }
+
+  const onArchiveChallengePress = async() => {
+    await archiveChallenge(activeChallenge, cooperationId).then(res => {
+      handlePresentPress()
+    })
+  }
+  console.log("winner", winner)
+
   return(
     <View style={styles.wrapper}>
       <Card style={returnCardStyle()}>
@@ -78,18 +90,20 @@ export const Challenge = ({activeChallenge, handleEditPress, members, currentUse
 
           <View style={styles.progress}>
           <View style={styles.progressAndText}>
-            <Text style={styles.progressName}>{friend && friend.firstname}</Text>
+            <Text style={styles.progressName}>{friend && friend.firstname} - <Text style={{color: 'grey', textTransform: 'lowercase'}}>{workload[friendUserId]} timer</Text></Text>
             <ProgressBar style={styles.progressBar} progress={friendProgress} color={friend && returnColor(friend.uid)}/>
           </View>
           <View style={styles.progressAndText}>
-            <Text style={styles.progressName}>{currentUser && currentUser.firstname} (deg)</Text>
+            <Text style={styles.progressName}>{currentUser && currentUser.firstname} (deg) - <Text style={{color: 'grey', textTransform: 'lowercase'}}>{workload[currentUser.uid]} timer</Text> </Text>
             <ProgressBar style={styles.progressBar} progress={currentUserProgress} color={currentUser && returnColor(currentUser.uid)}/>
           </View>
           </View>
           <View style={styles.reward}>
-            <List.Icon color="" icon="medal"></List.Icon>
-            <Text style={textStyles.subtitleText}>{reward}</Text>
+            <Text style={textStyles.subtitleText}>✨ {reward} ✨</Text>
           </View>
+          {winner && (
+            <Text>{winner.firstname} vant!</Text>
+          )}
         </View>
         {leader === null ?
           (
@@ -117,6 +131,9 @@ export const Challenge = ({activeChallenge, handleEditPress, members, currentUse
         }
       </View>
       </Card>
+      {winner && (
+        <Button style={{marginTop: 20, marginBottom: 10, width: '80%', alignSelf: "center"}} onPress={onArchiveChallengePress} mode="contained">Start en ny utfordring!</Button>
+        )}
     </View>
   )
 }
@@ -189,7 +206,8 @@ const styles = StyleSheet.create({
   reward: {
     display: "flex",
     alignItems: "center",
-    flexDirection: "row"
+    flexDirection: "row",
+    marginBottom: 10,
   },
   loosingFooter: {
     backgroundColor: "#BF212F",
@@ -197,8 +215,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: 'center',
-    justifyContent: "center",
-    //  litt hacky å sette denne manuelt men blir sånn enn så lenge
+    justifyContent: "space-between",
     borderBottomRightRadius: 8,
     borderBottomLeftRadius: 8,
   },
@@ -209,7 +226,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: 'center',
     justifyContent: "center",
-    //  litt hacky å sette denne manuelt men blir sånn enn så lenge
     borderBottomRightRadius: 8,
     borderBottomLeftRadius: 8,
   },
