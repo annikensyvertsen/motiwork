@@ -54,13 +54,7 @@ export const findExpiredChallenges = async (members) => {
             .catch(err => console.log(err))
         }else{
           console.log("else")
-          let isChallengeCompleted = await checkIfChallengeIsCompleted(members, activeChallenge)
-          console.log("skal ikke nødvendigvis arkiveres")
-          // if(isChallengeCompleted){
-          //  await archiveChallenge(activeChallenge, doc.id)
-          //  .then()
-          //  .catch(err => console.log(err))
-          // }
+      
         }
       }
     })
@@ -78,20 +72,14 @@ export const hasChallengeExpired = async (members, activeChallenge, id) => {
         .then()
         .catch(err => console.log(err))
     }else{
-      console.log("else")
-      let isChallengeCompleted = await checkIfChallengeIsCompleted(members, activeChallenge)
-      console.log("isChallengeCompleted", isChallengeCompleted)
-      console.log("activechallenge", activeChallenge)
+      await checkIfChallengeIsCompleted(members, activeChallenge)
+      //TODO: sett completed til true
       await db.collection('cooperationsCollection').doc(id).update(
         {
-          [`activeChallenge.winner`]: activeChallenge.winner
+          [`activeChallenge.winner`]: activeChallenge.winner,
+          [`activeChallenge.completed`]: true,
         }
       )
-      // if(isChallengeCompleted){
-      //  await archiveChallenge(activeChallenge, id)
-      //  .then()
-      //  .catch(err => console.log(err))
-      // }
     }
   }
 }
@@ -130,10 +118,7 @@ export const setCooperations = async (userId, dispatch) => {
           cooperations.push(cooperation)
         }
         await hasChallengeExpired(members, activeChallenge, doc.id)
-        
-        //await findExpiredChallenges(cooperationMembers).catch(err => console.log(err))
     })
-    
   }
     
     )

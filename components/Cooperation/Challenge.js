@@ -30,10 +30,8 @@ export const Challenge = ({activeChallenge, handlePresentPress, cooperationId, h
     else setLeader(null)
   }
 
-  let winner = activeChallenge.winner && returnUserBasedOnId(activeChallenge.winner)
+  let winner = activeChallenge.winner && returnUserBasedOnId(activeChallenge.winner) || null
  
-  console.log("winner", winner)
-
   const winningColor = "#006F3C"
   const losingColor = "#BF212F"
   let remainingDaysText = "dager igjen"
@@ -71,7 +69,6 @@ export const Challenge = ({activeChallenge, handlePresentPress, cooperationId, h
       handlePresentPress()
     })
   }
-  console.log("winner", winner)
 
   return(
     <View style={styles.wrapper}>
@@ -102,10 +99,16 @@ export const Challenge = ({activeChallenge, handlePresentPress, cooperationId, h
             <Text style={textStyles.subtitleText}>✨ {reward} ✨</Text>
           </View>
           {winner && (
-            <Text>{winner.firstname} vant!</Text>
+            <Text>{winner.uid === currentUser.uid? 'Du' : winner.firstname} vant!</Text>
+          )}
+          {activeChallenge.completed && !activeChallenge.winner && (
+            <View style={{marginBottom: 10}}>
+              <Text>Det ble uavgjort 🤷</Text>
+            </View>
           )}
         </View>
-        {leader === null ?
+        {(!activeChallenge.completed && !activeChallenge.winner) && (
+           leader === null ?
           (
              <View style={styles.loosingFooter}>
                 <List.Icon color="#FFB61D" icon="alert"></List.Icon>
@@ -128,10 +131,13 @@ export const Challenge = ({activeChallenge, handlePresentPress, cooperationId, h
                 <List.Icon color="#FFB61D" icon="alert"></List.Icon>
             </View>
           )
-        }
+        
+        )}
+
+       
       </View>
       </Card>
-      {winner && (
+      {(winner || activeChallenge.completed)  && (
         <Button style={{marginTop: 20, marginBottom: 10, width: '80%', alignSelf: "center"}} onPress={onArchiveChallengePress} mode="contained">Start en ny utfordring!</Button>
         )}
     </View>

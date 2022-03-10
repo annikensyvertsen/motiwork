@@ -16,7 +16,6 @@ export const setActiveChallenges = async (cooperations, dispatch) => {
           }
           if(activeChallenges.length > 0){
             activeChallenges.forEach(c => {
-              console.log("c", c.cooperationId, activeChallengeWithMembers.cooperationId)
               //if the cooperation id on activechallengeis not the same as cooperation id
              if(c.cooperationId !== activeChallengeWithMembers.cooperationId){
                activeChallenges.push(activeChallengeWithMembers)
