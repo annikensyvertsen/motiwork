@@ -6,7 +6,7 @@ import { convertHoursToSeconds, convertSecondsToDaysHoursAndMinutes, convertSeco
 import { archiveGoal } from "../help-functions/goal";
 import { cardStyles, greenColor, textStyles, yellowColor } from "./styles/sharedStyles";
 
-export const GoalDisplay =  ({userId, goal, handleEditGoalPress}) => {
+export const GoalDisplay =  ({userId, goal, handleEditGoalPress, handlePresentPress}) => {
   let today = new Date().getTime() / 1000
   let hoursWorked = goal.workload || 0
   let workloadGoal = (goal.workloadGoal) || 0
@@ -33,7 +33,6 @@ export const GoalDisplay =  ({userId, goal, handleEditGoalPress}) => {
   }
 
   const onEditPress = () => {
-    console.log("edit")
     handleEditGoalPress()
   }
 
@@ -42,8 +41,10 @@ export const GoalDisplay =  ({userId, goal, handleEditGoalPress}) => {
     calculateProgress()
   }, [goal])
   
-  const onArchiveGoalPress = () => {
-    archiveGoal(userId)
+  const onArchiveGoalPress = async () => {
+    await archiveGoal(userId).then(res => {
+      handlePresentPress()
+    })
   }
 
   return (
@@ -51,33 +52,31 @@ export const GoalDisplay =  ({userId, goal, handleEditGoalPress}) => {
       <Card style={(goal && goal.isReached) ? cardStyles.successCard : cardStyles.primaryCard}>
       {goal && goal.isReached ? 
        ( 
-         <View>
+         <View style={styles.successCardContent}>
           <Text style={textStyles.tertiaryHeadingText}>Bra jobbet! Du har nådd målet 😍	</Text>
 
           <View style={styles.textAndCircle}>
-            <View style={styles.rewardText}>
-              <Text style={{fontSize: 20, marginRight: 10}}>🏆</Text>
-              {goal.reward && <Text style={{textAlign: 'center'}}>Du kan nå unne deg "{goal.reward}" med god samvittighet.</Text>}
-            </View>
             <View style={styles.progressCircle} >
               <AnimatedCircularProgress
                 color={greenColor}
                 startDeg={45}
                 endDeg={progress}
-                radius={44}
-                innerRadius={34}
+                radius={40}
+                innerRadius={30}
                 innerBackgroundColor={"white"}
                 duration={1000}
                 style={styles.childrenStyle}
               >
                 <View style={styles.circleText}>
-                  <Text>{Math.floor(hoursWorked)} / {Math.floor(workloadGoal)} t</Text>
+                  <Text style={{fontSize: 12}}>{Math.floor(hoursWorked)} / {Math.floor(workloadGoal)} t</Text>
                 </View>
               </AnimatedCircularProgress>
-           </View>
+          </View>
+            <View style={styles.rewardText}>
+              {goal.reward && <Text>Du har nå gjort deg fortjent til premien du har satt deg: "{goal.reward}" </Text>}
+            </View>
           </View>
 
-          <Button onPress={onArchiveGoalPress}>Arkiver mål</Button>
         </View>
 
         )
@@ -131,6 +130,9 @@ export const GoalDisplay =  ({userId, goal, handleEditGoalPress}) => {
       }
        
       </Card>
+      {goal && goal.isReached &&
+        <Button style={{marginTop: 20, marginBottom: 10, width: '80%', alignSelf: "center"}} onPress={onArchiveGoalPress} mode="contained">Sett et nytt mål!</Button>
+      }
     </View>
   )
 }
@@ -147,11 +149,15 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginRight: 5,
   },
+  successCardContent: {
+    width: '100%',
+    marginTop: 5,
+  },
   textAndCircle: {
     display: "flex",
-    marginTop: 10,
+    marginTop: 15,
     flexDirection: "row",
-    justifyContent: "space-between"
+    width: "90%",
   },
   iconWrapper: {
     display: "flex",
@@ -164,11 +170,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   rewardText: {
-    display: "flex",
-    flexDirection: "row",
-    width: '50%',
+
+    width: '70%',
     marginLeft: 10,
-    alignItems: "center"
   },
   progressCircleContainer: {
     backgroundColor: 'white',

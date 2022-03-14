@@ -29,10 +29,10 @@ export const ChallengeForm = ({members, steps, setSteps, setSubmitted, submitted
   let dateTomorrow = new Date((new Date()).getTime() + 86400000);
 
   const [reward, setReward] = useState('');
-  const predefinedRewards = ["Ingenting", "En gratis middag", "En kinodate", "En kaffedate"]
+  const predefinedRewards = ["Ingenting", "Et hjemmelaget måltid", "En kinodate", "Overraskelse!", "En kaffedate"]
   const [visible, setVisible] = useState(!visible);
 
-  const [workload, setWorkload] = useState(0)
+  const [workload, setWorkload] = useState(20)
   const [goalName, setGoalName] = useState("")
 
   const [startDate, setStartDate] = useState(new Date())
@@ -109,7 +109,7 @@ export const ChallengeForm = ({members, steps, setSteps, setSubmitted, submitted
              mode={"outlined"}
              value={goalName}
              onChangeText={name => setGoalName(name)}
-             placeholder={"Jobbe minst førti timer "}
+             placeholder={"'Jobbe minst tjue timer' "}
 
             />
          )}
@@ -145,6 +145,7 @@ export const ChallengeForm = ({members, steps, setSteps, setSubmitted, submitted
     </View>
 
       <View style={containerStyles.flexWithMarginTop}>
+      <Text>Hva skal taperen gi til vinneren?</Text>
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (

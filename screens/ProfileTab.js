@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet} from "react-native";
 import { Avatar, Button, Divider, List } from "react-native-paper";
 import { auth } from "../firebase";
 import { useSelector } from "react-redux";
 import { convertSecondsToDaysHoursAndMinutes, convertHoursToSeconds, returnFormattedTime } from "../help-functions/date-and-time";
 import { ArchivedGoals } from "../components/ArchivedGoals";
+import { ScrollView } from "react-native-gesture-handler";
 
 
 const ProfileTab = () => {
@@ -21,7 +22,8 @@ const ProfileTab = () => {
 
 
   return (
-      <View style={styles.wrapper}>
+      <ScrollView >
+        <View style={styles.wrapper}>
         <View style={styles.userInformation}>
           <View>
             <View style={styles.authenticationInfo}>
@@ -50,8 +52,9 @@ const ProfileTab = () => {
           <ArchivedGoals archivedGoals={user.archivedGoals}/>   
         )}
         </View>
+        </View>
 
-    </View>
+    </ScrollView>
   );
 };
 export default ProfileTab;

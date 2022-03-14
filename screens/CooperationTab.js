@@ -69,7 +69,7 @@ const CooperationTab = () => {
         <Text style={styles.name}>{user && user.firstname} {user && user.surname}</Text>
       </View>
       {activeChallenge && Object.keys(activeChallenge).length > 0 ?
-      (<Challenge handleEditPress={handleEditPress} currentUser={user} activeChallenge={activeChallenge} members={members} />)
+      (<Challenge cooperationId={cooperationId} handlePresentPress={handlePresentPress} handleEditPress={handleEditPress} currentUser={user} activeChallenge={activeChallenge} members={members} />)
       :
       (<ChallengesEmptyState handlePresentPress={handlePresentPress}/>)
       }

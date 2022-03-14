@@ -31,7 +31,7 @@ const GoalForm = ({ submitted, setSubmitted}) => {
   let dateTomorrow = new Date((new Date()).getTime() + 86400000);
 
   const [reward, setReward] = useState('');
-  const predefinedRewards = ["Ingenting", "En gratis middag", "En kinodate", "En kaffedate"]
+  const predefinedRewards = ["Ingenting", "Foodora til middag", "Nye sko", "Middag ute", "En fridag"]
   const [visible, setVisible] = useState(!visible);
 
   const [isWorkloadString, setIsWorkloadString] = useState(false)
@@ -132,12 +132,13 @@ const GoalForm = ({ submitted, setSubmitted}) => {
       </View>
 
       <View style={containerStyles.flexWithMarginTop}>
+      <Text>Hva skal du unne deg selv hvis du når målet ditt?</Text>
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <View style={styles.container}>
             <TextInput
-              placeholder="En gratis middag"
+              placeholder="Foodora til middag"
               mode="outlined"
               label="Premie"
               value={reward}

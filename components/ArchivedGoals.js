@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text } from 'react-native'
+import React, { useState, useEffect, useRef } from 'react';
+import { View, StyleSheet, Text, ScrollView } from 'react-native'
 import AnimatedCircularProgress from 'react-native-animated-circular-progress';
-import { ScrollView } from 'react-native-gesture-handler';
 import { Card, List } from 'react-native-paper';
 import { returnFormattedDate } from '../help-functions/date-and-time';
 import { ArchivedGoal } from './Goals/ArchivedGoal';
@@ -9,11 +8,15 @@ import { greenColor, textStyles } from './styles/sharedStyles';
 
 export const ArchivedGoals = ({archivedGoals}) => {
 
+  const scrollViewRef = useRef()
   return(
     <View>
     <Text style={textStyles.greyText}>Arkiverte mål</Text>
     {archivedGoals.length > 0 ? (
-      <ScrollView style={styles.archivedGoals}> 
+      <ScrollView
+       ref={scrollViewRef}
+       onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
+       style={styles.archivedGoals}> 
       {archivedGoals.map((goal, i) => (
         <ArchivedGoal key={i} goal={goal} />
         ))}

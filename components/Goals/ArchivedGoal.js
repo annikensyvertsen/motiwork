@@ -11,7 +11,6 @@ export const ArchivedGoal = ({goal}) => {
   let workloadGoal = (goal.workloadGoal) || 0
 
   const calculateProgress = () => {
-    console.log("goal", goal)
     let percentageWorked = hoursWorked/workloadGoal
     let degrees = 360*percentageWorked
     if(degrees>360) degrees = 360 
@@ -24,7 +23,7 @@ export const ArchivedGoal = ({goal}) => {
 
 
   return(
-    <Card>
+    <Card style={styles.card}>
       <View style={styles.container}>
         <View style={styles.content}>
           <View style={styles.header}>
@@ -56,7 +55,7 @@ export const ArchivedGoal = ({goal}) => {
                   style={styles.childrenStyle}
                 >
                     <View style={styles.circleText}>
-                      <Text style={{fontSize: 10}}>{Math.floor(goal.hoursWorked || 0)} / {Math.floor(goal.workloadGoal || 0)} t</Text>
+                      <Text style={{fontSize: 10}}>{Math.floor(hoursWorked)} / {Math.floor(workloadGoal)} t</Text>
                     </View>
                   </AnimatedCircularProgress>
                 </View>
@@ -88,6 +87,9 @@ export const ArchivedGoal = ({goal}) => {
 export const styles = StyleSheet.create({
   content: {
     margin: 10,
+   },
+   card: {
+    marginBottom: 10,
    },
    horizontalHeaderText: {
     display: "flex",

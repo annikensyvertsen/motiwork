@@ -64,13 +64,12 @@ export const archiveGoal = async(uid) => {
   console.log("currentgoal", currentGoal)
 
   if(checkIfGoalisReached(currentGoal.workload, currentGoal.workloadGoal)){
-    console.log("here we will archive goal")
-    // await db.collection('usersCollection').doc(uid).update(
-    //   {
-    //     archivedGoals: firebase.firestore.FieldValue.arrayUnion(user.currentGoal),
-    //     currentGoal: {}
-    //   }
-    //   ).then(res => console.log(res)).catch(err => console.log(err))
+    await db.collection('usersCollection').doc(uid).update(
+      {
+        archivedGoals: firebase.firestore.FieldValue.arrayUnion(user.currentGoal),
+        currentGoal: {}
+      }
+      ).then(res => console.log(res)).catch(err => console.log(err))
   }
 
 }
