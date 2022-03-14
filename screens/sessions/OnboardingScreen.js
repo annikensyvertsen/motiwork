@@ -1,11 +1,11 @@
 import React, { useRef } from "react";
 import { View, ScrollView, Text, Image, StyleSheet, TextInput } from "react-native";
-import { DefaultTheme, IconButton } from "react-native-paper";
+import { Button, DefaultTheme, IconButton } from "react-native-paper";
 
-const WelcomeScreen = ({ navigation }) => {
+const OnboardingScreen = ({ navigation }) => {
 
-  const onNextPress = () => {
-    navigation.navigate("info")
+  const onPress = () => {
+    navigation.navigate("signIn")
   }
   return(
 
@@ -15,13 +15,19 @@ const WelcomeScreen = ({ navigation }) => {
       source={require("../../assets/doinghomework.png")}
       style={styles.image}
     />
-      <Text style={styles.mainText}>Sett deg mål alene eller med venner og bli motivert til å jobbe jevnt gjennom hele semesteret.</Text>
-      <IconButton onPress={onNextPress} icon="arrow-right-circle" size={50} color={DefaultTheme.colors.primary} />
+    <View style={styles.steps}>
+      <Text style={styles.mainText}>1. Registrer profil i appen</Text>
+      <Text style={styles.mainText}>2. Legg til venner og start et samarbeid</Text>
+      <Text style={styles.mainText}>3. Sett dere et mål og bestem hva taperen skal gi til vinneren</Text>
+      <Text style={styles.mainText}>4. Start timeren for å tracke når dere jobber!</Text>
+    </View>
+
+      <Button mode="contained" onPress={onPress}>Kom i gang!</Button>
     </View>
   )
 }
 
-export default WelcomeScreen;
+export default OnboardingScreen;
 const styles = StyleSheet.create({
   container: {
     display: "flex",
@@ -45,7 +51,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   mainText: {
-    fontSize: 20,
-    textAlign: "center"
+    fontSize: 18,
+    marginBottom: 15,
+  },
+  steps: {
+    display: "flex",
+    flexDirection: "column"
   }
 })
