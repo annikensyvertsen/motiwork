@@ -7,18 +7,20 @@ import { textStyles, greenColor, redColor } from '../styles/sharedStyles';
 
 export const ArchivedGoal = ({goal}) => {
   const [progress, setProgress] = useState(45)
-  let hoursWorked = goal.workload || 0
-  let workloadGoal = (goal.workloadGoal) || 0
+  const [hoursWorked, setHoursWorked] = useState(goal.workload || 0)
+  const [workloadGoal, setWorkloadGoal] = useState(goal.workloadGoal || 0)
 
   const calculateProgress = () => {
     let percentageWorked = hoursWorked/workloadGoal
     let degrees = 360*percentageWorked
     if(degrees>360) degrees = 360 
     setProgress(degrees)
-
   }
   useEffect(() => {
+    setHoursWorked(goal.workload)
+    setWorkloadGoal(goal.workloadGoal)
     calculateProgress()
+
   }, [goal])
 
 
