@@ -5,7 +5,6 @@ import { Button, DefaultTheme, Surface } from "react-native-paper";
 import { updateUserPoints } from "../help-functions/goal";
 import { useStopwatch } from "../hooks/stopWatchHook";
 import { useSelector } from "react-redux";
-import { auth } from "../firebase";
 import { buttonStyles, textStyles, containerStyles } from "./styles/sharedStyles";
 
 export const StopWatch = ({values}) => {
