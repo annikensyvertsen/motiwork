@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { View } from "react-native";
+import { View, Statusbar } from "react-native";
 import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native";
 import { useColorScheme} from 'react-native-paper'
 import { createStackNavigator } from "@react-navigation/stack";
