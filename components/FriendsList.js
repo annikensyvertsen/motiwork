@@ -7,15 +7,11 @@ import { returnMultipleUsersBasedOnIds } from "../help-functions/friends";
 export const FriendsLists = () => {
 
   let {user} = useSelector(state => state.user)
-  let [friends, setFriends] = useState([])
-  //let friends = returnMultipleUsersBasedOnIds(user.friends)
+  let friends = returnMultipleUsersBasedOnIds(user.friends)
 
   const findInitials = (friend) => {
     return (friend.firstname[0] + friend.surname[0]).toUpperCase()
   }
-  useEffect(() => {
-    setFriends(returnMultipleUsersBasedOnIds(user.friends))
-  }, [user.friends])
 
   return(
     <View>
