@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import BackgroundTimer from "react-native-background-timer"
 
 export const useTimer = () => {
   const [isRunning, setIsRunning] = useState(false);
@@ -11,12 +12,19 @@ export const useTimer = () => {
 
   useEffect(() => {
     let interval;
-    if(isRunning){
-      interval = setInterval(
-        () => setElapsedTime((prevElapsedTime) => prevElapsedTime + 1), 1000
-      );
-    }
-    return () => clearInterval(interval)
+      console.log("hei")
+      if(isRunning){
+          BackgroundTimer.start()
+          interval = BackgroundTimer.setInterval(() => {
+              setElapsedTime((prevElapsedTime) => prevElapsedTime + 1)
+              console.log("elapsed time", elapsedTime)
+          }, 1000)
+          BackgroundTimer.stop()
+
+      }
+      return () => {
+          BackgroundTimer.clearInterval(interval)
+      }
   }, [isRunning])
 
   useEffect(() => {
