@@ -33,6 +33,7 @@ export const updateCooperations = async (cooperations, user, hours) => {
 }
 
 export const updateUserGoal = async (user, hours) => {
+  console.log("in updateusergoal. user: ", user, "hours: ",  hours)
   if(user.currentGoal && user.currentGoal.startDate){
     if(checkIfGoalOrChallengeHasStarted(user.currentGoal.startDate) && !checkIfGoalOrChallengeHasEnded(user.currentGoal.endDate)){
       await db.collection('usersCollection').doc(user.uid).update({
@@ -50,8 +51,8 @@ export const updateUserPoints = async(hours, points, user, cooperations) => {
   .then(result => console.log("result", result))
   .catch(error => console.log("error", error))
   
-  updateUserGoal(user, hours)
-  updateCooperations(cooperations, user, hours)
+  await updateUserGoal(user, hours).catch(error => console.log(error))
+  await updateCooperations(cooperations, user, hours).catch(error => console.log(error))
 
 }
 

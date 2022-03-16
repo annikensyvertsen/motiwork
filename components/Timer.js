@@ -38,10 +38,12 @@ export const Timer = ({values, setIsSessionComplete, resetTimer, currentPoints, 
 
   const onCountdownComplete = async () => {
     let totalMinutes = countDownTime/60
+    console.log("totalminutes", totalMinutes, "countdownTime", countDownTime)
+    let sendInTimeInHours = totalMinutes/60
     if(totalMinutes >= 10){
       let points = (totalMinutes) - ( totalMinutes % 10)
       await setCurrentPoints(points)
-      await updateUserPoints(hours, points, user, cooperations)
+      await updateUserPoints(sendInTimeInHours, points, user, cooperations)
     }
     setIsTimerRunning(!isTimerRunning)
     setIsSessionComplete(true)

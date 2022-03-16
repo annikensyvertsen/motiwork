@@ -12,7 +12,6 @@ export const FriendsLists = () => {
   const findInitials = (friend) => {
     return (friend.firstname[0] + friend.surname[0]).toUpperCase()
   }
- 
 
   return(
     <View>
