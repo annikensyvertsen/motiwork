@@ -9,13 +9,15 @@ import { useSelector } from "react-redux";
 
 export const FriendsSection = ({bottomSheetRef}) => {
   let {user} = useSelector(state => state.user)
-
-  let incomingFriendRequests = user.incomingFriendRequests;
+  const [incomingFriendRequests, setIncomingFriendRequests] = useState([])
 
   const onPress = () => { 
     bottomSheetRef.current.present()
   }
 
+  useEffect(() => {
+    setIncomingFriendRequests(user.incomingFriendRequests)
+  },[user.incomingFriendRequests])
   //console.log("user", user)
   
 
