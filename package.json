@@ -1,9 +1,8 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "start": "expo start --dev-client",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "eject": "expo eject"
   },
@@ -18,12 +17,12 @@
     "expo": "~42.0.1",
     "expo-font": "~9.2.1",
     "expo-status-bar": "~1.0.4",
-    "expo-updates": "~0.8.2",
+    "expo-updates": "~0.8.1",
     "firebase": "8.2.3",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-hook-form": "^7.24.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
+    "react-native": "~0.63.4",
     "react-native-animated-circular-progress": "^1.0.6",
     "react-native-countdown-circle-timer": "^3.0.5",
     "react-native-datepicker": "^1.7.2",
@@ -42,10 +41,14 @@
     "react-redux": "^7.2.6",
     "reanimated-bottom-sheet": "^1.0.0-alpha.22",
     "redux": "^4.1.2",
-    "redux-thunk": "^2.4.1"
+    "redux-thunk": "^2.4.1",
+    "expo-splash-screen": "~0.11.2",
+    "react-native-unimodules": "0.14.10"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"
   },
-  "private": true
+  "private": true,
+  "name": "motiwork",
+  "version": "1.0.0"
 }
