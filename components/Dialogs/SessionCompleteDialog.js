@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, Text } from 'react-native'
 import { Button, Paragraph, Dialog, List } from 'react-native-paper';
-import ConfettiCannon from 'react-native-confetti-cannon';
 
 
 const SessionCompleteDialog = ({currentPoints, isSessionComplete, setIsSessionComplete, closeSessionCompleteDialog}) => {
 
-  let confettiRef = useRef(null)
   const onPress = () => {
     setIsSessionComplete(false)
     closeSessionCompleteDialog()
@@ -15,21 +13,11 @@ const SessionCompleteDialog = ({currentPoints, isSessionComplete, setIsSessionCo
 
   useEffect(() => {
     console.log("current points in session complete", currentPoints)
-    confettiRef.start()
   }, [])
 
   return(
     <Dialog visible={isSessionComplete}>
-      <Dialog.Content>
-      <ConfettiCannon
-      count={200}
-      fallSpeed={2500}
-      explosionSpeed={1000}
-      origin={{x: -10, y: 0}}
-      fadeOut={true}
-      autoStart={false}
-      ref={ref => (confettiRef = ref)}
-      />        
+      <Dialog.Content>   
         <View style={styles.dialogContent}>
         <View style={styles.textWrapper}>
         <View style={styles.iconsWrapper}>
