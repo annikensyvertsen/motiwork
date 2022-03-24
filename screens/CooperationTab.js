@@ -66,7 +66,7 @@ const CooperationTab = () => {
         <Text style={styles.name}>{user.firstname} {user.surname}</Text>
       </View>
       {activeChallenge && Object.keys(activeChallenge).length > 0 ?
-      (<Challenge currentUser={user} activeChallenge={activeChallenge} members={members} />)
+      (<Challenge cooperationId={cooperationId} handlePresentPress={handlePresentPress} currentUser={user} activeChallenge={activeChallenge} members={members} />)
       :
       (<ChallengesEmptyState handlePresentPress={handlePresentPress}/>)
       }
@@ -74,7 +74,7 @@ const CooperationTab = () => {
       {cooperation.archivedChallenges.length > 0 &&
         (
           <View style={{flex: 1}}>
-            <UnsettledChallenges members={members} archivedChallenges={cooperation.archivedChallenges} />
+            <UnsettledChallenges members={members} archivedChallenges={archivedChallenges} />
         </View>
         )
       }

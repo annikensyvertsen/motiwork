@@ -29,10 +29,10 @@ export const ChallengeForm = ({members, steps, setSteps, setSubmitted, submitted
   let dateTomorrow = new Date((new Date()).getTime() + 86400000);
 
   const [reward, setReward] = useState('');
-  const predefinedRewards = ["Ingenting", "En gratis middag", "En kinodate", "En kaffedate"]
+  const predefinedRewards = ["Ingenting", "Et hjemmelaget måltid", "En kinodate", "Overraskelse!", "En kaffedate"]
   const [visible, setVisible] = useState(!visible);
 
-  const [workload, setWorkload] = useState(0)
+  const [workload, setWorkload] = useState(20)
   const [goalName, setGoalName] = useState("")
 
   const [startDate, setStartDate] = useState(new Date())
@@ -42,10 +42,9 @@ export const ChallengeForm = ({members, steps, setSteps, setSubmitted, submitted
     setVisible(!visible)
   };
 
-  //TODO: denne skal kun akseptere nummer -> how
-  const checkIfNumbers = (load) => {
-    setWorkload(load)
-  }
+  const [isWorkloadString, setIsWorkloadString] = useState(false)
+
+
 
   const closeMenu = () => setVisible(!visible);
 
@@ -63,26 +62,37 @@ export const ChallengeForm = ({members, steps, setSteps, setSubmitted, submitted
 
   };
  
-  const onSubmit = async () => {
-    const formData = {
-      goalName: goalName,
-      reward: reward,
-      startDate: startDate,
-      endDate: endDate,
-      workloadGoal: workload,
-      settled: false,
-      winner: null,
+const onSubmit = async () => {
+    if(/^\d+$/.test(workload)){
+      setIsWorkloadString(false)
+      let workloadObj = {}
+      workloadObj[members.sender] = 0
+      workloadObj[members.receiver] = 0
+
+      const formData = {
+        goalName: goalName,
+        reward: reward,
+        startDate: startDate,
+        endDate: endDate,
+        workloadGoal: workload,
+        settled: false,
+        winner: null,
+        workload: workloadObj,
+        completed: false,
+      }
+      //TODO: her skal vi kalle på metoden som setter målet
+      await createChallenge(members, formData, cooperationId, dispatch)
+      .then(() => {
+        setSteps(steps + 1)
+  
+        setSubmitted(!submitted)
+      })
+      .catch(error => console.log("error??", error))
+    }else{
+      setIsWorkloadString(true)
     }
-    //TODO: her skal vi kalle på metoden som setter målet
-    await createChallenge(members, formData, cooperationId, dispatch)
-    .then(() => {
-      setSteps(steps + 1)
-
-      setSubmitted(!submitted)
-    })
-    .catch(error => console.log("error??", error))
+    
   }
-
 
   return(
     <Provider style={styles.provider}>
@@ -108,7 +118,7 @@ export const ChallengeForm = ({members, steps, setSteps, setSubmitted, submitted
        />
       </View>
 
-      <View style={containerStyles.flexWithMarginTop}>
+        <View style={containerStyles.flexWithMarginTop}>
        <Controller
         control={control}
           rules={{
@@ -117,21 +127,27 @@ export const ChallengeForm = ({members, steps, setSteps, setSubmitted, submitted
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-              type="number"
+              type="string"
               label="Antall timer"
               mode={"outlined"}
               value={workload.toString()}
-              onChangeText={load => checkIfNumbers(load)}
+              onChangeText={load => setWorkload(load.toString())}
               placeholder={"40"}
 
             />
           )}
           name="numberOfHours"
       />
-
       </View>
-
+      <View style={styles.errorMsg}>
+      {isWorkloadString && (
+        <Text style={styles.errorText}>Du må oppgi et tall</Text>
+      )}
+    </View>
+    
       <View style={containerStyles.flexWithMarginTop}>
+        <Text>Hva skal taperen gi til vinneren?</Text>
+
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (

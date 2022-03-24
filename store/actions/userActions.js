@@ -36,6 +36,10 @@ export const checkIfGoalIsDue = (goal) => {
   return goal.endDate.seconds < todayInSeconds
 }
 
+export const checkIfGoalIsReached = (goal) => {
+  return parseInt(goal.workload) >= parseInt(goal.workloadGoal)
+}
+
 export const updateActiveChallenge = async (uid) => {
   const userCollectionRef = db.collection('usersCollection').doc(uid)
   let doc = await userCollectionRef.get()
@@ -49,6 +53,19 @@ export const updateActiveChallenge = async (uid) => {
         currentGoal: {}
       }
       ).then(res => console.log(res)).catch(err => console.log(err))
+    }
+    else if(checkIfGoalIsReached(user.currentGoal)){
+      await db.collection('usersCollection').doc(uid).update(
+        {
+          [`currentGoal.isReached`]: true,
+        }
+        ).then(res => console.log(res)).catch(err => console.log(err))
+    }else if(!checkIfGoalIsReached(user.currentGoal)) {
+      await db.collection('usersCollection').doc(uid).update(
+        {
+          [`currentGoal.isReached`]: false,
+        }
+        ).then(res => console.log(res)).catch(err => console.log(err))
     }
   }
 }

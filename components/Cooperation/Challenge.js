@@ -5,7 +5,7 @@ import { calculateDaysLeft } from "../../help-functions/date-and-time";
 import { returnUserBasedOnId } from "../../help-functions/friends";
 import { textStyles } from "../styles/sharedStyles";
 
-export const Challenge = ({activeChallenge, members, currentUser}) => {
+export const Challenge = ({activeChallenge, handlePresentPress, cooperationId, members, currentUser}) => {
 
   const {goalName, endDate, reward, workload, workloadGoal} = activeChallenge
 
@@ -29,6 +29,7 @@ export const Challenge = ({activeChallenge, members, currentUser}) => {
     else setLeader(null)
   }
  
+ let winner = activeChallenge.winner && returnUserBasedOnId(activeChallenge.winner) || null
 
   const winningColor = "#006F3C"
   const losingColor = "#BF212F"
@@ -44,7 +45,7 @@ export const Challenge = ({activeChallenge, members, currentUser}) => {
 
   useEffect(() => {
     checkLeader()
-  }, [])
+  }, [currentUser])
 
 
   const returnColor = (id) => {
@@ -63,26 +64,39 @@ export const Challenge = ({activeChallenge, members, currentUser}) => {
       <Card style={returnCardStyle()}>
       <View style={styles.container}>
         <View style={styles.content}>
-          <View style={styles.header}>
-            <Text style={textStyles.tertiaryHeadingText}>{goalName}</Text>
-            <Text>{remainingDays} {remainingDaysText}</Text>
+          
+          <View style={styles.headerWrapper}>
+            <View style={{width: 22}}></View>
+            <View style={styles.header}>
+              <Text style={textStyles.tertiaryHeadingText}>{goalName}</Text>
+              <Text>{remainingDays} {remainingDaysText}</Text>
+            </View>
           </View>
+
           <View style={styles.progress}>
           <View style={styles.progressAndText}>
-            <Text style={styles.progressName}>{friend.firstname}</Text>
-            <ProgressBar style={styles.progressBar} progress={friendProgress} color={returnColor(friend.uid)}/>
+            <Text style={styles.progressName}>{friend && friend.firstname} - <Text style={{color: 'grey', textTransform: 'lowercase'}}>{workload[friendUserId]} timer</Text></Text>
+            <ProgressBar style={styles.progressBar} progress={friendProgress} color={friend && returnColor(friend.uid)}/>
           </View>
           <View style={styles.progressAndText}>
-            <Text style={styles.progressName}>{currentUser.firstname} (deg)</Text>
-            <ProgressBar style={styles.progressBar} progress={currentUserProgress} color={returnColor(currentUser.uid)}/>
+            <Text style={styles.progressName}>{currentUser && currentUser.firstname} (deg) - <Text style={{color: 'grey', textTransform: 'lowercase'}}>{workload[currentUser.uid]} timer</Text> </Text>
+            <ProgressBar style={styles.progressBar} progress={currentUserProgress} color={currentUser && returnColor(currentUser.uid)}/>
           </View>
           </View>
           <View style={styles.reward}>
-            <List.Icon color="" icon="medal"></List.Icon>
-            <Text style={textStyles.subtitleText}>{reward}</Text>
+            <Text style={textStyles.subtitleText}>✨ {reward} ✨</Text>
           </View>
+          {winner && (
+            <Text>{winner.uid === currentUser.uid? 'Du' : winner.firstname} vant!</Text>
+          )}
+          {activeChallenge.completed && !activeChallenge.winner && (
+            <View style={{marginBottom: 10}}>
+              <Text>Det ble uavgjort 🤷</Text>
+            </View>
+          )}
         </View>
-        {leader === null ?
+        {(!activeChallenge.completed && !activeChallenge.winner) && (
+           leader === null ?
           (
              <View style={styles.loosingFooter}>
                 <List.Icon color="#FFB61D" icon="alert"></List.Icon>
@@ -105,7 +119,8 @@ export const Challenge = ({activeChallenge, members, currentUser}) => {
                 <List.Icon color="#FFB61D" icon="alert"></List.Icon>
             </View>
           )
-        }
+        
+        )}
       </View>
       </Card>
     </View>
@@ -116,13 +131,13 @@ const styles = StyleSheet.create({
   wrapper: {
     display: "flex",
     width: '100%',
-    flex: 1
    },
   winningCardStyle: {
     borderRadius: 10,
     width: '80%',
     minHeight: 300,
     alignSelf: "center",
+    justifyContent: "center",
     borderWidth: 2,
     borderColor:  "#006F3C",
     marginTop: 20,
@@ -132,9 +147,16 @@ const styles = StyleSheet.create({
     width: '80%',
     minHeight: 300,
     alignSelf: "center",
+    justifyContent: "center",
     borderWidth: 2,
     borderColor:  "#BF212F",
     marginTop: 20,
+  },
+  headerWrapper: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    width: '100%'
   },
   header: {
     display: "flex",
@@ -175,7 +197,8 @@ const styles = StyleSheet.create({
   reward: {
     display: "flex",
     alignItems: "center",
-    flexDirection: "row"
+    flexDirection: "row",
+    marginBottom: 10,
   },
   loosingFooter: {
     backgroundColor: "#BF212F",
@@ -183,8 +206,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: 'center',
-    justifyContent: "center",
-    //  litt hacky å sette denne manuelt men blir sånn enn så lenge
+    justifyContent: "space-between",
     borderBottomRightRadius: 8,
     borderBottomLeftRadius: 8,
   },
@@ -195,7 +217,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: 'center',
     justifyContent: "center",
-    //  litt hacky å sette denne manuelt men blir sånn enn så lenge
     borderBottomRightRadius: 8,
     borderBottomLeftRadius: 8,
   },

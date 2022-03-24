@@ -14,16 +14,26 @@ export const checkIfGoalOrChallengeHasEnded = (endDate) => {
   else return false
 }
 
-export const updateUserPoints = async(hours, points, user, cooperations) => {
-  //console.log("in update user points", hours, "points", points, "user", user, "cooperations", cooperations)
-  //todo: sjekk om brukeren har noen aktive mål
-  await db.collection('usersCollection').doc(user.uid).update({
-    points: firebase.firestore.FieldValue.increment(points),
-    totalWorkload: firebase.firestore.FieldValue.increment(hours),
+export const checkIfGoalisReached = (workload, workloadGoal) => {
+  return workload >= workloadGoal
+}
+
+export const updateCooperations = async (cooperations, user, hours) => {
+  Object.keys(cooperations).length > 0 &&  
+  cooperations.forEach(async cooperation => {
+    if(cooperation.activeChallenge && Object.keys(cooperation.activeChallenge).length ){
+       let activeChallenge = cooperation.activeChallenge
+        if(checkIfGoalOrChallengeHasStarted(activeChallenge.startDate) && !checkIfGoalOrChallengeHasEnded(activeChallenge.endDate)){
+          await db.collection('cooperationsCollection').doc(cooperation.id).update({
+            [`activeChallenge.workload.` + user.uid]: firebase.firestore.FieldValue.increment(hours),
+          })
+        }
+    }
   })
-  .then(result => console.log("result", result))
-  .catch(error => console.log("error", error))
-  //sjekk om brukeren har et aktivt mål
+}
+
+export const updateUserGoal = async (user, hours) => {
+  console.log("in updateusergoal. user: ", user, "hours: ",  hours)
   if(user.currentGoal && user.currentGoal.startDate){
     if(checkIfGoalOrChallengeHasStarted(user.currentGoal.startDate) && !checkIfGoalOrChallengeHasEnded(user.currentGoal.endDate)){
       await db.collection('usersCollection').doc(user.uid).update({
@@ -31,21 +41,36 @@ export const updateUserPoints = async(hours, points, user, cooperations) => {
       })
     }
   }
-  Object.keys(cooperations).length > 0 &&  cooperations.forEach(async cooperation => {
-    //foreløpig er det tiltenkt at det bare skal være en aktiv utfordring i hvert samarbeid. Kan vurdere å gjøre dette om til et objekt isteden
-    if(Object.keys(cooperation.activeChallenge).length ){
-       let activeChallenge = cooperation.activeChallenge
-        if(checkIfGoalOrChallengeHasStarted(activeChallenge.startDate) && !checkIfGoalOrChallengeHasEnded(activeChallenge.endDate)){
-          console.log("it has")
-          await db.collection('cooperationsCollection').doc(cooperation.id).update({
-            [`activeChallenge.workload.` + user.uid]: firebase.firestore.FieldValue.increment(hours),
-          })
-        }
-    }
-   
+}
 
-
+export const updateUserPoints = async(hours, points, user, cooperations) => {
+  await db.collection('usersCollection').doc(user.uid).update({
+    points: firebase.firestore.FieldValue.increment(points),
+    totalWorkload: firebase.firestore.FieldValue.increment(hours),
   })
+  .then(result => console.log("result", result))
+  .catch(error => console.log("error", error))
+  
+  await updateUserGoal(user, hours).catch(error => console.log(error))
+  await updateCooperations(cooperations, user, hours).catch(error => console.log(error))
 
-  //sjekk om brukeren er med i noen aktive utfordringer
+}
+
+export const archiveGoal = async(uid) => {
+  const userCollectionRef = db.collection('usersCollection').doc(uid)
+  let doc = await userCollectionRef.get()
+  let user = doc.data()
+
+  let currentGoal = user && user.currentGoal
+  console.log("currentgoal", currentGoal)
+
+  if(checkIfGoalisReached(currentGoal.workload, currentGoal.workloadGoal)){
+    await db.collection('usersCollection').doc(uid).update(
+      {
+        archivedGoals: firebase.firestore.FieldValue.arrayUnion(user.currentGoal),
+        currentGoal: {}
+      }
+      ).then(res => console.log(res)).catch(err => console.log(err))
+  }
+
 }

@@ -31,6 +31,16 @@ export const calculateWinner = async (members, workload) => {
     return null
   }
 }
+
+export const findMembersWhoReachedGoal = (members, workload, workloadGoal) => {
+  let membersWhoReachedGoal = []
+  console.log("members", members, "workload", workload)
+  if(workload[members.receiver] >= workloadGoal) membersWhoReachedGoal.push(members.receiver)
+  if(workload[members.sender] >= workloadGoal) membersWhoReachedGoal.push(members.sender)
+  return membersWhoReachedGoal
+
+}
+
 export const findExpiredChallenges = async (members) => {
   let todayInSeconds = (new Date().getTime() / 1000)
   await db.collection("cooperationsCollection").get()
@@ -39,11 +49,8 @@ export const findExpiredChallenges = async (members) => {
       const {activeChallenge} = doc.data()
       if(Object.keys(activeChallenge).length > 0){
         if(activeChallenge.endDate.seconds < todayInSeconds){
-          await calculateWinner(members, activeChallenge.workload).then(
-            result =>
-            {console.log("result", result)
-            activeChallenge.winner = result}
-          )
+          let winner = await calculateWinner(members, activeChallenge.workload)
+          activeChallenge.winner = winner
           await archiveChallenge(activeChallenge, doc.id)
             .then()
             .catch(err => console.log(err))
@@ -53,13 +60,54 @@ export const findExpiredChallenges = async (members) => {
   })
 }
 
+export const hasChallengeExpired = async (members, activeChallenge, id) => {
+  let todayInSeconds = (new Date().getTime() / 1000)
+
+  if(Object.keys(activeChallenge).length > 0){
+    if(activeChallenge.endDate.seconds < todayInSeconds){
+      let winner = await calculateWinner(members, activeChallenge.workload)
+      activeChallenge.winner = winner
+      await archiveChallenge(activeChallenge, id)
+        .then()
+        .catch(err => console.log(err))
+    }else{
+      let isCompleted = await checkIfChallengeIsCompleted(members, activeChallenge)
+      if(isCompleted){
+           //TODO: sett completed til true
+        await db.collection('cooperationsCollection').doc(id).update(
+          {
+            [`activeChallenge.winner`]: activeChallenge.winner,
+            [`activeChallenge.completed`]: true,
+          }
+        )
+      }
+     
+    }
+  }
+}
+
+export const checkIfChallengeIsCompleted = async (members, activeChallenge) => {
+  if(Object.keys(activeChallenge).length > 0){
+    let membersWhoReachedGoal = findMembersWhoReachedGoal(members, activeChallenge.workload, activeChallenge.workloadGoal)
+    if(membersWhoReachedGoal.length > 1){
+      activeChallenge.winner = null
+      return true
+    } else if(membersWhoReachedGoal.length === 1){
+      activeChallenge.winner = membersWhoReachedGoal[0]
+      return true
+    } else return false
+  }
+
+}
+
 export const setCooperations = async (userId, dispatch) => {
   let cooperations = []
   let cooperationMembers;
   await db.collection("cooperationsCollection").get()
-    .then((querySnapshot) => {
+    .then(async (querySnapshot) => {
       querySnapshot.forEach(async(doc) => {
-        const {members} = doc.data()
+        const {members, activeChallenge} = doc.data()
+        console.log("activechallenge", activeChallenge)
         cooperationMembers = members;
         const cooperation = {
           ...doc.data(),
@@ -68,12 +116,15 @@ export const setCooperations = async (userId, dispatch) => {
         if(members.receiver === userId || members.sender === userId){
           cooperations.push(cooperation)
         }
-    });
+        await hasChallengeExpired(members, activeChallenge, doc.id)
     })
+  }
+    
+    )
     .catch(err => {
       console.log(err)
     });
-    await findExpiredChallenges(cooperationMembers).catch(err => console.log(err))
+    //await findCompletedChallenges(cooperationMembers).catch(err => console.log(err))
     dispatch({ type: SET_COOPERATIONS, payload: cooperations})
     return cooperations
 }
@@ -124,20 +175,13 @@ export const declineCooperationRequest = async (request) => {
 //challenge:
 
 export const createChallenge = async (members, formData, cooperationId, dispatch) => {
-  let workloadObj = {}
-  workloadObj[members.sender] = 0
-  workloadObj[members.receiver] = 0
-  let challenge = {
-    ...formData,
-    workload: workloadObj
-  }
   await db.collection('cooperationsCollection').doc(cooperationId).update({
-    activeChallenge: challenge
+    activeChallenge: formData
   }).then(
     setCooperations(members.sender, dispatch)
   ).catch(err => console.log(err))
-
 }
+
 
 export const archiveChallenge = async (challenge, cooperationId) => {
   await db.collection('cooperationsCollection').doc(cooperationId).update({

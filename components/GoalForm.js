@@ -31,8 +31,10 @@ const GoalForm = ({ submitted, setSubmitted}) => {
   let dateTomorrow = new Date((new Date()).getTime() + 86400000);
 
   const [reward, setReward] = useState('');
-  const predefinedRewards = ["Ingenting", "En gratis middag", "En kinodate", "En kaffedate"]
+  const predefinedRewards = ["Ingenting", "Foodora til middag", "Nye sko", "Middag ute", "En fridag"]
   const [visible, setVisible] = useState(!visible);
+
+  const [isWorkloadString, setIsWorkloadString] = useState(false)
 
   const [workload, setWorkload] = useState(0)
   const [goalName, setGoalName] = useState("")
@@ -45,22 +47,6 @@ const GoalForm = ({ submitted, setSubmitted}) => {
   const openMenu = () => {
     setVisible(!visible)
   };
-
-  //TODO: denne skal kun akseptere nummer -> how
-  const checkIfNumbers = (load) => {
-    console.log("load", load)
-    if(isNaN(parseInt(load))){
-      console.log("hello")
-      return 
-    }
-    else {
-      setWorkload(parseInt(load))
-    }
-  }
-
-  const allowOnlyNumber=(value)=>{
-    return value.replace(/[^0-9]/g, '')
- }
 
   const closeMenu = () => setVisible(!visible);
 
@@ -79,19 +65,27 @@ const GoalForm = ({ submitted, setSubmitted}) => {
   };
 
 
-  const onSubmit = async () => {
-    const data = {
-      goalName: goalName,
-      reward: reward,
-      startDate: startDate,
-      endDate: endDate,
-      workloadGoal: workload
+   const onSubmit = async () => {
+    if(/^\d+$/.test(workload)){
+      setIsWorkloadString(false)
+      const data = {
+        goalName: goalName,
+        reward: reward,
+        startDate: startDate,
+        endDate: endDate,
+        workloadGoal: parseInt(workload),
+        workload: 0,
+      }
+      await setUserGoal(data, currentUser.uid, dispatch).then(() => {
+        setSubmitted(!submitted)
+      })
+      .catch(error => console.log("error", error))
+    }else{
+      console.log("not numbers")
+      setIsWorkloadString(true)
     }
-    await setUserGoal(data, currentUser.uid, dispatch).then(() => {
-      setSubmitted(!submitted)
-    })
-    .catch(error => console.log("error", error))
   }
+
 
   return(
 
@@ -126,11 +120,11 @@ const GoalForm = ({ submitted, setSubmitted}) => {
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-              type="number"
+              type="string"
               label="Antall timer"
               mode={"outlined"}
-              value={workload}
-              onChangeText={load => setWorkload(load)}
+              value={workload.toString()}
+              onChangeText={load => setWorkload(load.toString())}
             />
           )}
           name="numberOfHours"
@@ -139,12 +133,13 @@ const GoalForm = ({ submitted, setSubmitted}) => {
       </View>
 
       <View style={containerStyles.flexWithMarginTop}>
+        <Text>Hva skal du unne deg selv hvis du når målet ditt?</Text>
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <View style={styles.container}>
             <TextInput
-              placeholder="En gratis middag"
+              placeholder="Foodora til middag"
               mode="outlined"
               label="Premie"
               value={reward}

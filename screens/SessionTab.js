@@ -6,6 +6,7 @@ import {StopWatch} from "../components/StopWatch"
 import {Timer} from "../components/Timer"
 import BottomSheetTemplate from "../screens/BottomSheetTemplate";
 import ComponentDialog from '../components/Dialog'
+import SessionCompleteDialog from '../components/Dialogs/SessionCompleteDialog'
 
 const SessionTab = () => {
 
@@ -14,6 +15,7 @@ const SessionTab = () => {
   const [minutes, setMinutes] = useState(45);
   const [seconds, setSeconds] = useState(0);
   const [visibleDialog, setVisibleDialog] = useState(false);
+  const [isSessionComplete, setIsSessionComplete] = useState(false)
   const [isEndSession, setIsEndSession] = useState(false);
   const [timerKey, setTimerKey] = useState(false)
   const [stopStopWatch, setStopStopWatch] = useState(false)
@@ -29,6 +31,7 @@ const SessionTab = () => {
   
   const resetTimer = () => {
     setTimerKey(!timerKey)
+    setMinutes(45)
   }
 
   const activateDialog = () => {
@@ -38,7 +41,20 @@ const SessionTab = () => {
   const closeDialogAndContinueSession = () => {
     setVisibleDialog(false)
     setIsEndSession(false)
-    if(!isTimer){
+    if(isTimer){
+      setIsTimerRunning(true)
+    }
+    else {
+      setStopStopWatch(!stopStopWatch)
+    }
+  }
+
+  const closeSessionCompleteDialog = () => {
+    setIsEndSession(true)
+    setCurrentPoints(0)
+    if(isTimer){
+      resetTimer()
+    }else {
       setStopStopWatch(!stopStopWatch)
     }
   }
@@ -46,7 +62,9 @@ const SessionTab = () => {
   const closeDialogAndStopSession = () => {
     setVisibleDialog(false)
     setIsEndSession(true)
+    setIsCurrentPoints(0)
     if(isTimer){
+      setIsSessionComplete(true)
       resetTimer()
     }else{
       setStopStopWatch(!stopStopWatch)
@@ -61,6 +79,7 @@ const SessionTab = () => {
     <Provider>
     <Portal>
     {visibleDialog && <ComponentDialog isTimer={isTimer} closeDialogAndStopSession={closeDialogAndStopSession} closeDialogAndContinueSession={closeDialogAndContinueSession}currentPoints={currentPoints} visibleDialog={visibleDialog}/>}
+    {isSessionComplete && <SessionCompleteDialog  closeSessionCompleteDialog={closeSessionCompleteDialog} isSessionComplete={isSessionComplete} currentPoints={currentPoints} setIsSessionComplete={setIsSessionComplete} />}
     </Portal>
 
     <View style={styles.sessionWrapper}>
@@ -77,7 +96,7 @@ const SessionTab = () => {
 
      <View style={styles.flexBoxWithMarginTop}>
       {isTimer ? 
-        <Timer key={timerKey} isTimerRunning={isTimerRunning} setIsTimerRunning={setIsTimerRunning} values={{activateDialog, setCurrentPoints, hours, minutes, setHours, setMinutes, visibleDialog, isEndSession}} handlePresentPress={handlePresentPress} /> 
+        <Timer key={timerKey} setIsSessionComplete={setIsSessionComplete} resetTimer={resetTimer} setCurrentPoints={setCurrentPoints} currentPoints={currentPoints} isTimerRunning={isTimerRunning} setIsTimerRunning={setIsTimerRunning} values={{activateDialog, setCurrentPoints, hours, minutes, setHours, setMinutes, visibleDialog, isEndSession}} handlePresentPress={handlePresentPress} /> 
         : 
         <StopWatch values={{stopStopWatch, activateDialog,visibleDialog, setCurrentPoints, isEndSession, isStopwatchRunning, setIsStopwatchRunning}}/>}
      </View>

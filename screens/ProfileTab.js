@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, ScrollView, Text, StyleSheet } from "react-native";
 import { Avatar, Button, Divider, List } from "react-native-paper";
 import { auth } from "../firebase";
 import { useSelector } from "react-redux";
@@ -21,6 +21,7 @@ const ProfileTab = () => {
 
 
   return (
+    <ScrollView>
       <View style={styles.wrapper}>
         <View style={styles.userInformation}>
           <View>
@@ -52,6 +53,7 @@ const ProfileTab = () => {
         </View>
 
     </View>
+    </ScrollView>
   );
 };
 export default ProfileTab;
