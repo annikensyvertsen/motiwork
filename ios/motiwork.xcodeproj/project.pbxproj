@@ -13,13 +13,15 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		96905EF65AED1B983A6B3ABC /* libPods-motiwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58EEBF8E8E6FB1BC6CAF49B5 /* libPods-motiwork.a */; };
-		96C51E8027D0E07100257CB5 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 96C51E7F27D0E07100257CB5 /* FirebaseAnalytics */; };
-		96C51E8227D0E07100257CB5 /* FirebaseAppDistribution-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 96C51E8127D0E07100257CB5 /* FirebaseAppDistribution-Beta */; };
-		96C51E8427D0E07100257CB5 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 96C51E8327D0E07100257CB5 /* FirebaseAuth */; };
-		96C51E8627D0E07100257CB5 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 96C51E8527D0E07100257CB5 /* FirebaseDatabase */; };
-		96C51E8827D0E07100257CB5 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 96C51E8727D0E07100257CB5 /* FirebaseFirestore */; };
-		96C51E8A27D0E19500257CB5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 96C51E8927D0E19500257CB5 /* GoogleService-Info.plist */; };
+		96D0B5BB27EC56AE0042FB69 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 96D0B5BA27EC56AE0042FB69 /* GoogleService-Info.plist */; };
+		96D0B5BE27EC57370042FB69 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 96D0B5BD27EC57370042FB69 /* FirebaseAnalytics */; };
+		96D0B5C027EC57370042FB69 /* FirebaseAppDistribution-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 96D0B5BF27EC57370042FB69 /* FirebaseAppDistribution-Beta */; };
+		96D0B5C227EC57370042FB69 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 96D0B5C127EC57370042FB69 /* FirebaseAuth */; };
+		96D0B5C427EC57370042FB69 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 96D0B5C327EC57370042FB69 /* FirebaseDatabase */; };
+		96D0B5C627EC57370042FB69 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 96D0B5C527EC57370042FB69 /* FirebaseFirestore */; };
+		96D0B5C827EC57370042FB69 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 96D0B5C727EC57370042FB69 /* FirebaseStorage */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
+		FBAC1314EF3242E2BFE32E32 /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA108C8CE86449AB994D7BF /* noop-file.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,8 +36,10 @@
 		58EEBF8E8E6FB1BC6CAF49B5 /* libPods-motiwork.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-motiwork.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C2E3173556A471DD304B334 /* Pods-motiwork.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-motiwork.debug.xcconfig"; path = "Target Support Files/Pods-motiwork/Pods-motiwork.debug.xcconfig"; sourceTree = "<group>"; };
 		7A4D352CD337FB3A3BF06240 /* Pods-motiwork.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-motiwork.release.xcconfig"; path = "Target Support Files/Pods-motiwork/Pods-motiwork.release.xcconfig"; sourceTree = "<group>"; };
-		96C51E8927D0E19500257CB5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		96D0B5BA27EC56AE0042FB69 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		99BFCF0510DF4B99BF84B7E8 /* motiwork-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "motiwork-Bridging-Header.h"; path = "motiwork/motiwork-Bridging-Header.h"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = motiwork/SplashScreen.storyboard; sourceTree = "<group>"; };
+		ABA108C8CE86449AB994D7BF /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "motiwork/noop-file.swift"; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
@@ -46,12 +50,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				96C51E8627D0E07100257CB5 /* FirebaseDatabase in Frameworks */,
-				96C51E8027D0E07100257CB5 /* FirebaseAnalytics in Frameworks */,
+				96D0B5C427EC57370042FB69 /* FirebaseDatabase in Frameworks */,
+				96D0B5BE27EC57370042FB69 /* FirebaseAnalytics in Frameworks */,
 				96905EF65AED1B983A6B3ABC /* libPods-motiwork.a in Frameworks */,
-				96C51E8227D0E07100257CB5 /* FirebaseAppDistribution-Beta in Frameworks */,
-				96C51E8427D0E07100257CB5 /* FirebaseAuth in Frameworks */,
-				96C51E8827D0E07100257CB5 /* FirebaseFirestore in Frameworks */,
+				96D0B5C027EC57370042FB69 /* FirebaseAppDistribution-Beta in Frameworks */,
+				96D0B5C827EC57370042FB69 /* FirebaseStorage in Frameworks */,
+				96D0B5C227EC57370042FB69 /* FirebaseAuth in Frameworks */,
+				96D0B5C627EC57370042FB69 /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,6 +75,8 @@
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
+				ABA108C8CE86449AB994D7BF /* noop-file.swift */,
+				99BFCF0510DF4B99BF84B7E8 /* motiwork-Bridging-Header.h */,
 			);
 			name = motiwork;
 			sourceTree = "<group>";
@@ -94,7 +101,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				96C51E8927D0E19500257CB5 /* GoogleService-Info.plist */,
+				96D0B5BA27EC56AE0042FB69 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* motiwork */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -153,11 +160,12 @@
 			);
 			name = motiwork;
 			packageProductDependencies = (
-				96C51E7F27D0E07100257CB5 /* FirebaseAnalytics */,
-				96C51E8127D0E07100257CB5 /* FirebaseAppDistribution-Beta */,
-				96C51E8327D0E07100257CB5 /* FirebaseAuth */,
-				96C51E8527D0E07100257CB5 /* FirebaseDatabase */,
-				96C51E8727D0E07100257CB5 /* FirebaseFirestore */,
+				96D0B5BD27EC57370042FB69 /* FirebaseAnalytics */,
+				96D0B5BF27EC57370042FB69 /* FirebaseAppDistribution-Beta */,
+				96D0B5C127EC57370042FB69 /* FirebaseAuth */,
+				96D0B5C327EC57370042FB69 /* FirebaseDatabase */,
+				96D0B5C527EC57370042FB69 /* FirebaseFirestore */,
+				96D0B5C727EC57370042FB69 /* FirebaseStorage */,
 			);
 			productName = motiwork;
 			productReference = 13B07F961A680F5B00A75B9A /* motiwork.app */;
@@ -172,7 +180,9 @@
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = 6M3WU7284K;
 						LastSwiftMigration = 1120;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -186,7 +196,7 @@
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			packageReferences = (
-				96C51E7E27D0E07000257CB5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				96D0B5BC27EC57370042FB69 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
@@ -204,7 +214,7 @@
 			files = (
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				96C51E8A27D0E19500257CB5 /* GoogleService-Info.plist in Resources */,
+				96D0B5BB27EC56AE0042FB69 /* GoogleService-Info.plist in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
 			);
@@ -295,6 +305,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				FBAC1314EF3242E2BFE32E32 /* noop-file.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,6 +330,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = motiwork/motiwork.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6M3WU7284K;
 				ENABLE_BITCODE = NO;
@@ -339,8 +353,10 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.annikers.motiwork;
 				PRODUCT_NAME = motiwork;
+				SWIFT_OBJC_BRIDGING_HEADER = "motiwork/motiwork-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -351,6 +367,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = motiwork/motiwork.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6M3WU7284K;
 				INFOPLIST_FILE = motiwork/Info.plist;
@@ -366,7 +385,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.annikers.motiwork;
 				PRODUCT_NAME = motiwork;
+				SWIFT_OBJC_BRIDGING_HEADER = "motiwork/motiwork-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -399,6 +420,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = motiwork/motiwork.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -458,6 +480,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = motiwork/motiwork.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -506,7 +529,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		96C51E7E27D0E07000257CB5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		96D0B5BC27EC57370042FB69 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
 			requirement = {
@@ -517,30 +540,35 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		96C51E7F27D0E07100257CB5 /* FirebaseAnalytics */ = {
+		96D0B5BD27EC57370042FB69 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 96C51E7E27D0E07000257CB5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 96D0B5BC27EC57370042FB69 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalytics;
 		};
-		96C51E8127D0E07100257CB5 /* FirebaseAppDistribution-Beta */ = {
+		96D0B5BF27EC57370042FB69 /* FirebaseAppDistribution-Beta */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 96C51E7E27D0E07000257CB5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 96D0B5BC27EC57370042FB69 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = "FirebaseAppDistribution-Beta";
 		};
-		96C51E8327D0E07100257CB5 /* FirebaseAuth */ = {
+		96D0B5C127EC57370042FB69 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 96C51E7E27D0E07000257CB5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 96D0B5BC27EC57370042FB69 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
 		};
-		96C51E8527D0E07100257CB5 /* FirebaseDatabase */ = {
+		96D0B5C327EC57370042FB69 /* FirebaseDatabase */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 96C51E7E27D0E07000257CB5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 96D0B5BC27EC57370042FB69 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseDatabase;
 		};
-		96C51E8727D0E07100257CB5 /* FirebaseFirestore */ = {
+		96D0B5C527EC57370042FB69 /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 96C51E7E27D0E07000257CB5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = 96D0B5BC27EC57370042FB69 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		96D0B5C727EC57370042FB69 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 96D0B5BC27EC57370042FB69 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
