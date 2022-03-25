@@ -17,7 +17,7 @@ const CommunityTab = () => {
   const addCooperationBottomSheetRef = useRef(null);
 
    return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, marginTop: 20}}>
     <View style={styles.mainContentContainer}>
       <View style={communityStyles.cooperationContainer}>
         <CooperationsSection bottomSheetRef={addCooperationBottomSheetRef}/>

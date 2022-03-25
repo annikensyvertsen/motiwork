@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, View, StatusBar } from "react-native";
 import { auth, db } from "./firebase";
 import SessionTab from "./screens/SessionTab";
 import HomeTab from "./screens/HomeTab";
@@ -9,7 +9,7 @@ import CooperationTab from "./screens/CooperationTab";
 import ProfileTab from "./screens/ProfileTab";
 import { useDispatch, useSelector, shallowEqual} from 'react-redux';
 import { setCurrentUser } from "./store/actions/userActions";
-
+import { DefaultTheme } from "react-native-paper";
 import { FontAwesome } from "@expo/vector-icons";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -57,7 +57,9 @@ export const AppContent = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#29434e" }}>
+    <View style={{ flex: 1, backgroundColor: DefaultTheme.colors.background }}>
+    <StatusBar hidden={true} />
+    <View style={{ flex: 1, marginTop: 20}}>
       <Tab.Navigator
         screenOptions={({ route }) => ({
           headerShown: false,
@@ -80,7 +82,7 @@ export const AppContent = () => {
               return <FontAwesome name="user" size={size} color={color} />;
             }
           },
-          tabBarActiveTintColor: "green",
+          tabBarActiveTintColor: "#6200EE",
           tabBarInactiveTintColor: "#819ca9",
           style: {
             backgroundColor: "#29434e",
@@ -98,6 +100,8 @@ export const AppContent = () => {
         />
         <Tab.Screen name="Profil" component={ProfileTab} />
       </Tab.Navigator>
-    </SafeAreaView>
+
+      </View>
+    </View>
   )
 }

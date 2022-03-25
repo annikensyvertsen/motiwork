@@ -6,6 +6,8 @@ import { useColorScheme} from 'react-native-paper'
 import { createStackNavigator } from "@react-navigation/stack";
 import { auth } from "./firebase";
 import thunk from 'redux-thunk'
+import WelcomeScreen from './screens/sessions/WelcomeScreen'
+import OnboardingScreen from './screens/sessions/OnboardingScreen'
 
 import LoginScreen from "./screens/sessions/LoginScreen";
 import RegisterScreen from "./screens/sessions/RegisterScreen";
@@ -59,6 +61,16 @@ export default function App() {
         <View style={{flex: 1}}>
           <StatusBar style="light" />
           <Stack.Navigator presentation="card">
+            <Stack.Screen 
+            options={{headerShown: false}}
+            name="welcome"
+            component={WelcomeScreen}
+            />
+            <Stack.Screen 
+            options={{headerShown: false}}
+            name="info"
+            component={OnboardingScreen}
+            />
             <Stack.Screen
               name="signIn"
               component={LoginScreen}

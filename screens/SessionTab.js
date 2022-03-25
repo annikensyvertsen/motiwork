@@ -115,7 +115,8 @@ const styles = StyleSheet.create({
     display: "flex",
     flex: 1,
     alignItems: "center",
-    marginTop: 30,
+    justifyContent: "center",
+    marginBottom: 70,
   },
   flexBoxWithMarginTop: {
     display: "flex",
