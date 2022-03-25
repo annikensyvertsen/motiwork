@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet , Text} from "react-native";
 import AnimatedCircularProgress from 'react-native-animated-circular-progress';
-import { Card, Button, Divider } from "react-native-paper";
-import { convertHoursToSeconds, convertSecondsToDaysHoursAndMinutes, returnFormattedTime } from "../help-functions/date-and-time";
+import { Card, Button, Divider, IconButton } from "react-native-paper";
+import { convertHoursToSeconds, convertSecondsToDaysHoursAndMinutes, convertSecondsToHoursAndMinutes, returnFormattedTime } from "../help-functions/date-and-time";
 import { cardStyles, textStyles, greenColor, yellowColor } from "./styles/sharedStyles";
+import { archiveGoal } from "../help-functions/goal";
 
-export const GoalDisplay =  ({userId, goal}) => {
+export const GoalDisplay =  ({userId, goal, handleEditGoalPress, handlePresentPress}) => {
   let today = new Date().getTime() / 1000
   let hoursWorked = goal.workload || 0
   let workloadGoal = (goal.workloadGoal) || 0
 
   let secondsWorked = convertHoursToSeconds(hoursWorked)
-  let convertedTime = convertSecondsToDaysHoursAndMinutes(secondsWorked)
+  let convertedTime = convertSecondsToHoursAndMinutes(secondsWorked)
   const [progress, setProgress] = useState(45)
   const [remainingDays, setRemainingDays] = useState(0)
   const [remainingTimeLeft, setRemainingTimeLeft] = useState({})
@@ -35,11 +36,20 @@ export const GoalDisplay =  ({userId, goal}) => {
     setProgress(degrees)
   }
 
+  const onEditPress = () => {
+    handleEditGoalPress()
+  }
+
   useEffect(() => {
     calculateDaysLeft() 
     calculateProgress()
   }, [goal])
-  
+
+  const onArchiveGoalPress = async () => {
+    await archiveGoal(userId).then(res => {
+      handlePresentPress()
+    })
+  }
 
   return (
     <View style={styles.wrapper} >
@@ -55,8 +65,8 @@ export const GoalDisplay =  ({userId, goal}) => {
                 color={greenColor}
                 startDeg={45}
                 endDeg={progress}
-                radius={40}
-                innerRadius={30}
+                radius={44}
+                innerRadius={34}
                 innerBackgroundColor={"white"}
                 duration={1000}
                 style={styles.childrenStyle}
@@ -97,6 +107,9 @@ export const GoalDisplay =  ({userId, goal}) => {
           </View>
 
           <View style={styles.progressCircleContainer}>
+            <View style={styles.iconWrapper}>
+            <IconButton style={{margin: 0}} icon="pencil-box-outline" color="grey" size={22} onPress={onEditPress} />
+            </View>
             <View style={styles.progressCircle} >
               <AnimatedCircularProgress
                 color={yellowColor}
@@ -119,10 +132,12 @@ export const GoalDisplay =  ({userId, goal}) => {
          
       }
       </Card>
+       {goal && goal.isReached &&
+        <Button style={{marginTop: 20, marginBottom: 10, width: '80%', alignSelf: "center"}} onPress={onArchiveGoalPress} mode="contained">Sett et nytt mål!</Button>
+      }
     </View>
   )
 }
-
 
 
 const styles = StyleSheet.create({

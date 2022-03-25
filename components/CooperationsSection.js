@@ -44,7 +44,7 @@ export const CooperationsSection = ({ bottomSheetRef}) => {
         <CooperationRequests />
       )}
       <View>
-      {cooperations.length > 0 ? (cooperations.map((cooperation, i) => (
+      {Object.keys(cooperations).length > 0 ? (cooperations.map((cooperation, i) => (
         <CooperationItem cooperation={cooperation} key={i}/>
         )
       )):

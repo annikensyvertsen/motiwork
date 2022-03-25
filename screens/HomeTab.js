@@ -13,12 +13,10 @@ import { setCurrentUser } from "../store/actions/userActions";
 import { setCooperations } from "../store/actions/cooperationsActions";
 import { auth } from "../firebase";
 import { setActiveChallenges } from "../store/actions/challengesActions";
-
+import EditGoal from "../components/Goals/EditGoal";
 
 const HomeTab = () => {
 
-    //TODO: denne må settes som en state som oppdateres når man ser om det er noe data lagret 
-  //activechallenges er i dette tilfelle riktig at er i flertall, siden den skal vise alle de aktive utfordringene du har med venner
   let currentUser = auth.currentUser
 
   const dispatch = useDispatch()
@@ -26,8 +24,16 @@ const HomeTab = () => {
 
   let {allActiveChallenges} = useSelector(state => state.cooperations)
 
+  const [isOpenEditGoalForm, setIsOpenEditGoalForm] = useState(false)
+
+
   const bottomSheetRef = useRef(null);
   const handlePresentPress = () => bottomSheetRef.current.present()
+
+  const handleEditGoalPress = () => {
+    setIsOpenEditGoalForm(true)
+    bottomSheetRef.current.present()
+  }
 
   const initialSetup = async () => {
     await setCurrentUser(currentUser.uid, dispatch).then().catch(err => console.log(err))
@@ -40,7 +46,6 @@ const HomeTab = () => {
 
   useEffect( () => {
     initialSetup()
-    console.log("USER HOMETAB", user)
   }, [])
 
 
@@ -48,12 +53,12 @@ const HomeTab = () => {
 
 
   return (
-    <View style={{flex: 1}}>
+      <View style={{flex: 1}}>
     <View style={styles.mainContentContainer}>
       <View style={styles.standardflexColumnContainer}>
         <Text style={styles.headingThree}>Mål</Text>
         {user.currentGoal.goalName ?
-        (<View style={styles.textContainer}><GoalDisplay userId={user.uid} goal={user.currentGoal}/></View>)
+        (<View style={styles.textContainer}><GoalDisplay userId={user.uid} handleEditGoalPress={handleEditGoalPress} goal={user.currentGoal}/></View>)
           :
         (<View style={styles.textContainer}>
           <Text>Du har ikke satt deg noen mål enda. Sett deg mål for å minne deg selv på å jobbe jevnt med skole!</Text>
@@ -76,7 +81,7 @@ const HomeTab = () => {
       </View>
  
       </View>
-        <BottomSheetTemplate contentComponent={<AddGoal bottomSheetRef={bottomSheetRef} />} ref={bottomSheetRef} />
+        <BottomSheetTemplate contentComponent={isOpenEditGoalForm ? <EditGoal goal={user.currentGoal} bottomSheetRef={bottomSheetRef} setIsOpenEditGoalForm={setIsOpenEditGoalForm} /> :<AddGoal bottomSheetRef={bottomSheetRef} />} ref={bottomSheetRef} />
     </View>
    
   )

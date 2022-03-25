@@ -38,7 +38,6 @@ export const Timer = ({values, setIsSessionComplete, resetTimer, currentPoints, 
 
   const onCountdownComplete = async () => {
     let totalMinutes = countDownTime/60
-    console.log("totalminutes", totalMinutes, "countdownTime", countDownTime)
     let sendInTimeInHours = totalMinutes/60
     if(totalMinutes >= 10){
       let points = (totalMinutes) - ( totalMinutes % 10)
@@ -69,7 +68,6 @@ export const Timer = ({values, setIsSessionComplete, resetTimer, currentPoints, 
 
   useEffect(() => {
     setFormattedTime(formatTimeToClock(remainingTime))
-
   }, [remainingTime])
 
   useEffect(() => {
