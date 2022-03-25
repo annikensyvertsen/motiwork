@@ -62,7 +62,7 @@ const SessionTab = () => {
   const closeDialogAndStopSession = () => {
     setVisibleDialog(false)
     setIsEndSession(true)
-    setIsCurrentPoints(0)
+    setCurrentPoints(0)
     if(isTimer){
       setIsSessionComplete(true)
       resetTimer()
