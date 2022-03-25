@@ -1,49 +1,49 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Menu, Provider, TextInput } from 'react-native-paper';
 import { View, StyleSheet, Text } from 'react-native';
 import { auth } from "../../firebase";
 import { useDispatch} from 'react-redux';
 import { useForm, Controller } from "react-hook-form";
 import { containerStyles } from "../styles/sharedStyles";
-import { setUserGoal } from '../../store/actions/goalActions';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { createChallenge } from "../../store/actions/cooperationsActions";
 
 
+export const EditChallengeForm = ({members, activeChallenge, steps, setSteps, setSubmitted, submitted, cooperationId}) => {
+  const {
+    control,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+     nameOfGoal: "",
+     numberOfHours: "",
+     reward: "",
+     startDate: "",
+     endDate: "",
+    }
+  });
 
-const EditGoalForm = ({ goal, submitted, setSubmitted}) => {
-   const {
-     control,
-     formState: { errors },
-   } = useForm({
-     defaultValues: {
-      nameOfGoal: "",
-      numberOfHours: "",
-      reward: "",
-      startDate: "",
-      endDate: "",
-     }
-   });
+  console.log("activechallenge", activeChallenge)
+
 
   let dispatch = useDispatch()
 
-  const [reward, setReward] = useState(goal.reward);
-  const predefinedRewards = ["Ingenting", "Foodora til middag", "Nye sko", "Middag ute", "En fridag"]
+  const [reward, setReward] = useState(activeChallenge.reward);
+  const predefinedRewards = ["Ingenting", "Taperen lager middag", "En sekser med øl", "En kaffe", "Taperen vasker leiligheten", "Overraskelse", "Neste øl på byen"]
   const [visible, setVisible] = useState(!visible);
 
-  const [isWorkloadString, setIsWorkloadString] = useState(false)
-  //todo - fikse så dette ikke er string når jeg fikser workload
-  const [workload, setWorkload] = useState(goal.workloadGoal.toString())
-  const [goalName, setGoalName] = useState(goal.goalName)
+  const [workload, setWorkload] = useState(activeChallenge.workloadGoal.toString())
+  const [goalName, setGoalName] = useState(activeChallenge.goalName)
 
-  const [startDate, setStartDate] = useState(new Date(goal.startDate.seconds * 1000))
-  const [endDate, setEndDate] = useState(new Date(goal.endDate.seconds * 1000))
-
-  let currentUser = auth.currentUser;
+  const [startDate, setStartDate] = useState(new Date(activeChallenge.startDate.seconds * 1000))
+  const [endDate, setEndDate] = useState(new Date(activeChallenge.endDate.seconds * 1000))
 
   const openMenu = () => {
     setVisible(!visible)
   };
+
+  const [isWorkloadString, setIsWorkloadString] = useState(false)
 
   const closeMenu = () => setVisible(!visible);
 
@@ -60,43 +60,53 @@ const EditGoalForm = ({ goal, submitted, setSubmitted}) => {
     setEndDate(currentDate);
 
   };
-
-
+ 
   const onSubmit = async () => {
     if(/^\d+$/.test(workload)){
       setIsWorkloadString(false)
-      const data = {
+      let workloadObj = {}
+      workloadObj[members.sender] = 0
+      workloadObj[members.receiver] = 0
+
+      const formData = {
         goalName: goalName,
         reward: reward,
         startDate: startDate,
         endDate: endDate,
-        workloadGoal: parseInt(workload),
-        workload: goal.workload
+        workloadGoal: workload,
+        settled: false,
+        winner: null,
+        workload: workloadObj,
+        completed: false,
       }
-      await setUserGoal(data, currentUser.uid, dispatch).then(() => {
+      //TODO: her skal vi kalle på metoden som setter målet
+      await createChallenge(members, formData, cooperationId, dispatch)
+      .then(() => {
+        setSteps(steps + 1)
+  
         setSubmitted(!submitted)
       })
-      .catch(error => console.log("error", error))
+      .catch(error => console.log("error??", error))
     }else{
       setIsWorkloadString(true)
     }
+    
   }
 
 
   return(
-
     <Provider style={styles.provider}>
     <View style={styles.formWrapper}>
 
-    <View style={{flex: 1}}>
+      <View style={{flex: 1}}>
       <Controller
         control={control}
          rules={{
          required: true,
          }}
-         render={({ field: { onChangeText, onBlur, value } }) => (
+         render={({ field: { onChange, onBlur, value } }) => (
            <TextInput
-            label="Navn på målet"
+            label="Navn på utfordring"
              mode={"outlined"}
              value={goalName}
              onChangeText={name => setGoalName(name)}
@@ -113,10 +123,7 @@ const EditGoalForm = ({ goal, submitted, setSubmitted}) => {
         control={control}
           rules={{
           required: true,
-          pattern: {
-            value: /([1-9][0-9]*)|0/,
-            message: "Du må oppgi et tall"
-          }
+          pattern: /^\d+$/
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
@@ -125,19 +132,18 @@ const EditGoalForm = ({ goal, submitted, setSubmitted}) => {
               mode={"outlined"}
               value={workload.toString()}
               onChangeText={load => setWorkload(load.toString())}
+              placeholder={"40"}
+
             />
           )}
           name="numberOfHours"
-          defaultValue=""
       />
-
-      <View style={styles.errorMsg}>
-          {isWorkloadString && (
-            <Text style={styles.errorText}>Du må oppgi et tall</Text>
-          )}
-        </View>
-
       </View>
+      <View style={styles.errorMsg}>
+      {isWorkloadString && (
+        <Text style={styles.errorText}>Du må oppgi et tall</Text>
+      )}
+    </View>
 
       <View style={containerStyles.flexWithMarginTop}>
         <Controller
@@ -186,7 +192,7 @@ const EditGoalForm = ({ goal, submitted, setSubmitted}) => {
         rules={{required: true,}}
         render={({ field: { onChange, onBlur, value } }) => (
           <View style={styles.dateWrapper}>
-            <Text style={styles.datePickerText}>Startdato for målet</Text>
+            <Text style={styles.datePickerText}>Startdato</Text>
               <View>
                 <DateTimePicker
                   testID="dateTimePicker"
@@ -207,7 +213,7 @@ const EditGoalForm = ({ goal, submitted, setSubmitted}) => {
         rules={{required: true}}
         render={({ field: { onChange, onBlur, value } }) => (
           <View style={styles.dateWrapper}>
-            <Text style={styles.datePickerText}>Sluttdato for målet</Text>
+            <Text style={styles.datePickerText}>Sluttdato</Text>
             <View>
               <DateTimePicker
                 testID="dateTimePicker"
@@ -227,16 +233,12 @@ const EditGoalForm = ({ goal, submitted, setSubmitted}) => {
 
       <View style={containerStyles.flexWithMarginTop}>
         <Button title="Submit" mode="contained" onPress={onSubmit}>Lagre</Button>
-      </View>
-
+      </View>        
     </View>
   </Provider>
-
   )
-
 }
 
-export default EditGoalForm;
 
 const styles = StyleSheet.create({
   provider: {
@@ -280,5 +282,3 @@ const styles = StyleSheet.create({
   },
 
 });
-
-

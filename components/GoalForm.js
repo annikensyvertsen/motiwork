@@ -18,7 +18,7 @@ const GoalForm = ({ submitted, setSubmitted}) => {
    } = useForm({
      defaultValues: {
       nameOfGoal: "",
-      numerOfHours: "",
+      numberOfHours: "",
       reward: "",
       startDate: "",
       endDate: "",

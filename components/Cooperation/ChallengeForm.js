@@ -17,7 +17,7 @@ export const ChallengeForm = ({members, steps, setSteps, setSubmitted, submitted
   } = useForm({
     defaultValues: {
      nameOfGoal: "",
-     numerOfHours: "",
+     numberOfHours: "",
      reward: "",
      startDate: "",
      endDate: "",
@@ -29,7 +29,7 @@ export const ChallengeForm = ({members, steps, setSteps, setSubmitted, submitted
   let dateTomorrow = new Date((new Date()).getTime() + 86400000);
 
   const [reward, setReward] = useState('');
-  const predefinedRewards = ["Ingenting", "Et hjemmelaget måltid", "En kinodate", "Overraskelse!", "En kaffedate"]
+  const predefinedRewards = ["Ingenting", "Taperen lager middag", "En sekser med øl", "En kaffe", "Taperen vasker leiligheten", "Overraskelse", "Neste øl på byen"]
   const [visible, setVisible] = useState(!visible);
 
   const [workload, setWorkload] = useState(20)

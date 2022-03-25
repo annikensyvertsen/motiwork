@@ -9,7 +9,7 @@ const SubmittedMessage = ({bottomSheetRef, message, setIsOpenEditGoalForm}) => {
 
   const onPress = () => {
     bottomSheetRef.current.dismiss()
-    setIsOpenEditGoalForm(false)
+    setIsOpenEditGoalForm && setIsOpenEditGoalForm(false)
   }
   return(
     <View style={styles.wrapper}>

@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { Card, List, ProgressBar } from "react-native-paper";
-import { calculateDaysLeft } from "../../help-functions/date-and-time";
+import { Card, IconButton, List, ProgressBar, Button } from "react-native-paper";
+import { calculateDaysLeft, convertSecondsToDaysHoursAndMinutes, convertSecondsToHoursAndMinutes } from "../../help-functions/date-and-time";
 import { returnUserBasedOnId } from "../../help-functions/friends";
+import { archiveChallenge } from "../../store/actions/cooperationsActions";
 import { textStyles } from "../styles/sharedStyles";
 
-export const Challenge = ({activeChallenge, handlePresentPress, cooperationId, members, currentUser}) => {
+export const Challenge = ({activeChallenge, handlePresentPress, cooperationId, handleEditPress, members, currentUser}) => {
 
   const {goalName, endDate, reward, workload, workloadGoal} = activeChallenge
 
-  let remainingDays = calculateDaysLeft(endDate.seconds)
-
+  const [remainingTimeLeft, setRemainingTimeLeft] = useState({})
   const [leader, setLeader] = useState(null)
 
   const calculateProgress = (amountWorked) => {
@@ -23,30 +23,36 @@ export const Challenge = ({activeChallenge, handlePresentPress, cooperationId, m
   let currentUserProgress = calculateProgress(workload[currentUser.uid])
   let friendProgress = calculateProgress(workload[friendUserId])
 
+ const calculateDaysLeft = () => {
+    let today = new Date().getTime() / 1000
+
+    let endDateInSeconds = endDate ? endDate.seconds : 0;
+    let timeLeft = endDateInSeconds - today
+
+    let daysHoursAndMinutes = convertSecondsToDaysHoursAndMinutes(timeLeft)
+
+    setRemainingTimeLeft(daysHoursAndMinutes)
+  }
+
   const checkLeader = () => {
     if(currentUserProgress > friendProgress) setLeader(currentUser)
     else if(currentUserProgress < friendProgress) setLeader(friend)
     else setLeader(null)
   }
- 
- let winner = activeChallenge.winner && returnUserBasedOnId(activeChallenge.winner) || null
 
+  let winner = activeChallenge.winner && returnUserBasedOnId(activeChallenge.winner) || null
+ 
   const winningColor = "#006F3C"
   const losingColor = "#BF212F"
-  let remainingDaysText = "dager igjen"
 
   useEffect(() => {
-    if(remainingDays === 1){
-      remainingDaysText = "dag igjen"
-    }else{
-      remainingDaysText = "dager igjen"
-    }
-  }, [])
-
-  useEffect(() => {
+    calculateDaysLeft() 
     checkLeader()
   }, [currentUser])
 
+  const onEditPress = () => {
+    handleEditPress()
+  }
 
   const returnColor = (id) => {
     if(leader === null) return losingColor
@@ -59,18 +65,34 @@ export const Challenge = ({activeChallenge, handlePresentPress, cooperationId, m
     else if(leader.uid === currentUser.uid) return styles.winningCardStyle
     else return styles.losingCardStyle
   }
+
+  const onArchiveChallengePress = async() => {
+    await archiveChallenge(activeChallenge, cooperationId).then(res => {
+      handlePresentPress()
+    })
+  }
+
   return(
     <View style={styles.wrapper}>
       <Card style={returnCardStyle()}>
       <View style={styles.container}>
         <View style={styles.content}>
-          
+
           <View style={styles.headerWrapper}>
             <View style={{width: 22}}></View>
             <View style={styles.header}>
               <Text style={textStyles.tertiaryHeadingText}>{goalName}</Text>
-              <Text>{remainingDays} {remainingDaysText}</Text>
+              <View style={styles.subTextWrapper}>
+              <Text style={textStyles.greyText}> Tid igjen:</Text>
+
+              <Text style={textStyles.greyTextBold}>{remainingTimeLeft.days}</Text>
+              <Text style={textStyles.greyText}> d </Text>
+              <Text style={textStyles.greyTextBold}>{remainingTimeLeft.hours}</Text>
+              <Text style={textStyles.greyText}> t </Text>
+              <Text style={textStyles.greyTextBold}>{remainingTimeLeft.minutes}</Text>
             </View>
+            </View>
+            <IconButton style={{margin: 0}} icon="pencil-box-outline" color="grey" size={22} onPress={onEditPress} />
           </View>
 
           <View style={styles.progress}>
@@ -121,8 +143,13 @@ export const Challenge = ({activeChallenge, handlePresentPress, cooperationId, m
           )
         
         )}
+
+       
       </View>
       </Card>
+      {(winner || activeChallenge.completed)  && (
+        <Button style={{marginTop: 20, marginBottom: 10, width: '80%', alignSelf: "center"}} onPress={onArchiveChallengePress} mode="contained">Start en ny utfordring!</Button>
+        )}
     </View>
   )
 }
@@ -137,17 +164,21 @@ const styles = StyleSheet.create({
     width: '80%',
     minHeight: 300,
     alignSelf: "center",
-    justifyContent: "center",
     borderWidth: 2,
     borderColor:  "#006F3C",
     marginTop: 20,
+  },
+   subTextWrapper: {
+    display: "flex",
+    flexDirection: "row",
+    marginTop: 8,
+    marginBottom: 8,
   },
   losingCardStyle: {
     borderRadius: 10,
     width: '80%',
     minHeight: 300,
     alignSelf: "center",
-    justifyContent: "center",
     borderWidth: 2,
     borderColor:  "#BF212F",
     marginTop: 20,
@@ -155,7 +186,7 @@ const styles = StyleSheet.create({
   headerWrapper: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     width: '100%'
   },
   header: {
